@@ -1,59 +1,80 @@
 # Melusense Benchmark
 
-Reproduzierbarer A/B/C-Benchmark für **Kolibri-1, Mistral Small 4 und Qwen**:
-Serving-Performance, allgemeine Modellqualität, Coding/Tool Calling und die
-eigenständige Entwicklung derselben Melusine-Pipeline werden getrennt bewertet.
+A reproducible A/B/C benchmark for **Kolibri-1, Mistral Small 4 and Qwen**.
+We evaluate serving performance, general model quality, coding/tool calling and
+independent development of the same Melusine pipeline as separate outcomes.
 
-Dieses private Repository enthält die agentensichtbare Entwicklungsaufgabe und
-ein absichtlich unvollständiges Startgerüst. Die Infrastruktur und die
-Coordinator-Runner werden im separaten AI-Model-Projekt geführt. Die hier
-vorhandenen Parser-Stubs sind keine Referenzimplementierung.
+This private repository contains the agent-visible development assignment and
+an intentionally incomplete starter. Infrastructure and coordinator runners live
+in the separate AI-Model project. The parser stubs here are not the reference
+implementation. Maintained project documentation is written in English.
 
-## Einstieg
+## Purpose and research question
 
-- [MANIFEST.md](MANIFEST.md): Navigation.
-- [AGENTS.md](AGENTS.md): verbindliche Agentenregeln.
-- [TASKS.md](TASKS.md): gemeinsame Aufgaben und Phasen-Checkliste.
-- [API-Vertrag](docs/contract.md): Schnittstellen und Sicherheitsinvarianten.
-- [Evaluationsvertrag](docs/evaluation.md): Vergleichbarkeit und Isolation.
-- [Gemeinsame Budgets](config/budget.json): gleiche Grenzen für alle Modelle.
+Can each model independently implement the Melusine email pipeline when given
+the same starting code, TASKS.md, tools and budget? How do the resulting solutions
+differ in correctness, safety, architecture, code quality and development cost?
 
-## Vier Phasen
+The four phases help explain those differences. They separate hardware/serving
+limits, general model capability, tool-use failures and the ability to complete
+the actual engineering task. We compare measured outcomes and independently
+review implementations; equivalent functionality does not require identical code.
 
-| Phase | Umfang | Werkzeug / Ausführung |
+The intended deliverables are a versioned methodology, reproducible run records,
+separate phase results and an independently assessed implementation comparison.
+An ALTONJI article and a reproducible Hugging Face evaluation are future release
+goals, subject to review and explicit publication approval.
+
+## Start here
+
+- [MANIFEST.md](MANIFEST.md): navigation.
+- [AGENTS.md](AGENTS.md): binding agent rules.
+- [TASKS.md](TASKS.md): common assignment and phase checklist.
+- [API contract](docs/contract.md): interfaces and safety invariants.
+- [Evaluation contract](docs/evaluation.md): comparability and isolation.
+- [Common budgets](config/budget.json): identical limits for all models.
+
+## Four phases
+
+| Phase | Question and scope | Tools and execution |
 |---|---|---|
-| 1 — Infrastructure & Metrics | Modellrevision, Quantisierung, Kontext, Speicher, TTFT, Prefill, Decode, Cache, 1/2/4 gleichzeitige Clients | vLLM, ein zentraler Prometheus, NVIDIA AIPerf; Coordinator-Runner in AI-Model |
-| 2 — General Evaluation | Instruktionsbefolgung, Wissen und Reasoning mit festen Aufgaben, Dataset-Revisionen und Bewertungsregeln | Hugging Face LightEval mit IFEval, MMLU-Pro und BBH; Coordinator-Runner in AI-Model |
-| 3 — Coding & Tool Calling | Aufgabenerfolge, echte Tool Calls, Fehler, Laufzeit und Tokenverbrauch | Versionierte SWE-bench-/BFCL-Auswahl und Runner in AI-Model; Kolibri-Pilot 9/9 korrekte Tool Calls; SWE-Images aktuell ohne ARM64 |
-| 4 — Melusine AgentBench | Eigenständige Pipeline-Implementierungen aus identischem Start-Commit | Neun Branches/Worktrees vorbereitet; Tool-/Evaluator-Container geprüft, Freeze und separater Referenz-/Gold-Evaluator implementiert; reale Agentenläufe an Gates gebunden |
+| 1 — Infrastructure & Metrics | How does the model run on this hardware? Revision, quantization, context, memory, TTFT, prefill, decode, cache and 1/2/4 concurrent clients. | vLLM, one central Prometheus and NVIDIA AIPerf; coordinator runners in AI-Model. |
+| 2 — General Evaluation | How well does it follow instructions, recall knowledge and reason? Identical tasks, dataset revisions and scoring rules. | Hugging Face LightEval with IFEval, MMLU-Pro and BBH; coordinator runners in AI-Model. |
+| 3 — Coding & Tool Calling | Can it solve coding tasks and issue correct tool calls? Record successes, errors, elapsed time and token usage. | Versioned SWE-bench Verified and BFCL selections; preparation, inference and grading runners in AI-Model. |
+| 4 — Melusine AgentBench | Can it independently implement the same pipeline from the same frozen commit? | Separate branches/worktrees and confined runtimes; freeze candidates before independent reference/Gold evaluation. |
 
-Im AI-Model-Projekt sind ein Kolibri-Performance-Pilot, ein General-Evaluation-Smoke
-und ein BFCL-Pilot ausgeführt: drei einfache Python-Tool-Fälle mit je drei Seeds,
-9/9 vom offiziellen AST-Checker akzeptiert und lokal als erlaubte reine Funktionen
-ausgeführt. Dieser kleine Single-Turn-Test ist kein vollständiger BFCL-Score.
-Die drei eingefrorenen SWE-bench-Images bieten aktuell AMD64, kein ARM64; auf der
-Spark bleibt deren Ausführung blockiert, ohne Emulation oder stillen Falltausch.
+## Current evidence and open gates
 
-Für Melusine sind je drei Branches/Worktrees für Kolibri, Mistral und Qwen aus
-identischem Basis-SHA angelegt. Die Kandidaten erhalten Git-freie Exporte.
-Neun reale Tool-/Evaluator-Container bestehen je 14 Abschottungsprüfungen.
-Das attestiert noch nicht den sichtbaren Kilo-Worker samt Modell-Gateway.
-Referenz-Freeze, qualifizierte menschliche Gold-Daten, unabhängige Worker-Isolation
-und qualifizierte weitere Modellprofile fehlen noch. Es gibt keine gestarteten
-Melusine-Modellversuche, keinen realen Melusine-F1 und keinen fertigen A/B/C-Vergleich.
+The AI-Model project has executed a Kolibri performance pilot, a general-evaluation
+smoke and a BFCL pilot. The BFCL pilot uses three simple Python tool cases with
+three seeds: 9/9 calls pass the official AST checker and execute locally as
+allowlisted pure functions. This small single-turn test is not a full BFCL score
+or a multi-turn tool-result-consumption benchmark. The three frozen SWE-bench
+images currently provide AMD64, not ARM64; their Spark execution is blocked,
+without emulation or silent case substitution.
 
-Die Coordinator-Befehle in AI-Model sind coding.py mit prepare/bfcl/swe-preflight/
-swe-evaluate und agentbench.py mit prepare/status/probe/handoff/freeze/evaluate.
-Der Freeze sichert einen Git-Tree ohne Commit/Push; der getrennte Evaluator
-vergleicht eingefrorene Kandidaten und eine unabhängig freigegebene Referenz
-gegen private geprüfte Gold-Daten. Er bewahrt Fehler und exportiert nur Aggregate.
-Künftige Worker bleiben in der sichtbaren Kilo-VS-Code-Sitzung; kein versteckter
-Agentenloop wird als Ersatz gestartet.
-Dieses Startgerüst allein startet keine SWE-bench-, BFCL- oder Agentenläufe.
+Three branches/worktrees per model are prepared from the identical base SHA.
+Candidates receive Git-free exports. Nine real tool/evaluator containers each
+pass 14 confinement checks. Those checks do not attest confinement of the visible
+Kilo worker or its model gateway. Reference freeze, qualified human Gold,
+independent worker isolation and qualified additional model profiles remain
+open gates. No real Melusine model trial, reference/Gold comparison, Melusine F1
+or complete A/B/C comparison has run.
 
-## Gemeinsamer Ausgangspunkt
+Coordinator commands in AI-Model are `scripts/benchmark/coding.py` with
+`prepare`, `bfcl`, `swe-preflight`, `swe-evaluate`, and
+`scripts/benchmark/agentbench.py` with `prepare`, `status`, `probe`, `handoff`,
+`freeze`, `evaluate`. Freeze records a Git tree without committing/pushing.
+The separate evaluator is implemented to compare frozen candidates and an
+independently approved reference against private qualified Gold. It retains
+failures and exports aggregate metrics only. Real private-Gold evaluation has
+not yet been executed. Future workers stay in the visible Kilo VS Code session;
+a hidden agent loop is not a substitute. This starter alone starts no benchmark
+or agent run.
 
-Der eingefrorene Ausgangs-Commit ist:
+## Common starting point
+
+The frozen starting commit is:
 
 ```text
 75fcaad909346909115d92b9929b5b91b3ddfbd6
@@ -61,22 +82,22 @@ Branch: benchmark/base-v1
 Tag:    benchmark-base-v1
 ```
 
-Alle Modellversuche müssen diesen **vollständigen SHA** verwenden. Der Hauptbranch
-entwickelt die Projektdokumentation weiter und ist kein Ersatz für den Basis-SHA.
-GitHub-Schreibschutz ist im aktuellen privaten Tarif nicht verfügbar; der
-Coordinator muss die Referenzen vor jedem Lauf gegen den SHA prüfen.
+Every model trial must use this **full SHA**. The main branch may evolve project
+documentation and is not a replacement for the base SHA. Branch protection is
+unavailable under the current private GitHub plan; the coordinator must verify
+refs against the SHA before each trial.
 
-Jedes Modell erhält dieselbe TASKS.md, sichtbare Tests und Budgets. Mindestens
-drei unabhängige Wiederholungen erhalten jeweils eigene Run-IDs. Modellversion,
-Quantisierung, Kontext, Decoding-Parameter, Toolversionen, Laufzeit, Tokenverbrauch
-und Fehler werden protokolliert. Keine früheren Lösungen, Agentenverläufe oder
-geänderten Dateien werden übernommen. Gleiche Vorbereitung und Bewertung
-verlangen keine identischen stochastischen Modellausgaben.
+Each model receives identical TASKS.md, visible tests and budgets. At least
+three independent repetitions get unique Run-IDs. Record model revision,
+quantization, context, decoding settings, tool versions, timing, token usage and
+failures. Do not reuse earlier solutions, agent histories or modified trial
+files. Reproducible preparation and scoring do not imply identical stochastic
+model outputs.
 
-## Startgerüst prüfen
+## Verify the starter
 
-Python >=3.12 ist die Zielumgebung. Die initialen Quellen verwenden nur die
-Standardbibliothek:
+Python >=3.12 is the target environment. Initial source uses only the standard
+library:
 
 ```bash
 python3 -B tools/verify_scaffold.py
@@ -84,31 +105,28 @@ python3 -B -m unittest discover -s tests -p 'test_scaffold.py'
 python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
 ```
 
-Die ersten beiden Befehle prüfen das Startgerüst. Der letzte Befehl scheitert
-auf der eingefrorenen Basis erwartungsgemäß an den unimplementierten Parsern.
-Diese sichtbaren Abnahmetests sind unverändert zu erfüllen; ein grüner
-Strukturcheck ist kein Parser-Erfolg. Fehlgeschlagene Tests dürfen nicht zur
-Ergebnisverbesserung gelöscht, übersprungen oder abgeschwächt werden.
+The first two commands verify the starter structure. The last command fails
+on the frozen base because the parsers are intentionally unimplemented. Fulfill
+these visible acceptance tests unchanged; a passing structure check is not parser
+success. Never delete, skip or weaken failed tests to improve a result.
 
-## Architektur und Isolationsgrenzen
+## Architecture and isolation boundaries
 
-Ein zentraler Prometheus sammelt die Metriken des jeweils laufenden
-Modellservers. Ein Worktree benötigt keinen eigenen Prometheus. Große Modelle
-werden auf der DGX Spark nacheinander geprüft; gleichzeitige Clients und
-tatsächlich aktive Modellsequenzen müssen getrennt ausgewiesen werden.
+One central Prometheus collects metrics from the active model server. Worktrees
+do not need their own Prometheus. Large models are tested sequentially on the
+DGX Spark; concurrent clients and actual active model sequences are reported
+separately.
 
-Die vollständige Referenz bleibt im separaten Repository
-`validatusinternal/melusense`. Branches und Worktrees sind keine Zugriffssperre.
-Agenten dürfen weder die Referenz noch andere Versuche, Host-Zugangsdaten,
-private Korpora, Gold oder versteckte Tests erreichen. Diese Isolation muss
-außerhalb von Git tatsächlich geprüft werden.
+The complete reference stays in the separate `validatusinternal/melusense`
+repository. Branches and worktrees are not access control. Agents must not access
+the reference, other trials, host credentials, private corpora, Gold or hidden
+tests. Verify that isolation outside Git before starting a real trial.
 
-Nur der unabhängige Evaluator verwendet zugelassene zusätzliche Prüfdaten.
-Er bewertet vorher eingefrorene Kandidaten; der Worker zertifiziert seinen
-eigenen Erfolg nicht. Rechte-/Datenschutzprüfung und unabhängige menschliche
-Gold-Annotationen bleiben verbindliche Gates.
+Only the independent evaluator receives approved additional evaluation data.
+It scores previously frozen candidates; workers do not certify their own success.
+Rights/privacy review and independent human Gold annotation remain binding gates.
 
-Die drei sichtbaren Beispiele sind synthetisch. Reale E-Mails, private
-Annotationen, Referenzcode, Geheimnisse und frühere Modelllösungen gehören
-nicht in dieses Repository. Eine spätere Veröffentlichung auf ALTONJI oder
-Hugging Face setzt gesonderte Prüfung und Freigabe voraus.
+The three visible examples are synthetic. Real email, private annotations,
+reference code, secrets and previous model solutions do not belong in this
+repository. Publication on ALTONJI or Hugging Face requires separate review and
+approval.
