@@ -24,13 +24,31 @@ vorhandenen Parser-Stubs sind keine Referenzimplementierung.
 |---|---|---|
 | 1 — Infrastructure & Metrics | Modellrevision, Quantisierung, Kontext, Speicher, TTFT, Prefill, Decode, Cache, 1/2/4 gleichzeitige Clients | vLLM, ein zentraler Prometheus, NVIDIA AIPerf; Coordinator-Runner in AI-Model |
 | 2 — General Evaluation | Instruktionsbefolgung, Wissen und Reasoning mit festen Aufgaben, Dataset-Revisionen und Bewertungsregeln | Hugging Face LightEval mit IFEval, MMLU-Pro und BBH; Coordinator-Runner in AI-Model |
-| 3 — Coding & Tool Calling | Aufgabenerfolge, echte Tool Calls, Fehler, Laufzeit und Tokenverbrauch | Versionierte Auswahl aus SWE-bench Verified und BFCL; Runner/Evaluator im Aufbau |
-| 4 — Melusine AgentBench | Eigenständige Pipeline-Implementierungen aus identischem Start-Commit | Getrennte Branches/Worktrees und tatsächlich isolierte Laufzeiten; unabhängiger Evaluator |
+| 3 — Coding & Tool Calling | Aufgabenerfolge, echte Tool Calls, Fehler, Laufzeit und Tokenverbrauch | Versionierte SWE-bench-/BFCL-Auswahl und Runner in AI-Model; Kolibri-Pilot 9/9 korrekte Tool Calls; SWE-Images aktuell ohne ARM64 |
+| 4 — Melusine AgentBench | Eigenständige Pipeline-Implementierungen aus identischem Start-Commit | Neun Branches/Worktrees vorbereitet; Tool-/Evaluator-Container geprüft, Freeze und separater Referenz-/Gold-Evaluator implementiert; reale Agentenläufe an Gates gebunden |
 
-Phase 1/2 haben im AI-Model-Projekt bereits einen Kolibri-Performance-Pilot und
-einen General-Evaluation-Smoke. Ein Smoke-Test ist keine vollständige
-Qualitätsauswertung. Die vollständigen Vergleiche und Phase-3/4-Ausführung
-erfordern die jeweils verifizierten Runner, Modellprofile und Audit-Gates.
+Im AI-Model-Projekt sind ein Kolibri-Performance-Pilot, ein General-Evaluation-Smoke
+und ein BFCL-Pilot ausgeführt: drei einfache Python-Tool-Fälle mit je drei Seeds,
+9/9 vom offiziellen AST-Checker akzeptiert und lokal als erlaubte reine Funktionen
+ausgeführt. Dieser kleine Single-Turn-Test ist kein vollständiger BFCL-Score.
+Die drei eingefrorenen SWE-bench-Images bieten aktuell AMD64, kein ARM64; auf der
+Spark bleibt deren Ausführung blockiert, ohne Emulation oder stillen Falltausch.
+
+Für Melusine sind je drei Branches/Worktrees für Kolibri, Mistral und Qwen aus
+identischem Basis-SHA angelegt. Die Kandidaten erhalten Git-freie Exporte.
+Neun reale Tool-/Evaluator-Container bestehen je 14 Abschottungsprüfungen.
+Das attestiert noch nicht den sichtbaren Kilo-Worker samt Modell-Gateway.
+Referenz-Freeze, qualifizierte menschliche Gold-Daten, unabhängige Worker-Isolation
+und qualifizierte weitere Modellprofile fehlen noch. Es gibt keine gestarteten
+Melusine-Modellversuche, keinen realen Melusine-F1 und keinen fertigen A/B/C-Vergleich.
+
+Die Coordinator-Befehle in AI-Model sind coding.py mit prepare/bfcl/swe-preflight/
+swe-evaluate und agentbench.py mit prepare/status/probe/handoff/freeze/evaluate.
+Der Freeze sichert einen Git-Tree ohne Commit/Push; der getrennte Evaluator
+vergleicht eingefrorene Kandidaten und eine unabhängig freigegebene Referenz
+gegen private geprüfte Gold-Daten. Er bewahrt Fehler und exportiert nur Aggregate.
+Künftige Worker bleiben in der sichtbaren Kilo-VS-Code-Sitzung; kein versteckter
+Agentenloop wird als Ersatz gestartet.
 Dieses Startgerüst allein startet keine SWE-bench-, BFCL- oder Agentenläufe.
 
 ## Gemeinsamer Ausgangspunkt
