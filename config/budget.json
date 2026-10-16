@@ -1,0 +1,29 @@
+{
+  "version": "base-v1",
+  "models": [
+    "kolibri",
+    "mistral",
+    "qwen"
+  ],
+  "repetitions": 3,
+  "seeds": [
+    41,
+    42,
+    43
+  ],
+  "context_tokens": 262144,
+  "max_output_tokens_per_turn": 32768,
+  "max_total_generated_tokens": 262144,
+  "max_agent_turns": 100,
+  "max_tool_calls": 200,
+  "wall_seconds": 3600,
+  "temperature": 0.2,
+  "top_p": 1.0,
+  "server_models_loaded_concurrently": 1,
+  "phase1_client_concurrency": [
+    1,
+    2,
+    4
+  ],
+  "notes": "Common prospective trial ceilings, not evidence that all models support 256K. Incompatibility blocks a trial; never silently lower context."
+}

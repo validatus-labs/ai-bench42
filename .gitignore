@@ -1,0 +1,11 @@
+build/
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+corpus/
+*.eml
+*.mbox
+*.safetensors
+*.gguf
