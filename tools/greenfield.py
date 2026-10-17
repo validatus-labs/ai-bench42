@@ -90,6 +90,8 @@ def node_commands(root: Path) -> tuple[str, str, dict]:
     """Prefer private, pinned portable Node; otherwise qualify system Node."""
     portable = root / ".node" / "bin"
     if (portable / "node").is_file():
+        if not (portable / "npm").is_file():
+            raise Blocked("Portable npm missing; refuse incomplete toolchain")
         env = {**os.environ, "PATH": str(portable) + os.pathsep + os.environ.get("PATH", "")}
         return str(portable / "node"), str(portable / "npm"), env
     node, npm = shutil.which("node"), shutil.which("npm")
@@ -193,6 +195,8 @@ def verify(root: Path, expected: str | None = None, smoke: bool = True) -> dict:
 
 def install(root: Path, expected: str | None, deps: bool, greenfield: bool = False) -> dict:
     if root.exists():
+        if greenfield and not (root / ".node" / "bin" / "node").is_file():
+            raise Blocked("Existing installation is not pinned greenfield Node; refuse reinterpretation")
         return {"action": "REUSED", **verify(root, expected)}
     if platform.system() != "Linux":
         raise Blocked("Linux only; DGX Spark ARM64 supported when upstream binaries are available")
