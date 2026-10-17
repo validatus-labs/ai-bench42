@@ -228,9 +228,9 @@ def install(root: Path, expected: str | None, deps: bool, greenfield: bool = Fal
             else:
                 raise Blocked("Explicit system dependencies requested but sudo/root unavailable")
             checked(prefix + [node, str(cli), "install-deps", "chromium"], staging,
-                    {**node_env, **env}, 1200)
+                    {**env, **node_env}, 1200)
         checked([node, str(cli), "install", "chromium"], staging,
-                {**node_env, **env}, 1200)
+                {**env, **node_env}, 1200)
         browser = browser_smoke(staging)  # Offline, data: URL only.
         private_write(staging / "stamp.json", jbytes({
             "schema": 1, "lock_sha256": digest, "mcp_version": MCP_VERSION,
