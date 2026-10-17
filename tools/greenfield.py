@@ -250,6 +250,17 @@ def install(root: Path, expected: str | None, deps: bool, greenfield: bool = Fal
             shutil.rmtree(staging)  # Only this invocation's private staging directory.
 
 
+def deep_research_check(source: Path) -> dict:
+    """Check an existing canonical Deep-Research tree; do not install or expose it."""
+    validator = source / "scripts" / "validate_coverage.py"
+    if not source.is_dir() or not validator.is_file() or validator.is_symlink():
+        raise Blocked("Canonical Deep-Research scripts/validate_coverage.py not found")
+    digest = sha256(validator.read_bytes())
+    return {"status": "SOURCE_CHECKED_ONLY", "root": str(source),
+            "validator_sha256": digest, "mcp_tools_enabled": False,
+            "note": "A separate pinned tool/service and identical MCP schema are required before trials"}
+
+
 def hpi_pairs() -> list[tuple[str, str]]:
     return [(name, blob) for case, (body, ann) in HPI_TRAIN.items()
             for name, blob in ((case, body), (case + ".ann", ann))]
@@ -406,6 +417,9 @@ def cli() -> int:
         p.add_argument("--expected-lock-sha256")
         p.add_argument("--network-isolated", action="store_true",
                        help="Coordinator attests external sandbox and egress controls")
+    p = actions.add_parser("deep-research-check")
+    p.add_argument("--source", type=Path, required=True,
+                   help="Existing canonical Deep-Research repository; no automatic install")
     actions.add_parser("hpi-plan")
     bundle = actions.add_parser("hpi-bundle")
     bundle.add_argument("--data-dir", type=Path, default=HPI_DEFAULT)
@@ -449,6 +463,8 @@ def cli() -> int:
                 env = {**base_env, "PLAYWRIGHT_BROWSERS_PATH": str(root / "browsers")}
                 os.execvpe(node, [node, *command], env)
                 raise AssertionError("execvpe returned")
+        elif args.action == "deep-research-check":
+            result = deep_research_check(args.source.expanduser().resolve(strict=True))
         elif args.action == "hpi-plan":
             result = {"scope": "ASF/TRAIN", "source_revision": HPI_REF,
                       "sample_ids": list(HPI_TRAIN), "file_pairs": len(HPI_TRAIN),
