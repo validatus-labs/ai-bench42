@@ -68,6 +68,17 @@ class GreenfieldTests(unittest.TestCase):
                 with self.assertRaises(greenfield.Blocked):
                     greenfield.hpi_import(root, {"rights_record_sha256": "different"})
 
+    def test_deep_research_source_check_never_enables_extra_tools(self):
+        with tempfile.TemporaryDirectory() as d:
+            source = pathlib.Path(d)
+            validator = source / "scripts" / "validate_coverage.py"
+            validator.parent.mkdir()
+            validator.write_text("# test validator\\n")
+            result = greenfield.deep_research_check(source)
+            self.assertEqual(result["status"], "SOURCE_CHECKED_ONLY")
+            self.assertFalse(result["mcp_tools_enabled"])
+            self.assertEqual(len(result["validator_sha256"]), 64)
+
     def test_no_filesystem_mutation_from_plan(self):
         self.assertTrue(callable(greenfield.cli))
         with tempfile.TemporaryDirectory() as d:
