@@ -4,7 +4,7 @@
 This file is the immutable *assignment*, not a progress log. Agents must not edit or tick it.
 Results belong only in isolated `build/` artifacts and independent evaluator records.
 
-**Goal:** Compare diverse models (e.g. Kolibri, Mistral, GLM, Qwen) as coding agents on one bounded, deterministic email-structure parser. No classifier, Silver-label mining, FN-Recovery model, online LLM parsing, or destructive cleanup is required.
+**Goal:** Compare diverse models (e.g. Kolibri, Mistral, GLM, Qwen) as coding agents on one bounded, deterministic email-structure parser. No classifier inference/training, Silver-label mining, FN-Recovery model, online LLM parsing, or destructive cleanup is required. The reserved `ml_mode=off|recover` interface is an extensibility check, not a classifier implementation or ML score.
 
 ## 0. Expected parser architecture (normative overview)
 
@@ -62,7 +62,7 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 
 ## 1. Reproducibility contract
 
-- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v2`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
+- One candidate = **one isolated runtime and clean Git-free export** from the *same owner-approved exact source SHA*, recorded in the coordinator's signed-off offline package manifest. The new Brave candidate baseline has **not yet been frozen**; do not use an old branch name as an implicit source identity. Never reuse a previous solution, agent cache, tool history or a reference implementation.
 - Coordinator verifies repo SHA, task/fixture/config hashes, tool versions, budgets, available context, isolation and tool/model endpoint before any trial. An unchanged rerun verifies/reuses its existing Run-ID; changed input creates a new Run-ID. **Never reset, overwrite or silently repair** divergent states.
 - Implementation source layout is defined by [AGENTS.md](AGENTS.md) and [WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md); required module paths are fixed for comparable outputs, while internals can differ. Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
 - Use pinned common [budgets](config/budget.json), [agent rules](AGENTS.md), [API contract](docs/contract.md) and [evaluation rules](docs/evaluation.md). Document unsupported context/platform settings; no silent fallback.
@@ -89,15 +89,17 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 
 ## 3. P4 — Candidate implementation from a deliberately empty parser
 
-- [ ] **C00 Tool + TRAIN preflight (coordinator):** run `python3 tools/greenfield.py plan`, verify the pinned Playwright MCP/Chromium lock fingerprint and live tool availability, prove external network isolation and identical origins for every worker, and validate the rights-approved HPI TRAIN-only bundle SHA. Any missing parity/rights blocks the real-corpus trial; never substitute hidden Gold or synthetic labels silently. See [Research tools](docs/RESEARCH_TOOLS.md) and [HPI data](docs/HPI_TRAIN.md).
+**One identical offline handoff for all models:** [English copy/paste agent prompt](docs/OFFLINE_AGENT_PROMPT.md) and [required candidate/build folder tree plus reserved switch contract](docs/BUILD_CONTRACT.md). Model agents require no GitHub access. Coordinator-supplied frozen source, documentation, and budgets must match exact hashes before any candidate begins.
+
+- [ ] **C00 Brave-MCP + TRAIN preflight (coordinator, read-only):** verify the immutable Git-free package hashes, the owner-approved exact Brave/Playwright/MCP binary/config/tool-schema fingerprints, a real browser MCP tool call from each isolated model agent, headless/sandbox, service-worker blocking and identical permitted Python/RFC/MDN documentation origins. Independently prove actual DNS/redirect/IPv4/IPv6 egress restriction and worker filesystem/reference/Gold/credential denial; never treat a browser flag as a sandbox. If rights-approved HPI TRAIN examples are supplied, validate identical approved TRAIN-only bundle SHA and worker disclosure permission; otherwise use synthetic fixtures only, without claiming real-data scores. Any missing qualification remains BLOCKED. No install, restart or silent Chromium fallback. See [Research tools](docs/RESEARCH_TOOLS.md), [build contract](docs/BUILD_CONTRACT.md) and [HPI data](docs/HPI_TRAIN.md).
 
 - [ ] **C01 Baseline:** Read `MANIFEST.md`, `AGENTS.md`, this task, `docs/contract.md`, fixtures and tests. Run and record unchanged scaffold checks **and expected failing acceptance tests**.
 - [ ] **C02 Design:** Define input budgets, canonical line/span model, original-source provenance, rule registry and conservative abstention. Specify exact Unicode codepoint and CRLF behavior.
 - [ ] **C03 Recognize:** Independently implement bounded regex + TOML dictionaries for Reply/Forward/Signature/Footer (EN/DE/FR/ES first), including quoted chains, multiline headers, separators, negative contexts and conflicts.
 - [ ] **C04 MIME:** Implement inert MIME/charset ingest; no attachment fetching/execution/payload export. Return attachment *metadata* and warnings when charset/HTML/source mapping is not provable.
-- [ ] **C05 Review:** Add deterministic BoundaryReviewer and stable evidence-based arbitration. Implement exact `detect_text(text, locale="auto")` and `detect_eml(raw, locale="auto")` public interfaces and JSON fields per contract. `authorized_removals=[]` always.
-- [ ] **C06 Verify:** Add targeted tests for no-history mail, nested forwards, Unicode, CRLF, misleading From/Date inside current body or code/patches, malformed MIME, hostile regex input and budgets. Preserve all provided tests unchanged.
-- [ ] **C07 Freeze candidate:** Run visible tests, document all failures, produce `build/worker-report.json` (Run-ID, hashes, decisions, commands, test outcomes, tokens, wall time, limitations), then stop. Only the independent evaluator may score protected Gold.
+- [ ] **C05 Review + reserved ML switch:** Add deterministic BoundaryReviewer and stable evidence-based arbitration. Implement `detect_text(text, locale="auto", *, ml_mode="off")` and `detect_eml(raw, locale="auto", *, ml_mode="off")` with the same original output contract, and a minimal local `python -m melusense ... --ml-mode off|recover` CLI, as specified by `docs/BUILD_CONTRACT.md`. Default and `off` execute **only rules** and produce identical results. `recover` raises explicit deterministic not-implemented/unsupported error without loading/training/calling any model or silently falling back. Unknown values fail closed. A reserved `processors/recovery_hook.py` is only a stub/interface, not a classifier. `authorized_removals=[]` always.
+- [ ] **C06 Verify:** Add targeted tests for no-history mail, nested forwards, Unicode, CRLF, misleading From/Date inside current body or code/patches, malformed MIME, hostile regex input and budgets. Verify default vs explicit `ml_mode="off"` parity, `recover` explicit unsupported behavior, bad-mode rejection, and the minimal CLI without network/ML calls. Preserve all provided tests unchanged.
+- [ ] **C07 Freeze candidate:** Run visible tests, document all failures, produce `build/worker-report.json` (Run-ID, hashes, decisions, commands, `ml_mode` behavior, test outcomes, tokens, wall time, limitations), then stop. Only the independent evaluator may score protected Gold.
 
 **Mandatory candidate smoke commands:**
 
@@ -132,4 +134,4 @@ This is a **domain-specific coding benchmark**, not a universal model ranking. R
 
 ## 6. Freeze and next action
 
-This file, tests and budgets describe a **not-started** model-agnostic benchmark. The coordinator freezes an exact `benchmark/base-v2` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, production model, HPI Gold or BLIND assets.
+This proposed assignment, tests and unchanged resource ceilings describe a **not-started** model-agnostic offline benchmark. The coordinator must obtain Owner + independent auditor approval, record a **new exact SHA**, verify the reproducible Brave research tools and worker isolation, transfer a checksum-verified Git-free archive, and then launch C01 only after a separate READY decision. Historical base-v1/base-v2, Spark worktrees, the production model, HPI Gold and BLIND assets must remain untouched until any separately authorized GitHub-only cleanup.

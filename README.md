@@ -1,5 +1,7 @@
 # ModelBench — One lab. Many models. Same evidence.
 
+> **OWNER-APPROVED TASK CONTRACT; RUNTIME NOT READY:** This repository defines the shared offline Brave/Playwright-MCP coding assignment. Approval of the task structure does **not** qualify the deployed tools, isolation or evaluator, or authorize Phase-4 C01–C07. Existing DGX Spark worktrees and P1–P3 receipts remain untouched.
+
 *How good is an LLM when it has to build something that actually works?*
 
 ## TL;DR — Too long; didn't read
@@ -79,25 +81,19 @@ The DGX Spark is an example host, not a requirement for every trial. The exact s
 
 **Dictionaries** capture language-specific header words; **regex** finds structural patterns; the **BoundaryReviewer** checks competing evidence and original text positions. Uncertain cases abstain rather than delete: `authorized_removals=[]`.
 
-**Classifier?** Not in this coding benchmark. Previous FN-Recovery research has not demonstrated enough additional benefit to make it a required step; future classifier/LLM recovery is a separate experiment.
+**Classifier?** No model training or classifier inference in this coding benchmark. The proposed new contract requires only a **reserved `--ml-mode off|recover` switch**: `off` is the rule-only implementation; `recover` must say explicitly that it is not implemented. This tests clean extensibility, **not** ML accuracy. Future real FN-Recovery remains a separate experiment. [Exact extension contract →](docs/BUILD_CONTRACT.md).
 
-## Same research tools. Real training examples.
+## Same verified research tools; optional real TRAIN examples.
 
-Every agent gets the **same pinned Playwright MCP browser**, approved documentation sites and tool budgets. A separate, rights-gated importer prepares **12 HPI/Quagga ASF TRAIN email/annotation pairs**; only an explicitly approved, SHA-256-identical TRAIN bundle may enter agent sandboxes, while independent TEST/EVAL Gold stays sealed.
+Every agent must receive the **same independently qualified, hash-pinned Brave/Playwright MCP browser tools**, approved documentation origins and budgets. The coordinator may separately provision **12 HPI/Quagga ASF TRAIN email/annotation pairs** only after explicit data-rights, privacy and worker-disclosure approval and SHA-256 equality. TRAIN is optional; independent TEST/EVAL Gold remains sealed.
 
-```bash
-python3 tools/greenfield.py plan
-python3 tools/greenfield.py install
-python3 tools/greenfield.py verify
-python3 tools/greenfield.py mcp-config --network-isolated
-python3 tools/greenfield.py hpi-plan
-```
+The existing `tools/greenfield.py` still includes an **obsolete Chromium installer** and is **not** the approved Brave verifier. Do **not** invoke its `install` or `greenfield` operations. The coordinator must qualify the *existing* Brave/MCP toolchain and effective sandbox/egress before starting any agent. No GitHub access is needed on Spark. [Exact requirements →](docs/RESEARCH_TOOLS.md).
 
 Browser MCP must actually be wired into every coding agent. `--network-isolated` is an **operator attestation**, not a firewall; the coordinator must enforce sandbox and egress restrictions externally. HPI download is **not automatic**: it requires documented rights/privacy approval.
 
 [Playwright deployment & fairness →](docs/RESEARCH_TOOLS.md) · [HPI sample download and Gold protocol →](docs/HPI_TRAIN.md)
 
-**Greenfield on the Spark:** `python3 tools/greenfield.py greenfield` installs pinned portable Node and the matching Playwright/Chromium stack into the ignored local workspace. `verify` checks its recorded versions and browser; the installer does not launch the coding benchmark or expose hidden HPI Gold. See [research-tool controls](docs/RESEARCH_TOOLS.md).
+**Brave runtime gate:** The existing Brave/Playwright/Kilo-MCP installation is the chosen toolchain, but each model worker must pass real MCP calls and independently enforced filesystem/egress restrictions. A read-only Brave verification adapter is **not yet implemented or audited**; do not treat browser connectivity as worker isolation. [Research-tool requirements →](docs/RESEARCH_TOOLS.md).
 
 ## One clean repository. Repeatable agent output.
 
@@ -112,7 +108,9 @@ melusense-benchmark/
 │   └── models.json          # Extensible model profiles
 ├── docs/
 │   ├── BENCHMARKS.md        # Background and official links
-│   ├── WORKSPACE_LAYOUT.md  # Branches, isolation, Run-IDs
+│   ├── WORKSPACE_LAYOUT.md  # Portable offline workbench
+│   ├── BUILD_CONTRACT.md    # Full required source/build ASCII tree
+│   ├── OFFLINE_AGENT_PROMPT.md # Identical English agent task
 │   ├── contract.md          # Parser API and safety
 │   └── evaluation.md        # Independent scoring
 ├── melusense/
@@ -123,22 +121,15 @@ melusense-benchmark/
 
 Agents create matching `melusense/rules/`, `dictionaries/`, `processors/` and reviewer modules as specified in [AGENTS.md](AGENTS.md). The files are organized alike, but the implementations can differ. Agents never edit frozen tasks/tests; their progress stays in ignored `build/`, and independent evaluation stays outside the candidate sandbox.
 
-[Agent contract](AGENTS.md) · [Directory & branch workflow](docs/WORKSPACE_LAYOUT.md) · [Complete assignment](TASKS.md)
+[English reusable agent prompt](docs/OFFLINE_AGENT_PROMPT.md) · [Standard candidate build tree](docs/BUILD_CONTRACT.md) · [Agent contract](AGENTS.md) · [Workspace layout](docs/WORKSPACE_LAYOUT.md) · [Complete assignment](TASKS.md)
 
-## Start from zero
+## Start from one offline package (after future freeze approval)
 
-The tool-enabled trial baseline is [**`benchmark/base-v2`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v2); record its exact commit SHA with `git rev-parse origin/benchmark/base-v2`. `main` contains the same approved starting files. Once frozen, any future assignment change requires a separately approved new baseline.
+Only a **coordinator** with repository access records the exact owner-approved source SHA, exports a **Git-free** candidate starter, hashes it and transfers it to the machine. The DGX Spark and coding models do **not** need repository access. A merged task contract is **not** proof that a particular offline runtime/package has passed security or readiness qualification.
 
-```bash
-git clone git@github.com:validatusinternal/melusense-benchmark.git
-cd melusense-benchmark
-git fetch origin benchmark/base-v2
-git rev-parse origin/benchmark/base-v2
-python3 -B tools/verify_scaffold.py
-python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
-```
+Every model receives the same English instruction in [OFFLINE_AGENT_PROMPT.md](docs/OFFLINE_AGENT_PROMPT.md), identical parser source/API tree in [BUILD_CONTRACT.md](docs/BUILD_CONTRACT.md), budgets and frozen tests. The coordinator checks a real Brave MCP tool call **from the actual isolated worker**, not only the historical Kolibri/Kilo host-open session, and confirms read/write/egress isolation before C01. The deliberately unimplemented starter must initially fail acceptance; those failures are expected, **not** candidate success.
 
-**Expected:** scaffold PASS; acceptance FAIL on the intentionally empty parser. This is a **not-started coding benchmark**, not evidence of successful Kolibri, Mistral, GLM or Qwen trials.
+No new coding-model trials, training, browser installations, server restarts or data disclosures are authorized merely by approval or merge of the task contract.
 
 [DGX Spark](https://developer.nvidia.com/topics/ai/dgx-spark) · [vLLM](https://docs.vllm.ai/en/latest/) · [Evaluation protocol](docs/evaluation.md)
 

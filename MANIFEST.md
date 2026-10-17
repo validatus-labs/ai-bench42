@@ -3,14 +3,16 @@
 1. [README](README.md) — mission, DGX Spark, model examples, four benchmark phases, parser pipeline.
 2. [TASKS](TASKS.md) — **frozen ASCII architecture and all-unchecked task contract**.
 3. [AGENTS](AGENTS.md) — binding coding-agent source layout and safety rules.
-4. [Workspace layout](docs/WORKSPACE_LAYOUT.md) — branches, isolated runtimes, Run-IDs and idempotence.
-5. [Benchmark guide](docs/BENCHMARKS.md) — definitions, official frameworks, references.
-6. [Model profile catalog](config/models.json) — illustrative profiles; deployment verification required.
-7. [Shared budgets](config/budget.json).
-8. [API and safety](docs/contract.md); [Independent evaluation](docs/evaluation.md).
-9. [Empty parser API](melusense/api.py), [synthetic fixtures](tests/fixtures.json), [visible acceptance](tests/test_acceptance.py), [scaffold check](tools/verify_scaffold.py).
+4. [Workspace layout](docs/WORKSPACE_LAYOUT.md) — one offline workbench, restricted builds/evidence/reports, Run-IDs and idempotence.
+5. [English offline coding-agent prompt](docs/OFFLINE_AGENT_PROMPT.md) — single copy/paste handoff for every model/seed.
+6. [Candidate build/tree and reserved ML interface](docs/BUILD_CONTRACT.md) — fixed Python module layout, CLI `--ml-mode off|recover` (reserved only), and no training.
+7. [Benchmark guide](docs/BENCHMARKS.md) — definitions, official frameworks, references.
+8. [Model profile catalog](config/models.json) — illustrative profiles; deployment verification required.
+9. [Shared budgets](config/budget.json).
+10. [API and safety](docs/contract.md); [Independent evaluation](docs/evaluation.md).
+11. [Empty parser API](melusense/api.py), [synthetic fixtures](tests/fixtures.json), [visible acceptance](tests/test_acceptance.py), [scaffold check](tools/verify_scaffold.py).
 
-10. [Single greenfield bootstrap](tools/greenfield.py) — pinned browser + HPI TRAIN importer.
-11. [Fair browser tools](docs/RESEARCH_TOOLS.md) · [Rights-gated HPI TRAIN](docs/HPI_TRAIN.md).
+12. [Existing greenfield/bootstrap script](tools/greenfield.py) — pinned browser + HPI TRAIN importer.
+13. [Fair browser tools](docs/RESEARCH_TOOLS.md) · [Rights-gated HPI TRAIN](docs/HPI_TRAIN.md).
 
-**Not started:** no benchmark candidate has completed this frozen assignment. No checkbox may be ticked in `TASKS.md`; results are recorded separately.
+**Owner-approved task structure:** English prompt, build tree, Brave/MCP research requirement and inert classifier-mode interface are now the ModelBench contract. **This is not a qualified worker/runtime freeze.** No new model trial has been run, existing Spark installations remain unchanged, and `TASKS.md` checkboxes remain immutable. Results belong in separate run evidence.
