@@ -1,5 +1,5 @@
 {
-  "version": "brave-proposal-v3-NOT-FROZEN",
+  "version": "brave-offline-v3",
   "models": [
     "kolibri",
     "mistral",
