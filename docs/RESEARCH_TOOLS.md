@@ -17,6 +17,16 @@ python3 tools/greenfield.py greenfield --with-system-deps
 
 `--network-isolated` is only an operator assertion, **not proof of network isolation**. Configure and verify the host/container's actual egress restrictions before giving browser access to an agent. Repeating `greenfield` rechecks its exact pinned Node/npm/MCP installation rather than upgrading it.
 
+## Optional Deep-Research source check
+
+The same Python entrypoint can **inspect an existing, locally installed** canonical Deep-Research source tree:
+
+```bash
+python3 tools/greenfield.py deep-research-check --source /path/to/Deep-Research
+```
+
+It checks `scripts/validate_coverage.py` and returns its SHA-256, but deliberately **does not install or expose new MCP tools**. Any future Deep-Research tool for candidates must be pinned, allowlisted and identically configured for all models before scoring.
+
 ## Single executable
 
 [`tools/greenfield.py`](../tools/greenfield.py) is a standard-library Python 3.12+ bootstrap with eight operations: `plan`, `install`, `verify`, `mcp-config`, `mcp-serve`, `hpi-plan`, `hpi-import`, `hpi-verify`, plus `hpi-bundle` for rights-approved TRAIN examples. It **never silently upgrades**, starts an agent trial, changes vLLM, downloads hidden data or edits the reference parser.
