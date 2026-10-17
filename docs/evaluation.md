@@ -1,6 +1,6 @@
-# Evaluation and freeze contract — proposed Brave offline baseline (NOT FROZEN)
+# Evaluation and freeze contract — Brave offline ModelBench
 
-**Status: PROPOSED / NOT STARTED.** This draft defines a future Brave-based, offline coding benchmark; the coordinator MUST pin a separately approved exact source SHA after audit. Old `benchmark/base-v1` and `benchmark/base-v2` remain prior baselines and are not automatically replaced.
+**Status: TASK CONTRACT APPROVED / RUNTIME NOT READY / NOT STARTED.** This document defines the approved Brave-based offline coding benchmark; the coordinator MUST pin and independently verify the exact offline source SHA and worker controls before trials. Old `benchmark/base-v1` and `benchmark/base-v2` remain prior baselines and are not automatically replaced.
 
 1. **Immutable assignment:** verify exact tree, instructions, tests, model catalog and budgets before creating any candidate trial. Existing dirty/changed/ambiguous state must fail closed—not silently reset, clean or overwrite.
 2. **Research-tool parity:** pin the actual approved **Brave + Playwright + MCP** binary hashes, server/tool schema, configuration, runtime identity, separately enforced docs-only origins, service-worker blocking and network/worker isolation. Demonstrate a real MCP tool-call from each candidate model, not only the earlier host-open Kolibri session. No Chromium install/fallback as a side effect. All candidates must receive the same browser affordances, budgets and URLs; log blocked/retried navigation. Browser origin filtering does not create a firewall.
