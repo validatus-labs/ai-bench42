@@ -135,6 +135,6 @@ Candidate grading can assign a small, separate `extensibility/API-discipline` ru
 
 ## D. Build/evidence discipline and freeze gate
 
-The worker owns only source changes in `/workspace/melusense/`, new tests, and `/workspace/build/`; the coordinator creates immutable `evidence` and `reports` records **outside** that mount. Identical model-neutral tasks and tooling apply per seed `41,42,43`, no GitHub needed on Spark. Reused complete fingerprint -> verify/reuse, changed input -> new Run-ID.
+The worker owns only source changes in `/workspace/melusense/`, new tests, and `/workspace/build/`; the coordinator creates immutable `evidence` and `reports` records **outside** that mount. Identical model-neutral tasks and tooling apply per seed `1,2,3`, no GitHub needed on Spark. Reused complete fingerprint -> verify/reuse, changed input -> new Run-ID.
 
 The current approved repository contract includes the new mode interface and visible tests, but older `base-v1`, `base-v2` and previously transferred `031f0cfa` packages cannot be relabeled as implementing them. The coordinator must verify the exact approved source SHA, package it into a **new** Git-free archive, and independently qualify real model-to-tool/inference isolation before any C01 run. **Do not** edit historical baselines, run P4, install/modify Brave, or overwrite local Spark evidence as a side effect.
