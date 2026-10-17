@@ -26,6 +26,8 @@ modelbench/                               # identical Git-free offline package
 │   ├── evaluation.md                      # independent evaluator contract
 │   ├── RESEARCH_TOOLS.md
 │   ├── HPI_TRAIN.md
+│   ├── OFFLINE_AGENT_PROMPT.md           # one identical English task
+│   ├── BUILD_CONTRACT.md                 # full source tree + reserved ML flag
 │   └── WORKSPACE_LAYOUT.md                # this document
 ├── tools/
 │   ├── verify_scaffold.py                 # existing structural verification
@@ -34,6 +36,7 @@ modelbench/                               # identical Git-free offline package
 ├── melusense/
 │   └── api.py                             # deliberately unimplemented starter
 ├── tests/                                 # frozen visible tests / fixtures
+│   └── test_reserved_ml_mode.py           # PROPOSED off-only / recover stub checks
 │
 ├── build/                                 # GENERATED, local, Git-ignored
 │   └── runs/
@@ -71,16 +74,18 @@ evaluator-private/                         # SEPARATE protected storage/mount
 
 ## One command/prompt per model: same sequence everywhere
 
+The normative candidate module layout, generated build/dist location, and future-only `--ml-mode off|recover` contract are in [BUILD_CONTRACT.md](BUILD_CONTRACT.md). For a standalone copy/paste instruction in English, use [OFFLINE_AGENT_PROMPT.md](OFFLINE_AGENT_PROMPT.md). Do not use different prompts for different models; Run-ID/manifest carries identity. No classifier training or inference is permitted.
+
 1. **INPUT:** Coordinator transfers one explicitly approved, content-addressed offline package; checks its archive and file hashes and records an immutable Run-ID with exact model revision, backend, KV calibration status and seed (41/42/43). No agent GitHub access.
 2. **C00 / PREFLIGHT:** Verify installed Brave executable, Playwright, MCP server/runtime/config hashes, actual agent-issued browser tool calls, headless/sandbox/isolation, service-worker block and the four allowed documentation origins; verify effective DNS/redirect/IPv4/IPv6 egress denial and filesystem denial **outside the candidate sandbox**. The previously successful Kolibri/Kilo host-open session does not itself satisfy this gate.
 3. **RESULT:** If any mandatory test is absent or different, write `evidence/preflight/<run-id>/` + `reports/readiness.md` as `DEVIATION` or `BLOCKED`. **Stop before C01**; do not install, auto-repair, switch browsers or silently change the frozen task.
-4. **P4 / C01–C07 only if READY:** Worker starts from the same frozen empty `melusense/api.py`, runs the initially *expected failing* acceptance tests, implements the rules-only EN/DE/FR/ES MIME/regex/TOML/BoundaryReviewer parser, keeps `authorized_removals=[]`, and adds its own adversarial tests without modifying provided tests or the task. Worker writes only its own `build/worker-report.json`.
+4. **P4 / C01–C07 only if READY:** Worker starts from the same frozen empty `melusense/api.py`, runs the initially *expected failing* acceptance tests, implements the rules-only EN/DE/FR/ES MIME/regex/TOML/BoundaryReviewer parser, keeps `authorized_removals=[]`, and adds its own adversarial tests without modifying provided tests or the task. The public `ml_mode` defaults to `off`; `recover` must fail explicitly as unimplemented (no weights/training/inference), including the minimal local CLI. Worker writes only its own `build/worker-report.json`.
 5. **EVALUATION:** Coordinator freezes worker outputs; a distinct evaluator scores hidden tests/rights-cleared Gold if available. Missing qualified Gold means `NOT_EVALUATED`, never perfect recall or 0 failures. TRAIN is optional and only available with explicit rights/privacy/worker-disclosure approval and an identical bundle hash.
 6. **REPEAT:** Identical complete Run-ID/fingerprint -> verify/reuse; changed model, version, baseline, toolchain, data, budget or seed -> new Run-ID, no overwrite, no reset. Previous P1–P3 receipts are reused with their precise original scope; `PARTIAL` and `BLOCKED` stay as such.
 
-## Short reusable model-facing instruction
+## One reusable English agent prompt
 
-> Work exclusively in the coordinator-provided offline `/workspace`. Read `AGENTS.md`, `TASKS.md`, `docs/contract.md`, `docs/evaluation.md` and the frozen tests. Confirm the coordinator's signed-off readiness manifest and your own permitted browser-MCP tool availability; no GitHub or private reference data. If not READY, report and stop. Otherwise implement C01–C07 independently, rules-only, with all original source preserved and `authorized_removals=[]`. Do not train any model, change provided tests or claim independent scoring. Save `build/worker-report.json`; stop for evaluator handoff.
+Use **[OFFLINE_AGENT_PROMPT.md](OFFLINE_AGENT_PROMPT.md)** verbatim for every model and seed. This stand-alone file contains the full C00 through C07 handoff and the non-executable `ml_mode=off|recover` compatibility obligation. The complete ASCII candidate package tree is in **[BUILD_CONTRACT.md](BUILD_CONTRACT.md)**. Short summaries are not a substitute for the normative frozen task and contract.
 
 ## Roles, security and retention
 
