@@ -1,6 +1,6 @@
 # ModelBench — one portable offline workbench
 
-**Status: PROPOSED for the Brave-MCP candidate baseline (draft PR #1); not a frozen or deployed contract.**
+**Status: OWNER-APPROVED DIRECTORY CONTRACT; WORKER DEPLOYMENT NOT YET QUALIFIED.**
 This is the compact directory convention to review before changing the active assignment. It replaces the *proposed* multi-root coordinator layout with one predictable workbench. Historical branches, Spark worktrees, receipts and reference/corpus repositories remain untouched.
 
 ## The idea
