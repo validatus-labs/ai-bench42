@@ -66,7 +66,7 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 - Coordinator verifies repo SHA, task/fixture/config hashes, tool versions, budgets, available context, isolation and tool/model endpoint before any trial. An unchanged rerun verifies/reuses its existing Run-ID; changed input creates a new Run-ID. **Never reset, overwrite or silently repair** divergent states.
 - Implementation source layout is defined by [AGENTS.md](AGENTS.md) and [WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md); required module paths are fixed for comparable outputs, while internals can differ. Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
 - Use pinned common [budgets](config/budget.json), [agent rules](AGENTS.md), [API contract](docs/contract.md) and [evaluation rules](docs/evaluation.md). Document unsupported context/platform settings; no silent fallback.
-- Run three isolated attempts per model with seeds 41, 42 and 43. Keep every failure, timeout, generated token count, tool call, command, model revision and tree SHA.
+- Run three isolated attempts per model with seeds **1, 2 and 3**. Keep every failure, timeout, generated token count, tool call, command, model revision and tree SHA.
 - **No progress checkbox is ever ticked in this file.** Store per-run progress and findings under `build/`, which is not committed to the frozen candidate source.
 
 ## 2. Coordinator phases (not candidate implementation tasks)
