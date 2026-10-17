@@ -1,4 +1,7 @@
 build/
+# Coordinator-generated evidence and evaluation reports stay local/private.
+evidence/
+reports/
 .venv/
 __pycache__/
 *.py[cod]
