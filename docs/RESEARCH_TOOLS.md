@@ -2,6 +2,21 @@
 
 **Audience:** benchmark coordinator. **Status:** documented greenfield bootstrap; installation on DGX Spark or any worker host has not been executed by this repository commit.
 
+## Fresh-host Greenfield (Node included)
+
+The same **single Python entrypoint** now has a `greenfield` operation, which downloads **Node.js 22.22.2** for Linux ARM64/x86_64 using the official pinned SHA-256 and installs the same Playwright MCP/Chromium release for everyone. Node/npm therefore do **not** need to be present for the `greenfield` action. Python 3.12+, working HTTPS certificates, Chromium shared libraries and runtime isolation are still required; OS package mutation is optional and explicit.
+
+```bash
+python3 tools/greenfield.py plan
+python3 tools/greenfield.py greenfield
+python3 tools/greenfield.py verify
+python3 tools/greenfield.py mcp-config --network-isolated
+# If Chromium shared libraries are missing (OS changes; explicit opt-in):
+python3 tools/greenfield.py greenfield --with-system-deps
+```
+
+`--network-isolated` is only an operator assertion, **not proof of network isolation**. Configure and verify the host/container's actual egress restrictions before giving browser access to an agent. Repeating `greenfield` rechecks its exact pinned Node/npm/MCP installation rather than upgrading it.
+
 ## Single executable
 
 [`tools/greenfield.py`](../tools/greenfield.py) is a standard-library Python 3.12+ bootstrap with eight operations: `plan`, `install`, `verify`, `mcp-config`, `mcp-serve`, `hpi-plan`, `hpi-import`, `hpi-verify`, plus `hpi-bundle` for rights-approved TRAIN examples. It **never silently upgrades**, starts an agent trial, changes vLLM, downloads hidden data or edits the reference parser.

@@ -40,6 +40,34 @@ class GreenfieldTests(unittest.TestCase):
         self.assertFalse(any("github.com" in url for url in greenfield.ALLOWED_ORIGINS))
         self.assertTrue(all(url.startswith("https://") for url in greenfield.ALLOWED_ORIGINS))
 
+    def test_portable_node_has_hard_pins(self):
+        self.assertEqual(greenfield.NODE_PIN, "22.22.2")
+        self.assertEqual(set(greenfield.NODE_ARCHIVE_SHA256), {"aarch64", "x86_64"})
+        self.assertTrue(all(len(value) == 64 for value in greenfield.NODE_ARCHIVE_SHA256.values()))
+
+    def test_portable_node_paths_do_not_depend_on_system_node(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            tools = root / ".node" / "bin"
+            tools.mkdir(parents=True)
+            (tools / "node").write_bytes(b"mock")
+            with self.assertRaises(greenfield.Blocked):
+                greenfield.node_commands(root)
+            (tools / "npm").write_bytes(b"mock")
+            node, npm, env = greenfield.node_commands(root)
+            self.assertEqual(node, str(tools / "node"))
+            self.assertEqual(npm, str(tools / "npm"))
+            self.assertTrue(env["PATH"].startswith(str(tools)))
+
+    def test_hpi_existing_import_rejects_changed_rights_record(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            (root / "manifest.json").write_text('{"rights_record_sha256":"first"}')
+            with patch.object(greenfield, "verify_hpi", return_value={"status": "VERIFIED"}):
+                with self.assertRaises(greenfield.Blocked):
+                    greenfield.hpi_import(root, {"rights_record_sha256": "different"})
+
     def test_no_filesystem_mutation_from_plan(self):
         self.assertTrue(callable(greenfield.cli))
         with tempfile.TemporaryDirectory() as d:

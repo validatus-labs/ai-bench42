@@ -97,6 +97,8 @@ Browser MCP must actually be wired into every coding agent. `--network-isolated`
 
 [Playwright deployment & fairness →](docs/RESEARCH_TOOLS.md) · [HPI sample download and Gold protocol →](docs/HPI_TRAIN.md)
 
+**Greenfield on the Spark:** `python3 tools/greenfield.py greenfield` installs pinned portable Node and the matching Playwright/Chromium stack into the ignored local workspace. `verify` checks its recorded versions and browser; the installer does not launch the coding benchmark or expose hidden HPI Gold. See [research-tool controls](docs/RESEARCH_TOOLS.md).
+
 ## One clean repository. Repeatable agent output.
 
 ```text
