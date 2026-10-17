@@ -1,6 +1,6 @@
 # ModelBench — portable offline coding-agent prompt (ENGLISH)
 
-**Status: PROPOSED for the next, explicitly approved Brave-based benchmark baseline.** The current Chromium-only `main` and previous frozen baselines are not changed by this document. This is the single reusable candidate-facing instruction, not an instruction to install tools or grant access.
+**Status: OWNER-APPROVED MODEL-NEUTRAL TASK; WORKER READINESS STILL BLOCKED.** This is the single reusable candidate-facing instruction. A coordinator must first freeze/verify the offline package SHA and qualify the actual Brave-MCP worker/network isolation. This file does not authorize installation or Phase-4 execution.
 
 > **MODEL-AGNOSTIC INSTRUCTION — copy unchanged for every model and seed**
 >
