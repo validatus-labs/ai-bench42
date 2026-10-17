@@ -13,7 +13,7 @@ We measure:
 - **Tool use**
 - **Real coding quality**
 
-—and keep the code, failures and costs, not just a leaderboard score. Our first challenge is **Melusense**: independently build a multilingual email parser from an empty starter.
+We also preserve the code, failures, and costs—not just a leaderboard score. Our first challenge is **Melusense**: each model must independently build a multilingual email parser from an empty starter.
 
 ![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1775519520461-6b6e068d9250?auto=format&fit=crop&w=1400&h=300&q=80)
 
@@ -74,9 +74,9 @@ The `42` series gives each trial a recognizable identity:
 | GLM | `G42-1` | `G42-2` | `G42-3` |
 | Qwen | `Q42-1` | `Q42-2` | `Q42-3` |
 
-These are human-readable **run labels**, not random seeds. The underlying numeric seeds remain **41, 42 and 43**, respectively, in [config/budget.json](config/budget.json) to preserve reproducibility. Each attempt starts from the same frozen source, never another agent's work. Models are benchmarked separately under the common resource budget.
+These are human-readable **run labels**, not random seeds. Attempts 1, 2, and 3 use the fixed numeric seeds 1, 2, and 3, respectively. The seed values are recorded in [config/budget.json](config/budget.json) for reproducibility. Each attempt starts from the same frozen source, never another agent's work. Models are benchmarked separately under the common resource budget.
 
-The coordinator may preserve an output branch such as `trial/kolibri-1/seed-41` after freezing the candidate. A Git branch is **not** a worker security boundary. The DGX Spark is an example host, not a requirement; exact served model revisions, context, quantization, KV-cache and tool gateway are pinned for every run.
+The coordinator may preserve an output branch such as `trial/kolibri-1/seed-1` after freezing the candidate. A Git branch is **not** a worker security boundary. The DGX Spark is an example host, not a requirement. The exact model revision, context-window size, quantization, KV-cache configuration, and tool gateway are pinned for each run.
 
 [Research tools, isolated workspaces & execution protocol →](docs/RESEARCH_TOOLS.md)
 
@@ -105,7 +105,7 @@ The coordinator may preserve an output branch such as `trial/kolibri-1/seed-41` 
 
 **Dictionaries** capture language-specific header words; **regex** finds structural patterns; the **BoundaryReviewer** checks competing evidence and original text positions. Uncertain cases abstain rather than delete: `authorized_removals=[]`.
 
-**Classifier?** No model training or classifier inference in this coding benchmark. The benchmark contract requires only a **reserved `--ml-mode off|recover` switch**: `off` is the rule-only implementation; `recover` must say explicitly that it is not implemented. This tests clean extensibility, **not** ML accuracy. Future real FN-Recovery remains a separate experiment. [Exact extension contract →](docs/BUILD_CONTRACT.md).
+**Classifier?** No model training or classifier inference in this coding benchmark. The benchmark contract requires only a **reserved `--ml-mode off|recover` switch**: `off` is the rule-only implementation; the `recover` mode must raise an explicit `NotImplementedError`. This tests clean extensibility, **not** ML accuracy. Future real FN-Recovery remains a separate experiment. [Exact extension contract →](docs/BUILD_CONTRACT.md).
 
 ## Why Kilo Code?
 
@@ -138,6 +138,6 @@ Kilo Code supports these capabilities in its [OpenAI-compatible provider guide](
 - Evaluate additional true positives **and** false positives on independent, sealed human Gold. Keep `KEEP_ALL`, preserve every source byte and never turn candidate detection into automatic deletion.
 - No hidden TEST/EVAL data, real correspondence or trained weights belong in ordinary coding-worker packages or public reports.
 
-If you want the bonus challenge, start with the [HPI TRAIN data/rights protocol](docs/HPI_TRAIN.md) and the [reserved extension API](docs/BUILD_CONTRACT.md). It needs its **own approval, dataset split, run IDs and independent evaluation**, outside the main benchmark.
+If you want the bonus challenge, start with the [HPI TRAIN data/rights protocol](docs/HPI_TRAIN.md) and the [reserved extension API](docs/BUILD_CONTRACT.md). This optional experiment requires its **own approval, dataset split, run IDs, and independent evaluation**. It remains outside the main benchmark.
 
 *Build independently. Measure what survives the tests.*
