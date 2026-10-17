@@ -104,6 +104,7 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 ```bash
 python3 -B tools/verify_scaffold.py
 python3 -B -m unittest discover -s tests -p 'test_scaffold.py'
+python3 -B -m unittest discover -s tests -p 'test_greenfield.py'
 python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
 ```
 
