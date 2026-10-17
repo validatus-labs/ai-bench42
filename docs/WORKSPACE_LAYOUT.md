@@ -1,122 +1,93 @@
-# Workspace layout and candidate lifecycle
+# ModelBench — one portable offline workbench
 
-**Audience:** coordinator and coding workers. **Status:** directory contract for future trials; it does not provision containers, secure sandboxes or a model server.
+**Status: PROPOSED for the Brave-MCP candidate baseline (draft PR #1); not a frozen or deployed contract.**
+This is the compact directory convention to review before changing the active assignment. It replaces the *proposed* multi-root coordinator layout with one predictable workbench. Historical branches, Spark worktrees, receipts and reference/corpus repositories remain untouched.
 
-## Three distinct layers
+## The idea
 
-```text
-source repository: validatusinternal/melusense-benchmark (private)
-  main                       # Living human-facing docs and future revisions
-  benchmark/base-v1          # Historical immutable pre-tool baseline
-  benchmark/base-v2          # Current frozen tool-enabled baseline
-  trial/<model>/seed-<n>     # Candidate output branch, after coordinator freeze
+One frozen, Git-free **offline assignment package** can be copied to any eligible machine. The agent does **not** need GitHub access. A coordinator supplies the package and its SHA-256 receipt, and independently qualifies runtime security. The model receives the same assignment, a real pinned Brave/Playwright MCP connection, the same allowed documentation sources and budgets. It may proceed only after a verified readiness decision. **No model training, classifier, FN-Recovery or online-LLM parser is part of Phase 4.**
 
-coordinator working storage (outside candidate sandboxes)
-  bases/
-    base-v2-<full-sha>/      # Git-free export of the exact frozen tree
-  trials/
-    <model-slug>/
-      seed-41/               # Isolated worker, fixed source, local build/
-      seed-42/
-      seed-43/
-  results/
-    <run-id>/
-      manifest.json          # Model/deployment/tool/dataset SHA, config
-      metrics.json           # Serving, quality and tool/coding metrics
-      worker-report.json     # Unedited candidate report and failures
-      evaluator-report.json  # Independent pass/fail and Gold scoring
-      logs/                  # Bounded non-secret raw diagnostics
-  toolchain-private/
-    greenfield-playwright/   # Verified MCP/Chromium + npm lock fingerprint
-    hpi-train/               # Rights-reviewed data and SHA256 TRAIN bundle
-  evaluator-private/         # Gold and hidden fixtures: worker has NO access
-```
+Brave working in the historical Melusine/Kilo session is **not** proof that a new benchmark worker is filesystem/network isolated. A browser sandbox is not a worker sandbox.
 
-The exact coordinator root is deployment-specific (DGX Spark or a remote controller) and must be recorded in the run manifest. Paths above illustrate the required separation, **not** already-created directories.
-
-## Why branches *and* isolation?
-
-One output branch per **model × seed** is useful for reviewing, comparing and preserving code without mixing solutions. But branches/worktrees share a Git object database and are **not** a security boundary. Workers receive isolated Git-free exports or rigorously separated containers with only their own base and scratch files, never repository credentials, reference source or private Gold.
-
-**Proposed output naming:**
-- `trial/kolibri-1/seed-41`, `.../seed-42`, `.../seed-43`
-- `trial/mistral-small-4/seed-41`
-- `trial/glm-5.3-flash/seed-41`
-- `trial/qwen/seed-41`
-- New profile: `trial/<validated-model-slug>/seed-<validated-seed>`
-
-Names are *conventions*, not evidence that a trial has been run. Coordinator records the exact served model name, checkpoint revision and all quantization/KV/backend settings in `results/<run-id>/manifest.json`.
-
-## Shared browser research and HPI TRAIN inputs
-
-The coordinator provisions the same [single greenfield bootstrap](../tools/greenfield.py) for all model trials. The pinned browser version, MCP endpoint, exact npm lock SHA256, allowed origins, browser invocation and optional rights-approved HPI TRAIN bundle SHA must match in each run manifest. Git-free worker snapshots may include an identical sanitized TRAIN bundle **only after rights approval**; evaluator-only Gold and reference code remain inaccessible. Browser-origin filtering is not enough—enforce network isolation outside Git.
-
-[Playwright setup](RESEARCH_TOOLS.md) · [HPI TRAIN rights and data](HPI_TRAIN.md).
-
-## Candidate module layout
-
-The coding agent **must** create this package tree within its isolated starter, not add a model-specific top-level folder:
+## Standard ASCII directory tree
 
 ```text
-melusense/
-  __init__.py
-  api.py
-  models.py
-  mime.py
-  canonical.py
-  boundary_reviewer.py
-  rules/{__init__.py,registry.py}
-  dictionaries/{en,de,fr,es}.toml
-  processors/{__init__.py,reply.py,forward.py,signature.py,footer.py}
-tests/
-  fixtures.json             # immutable
-  test_scaffold.py          # immutable
-  test_acceptance.py        # immutable
-  test_*.py                 # candidate additions only
-build/
-  worker-report.json        # ignored and collected externally
+modelbench/                               # identical Git-free offline package
+├── README.md
+├── MANIFEST.md                            # package provenance / source hash
+├── TASKS.md                               # immutable C00–C07 assignment
+├── AGENTS.md                              # immutable agent restrictions
+├── config/
+│   ├── budget.json                        # unchanged seeds / budgets
+│   ├── models.json                        # model catalog, NOT endpoint evidence
+│   └── toolchain.json                     # PROPOSED: approved Brave/MCP pins
+├── docs/
+│   ├── contract.md                        # parser API / KEEP_ALL
+│   ├── evaluation.md                      # independent evaluator contract
+│   ├── RESEARCH_TOOLS.md
+│   ├── HPI_TRAIN.md
+│   └── WORKSPACE_LAYOUT.md                # this document
+├── tools/
+│   ├── verify_scaffold.py                 # existing structural verification
+│   ├── greenfield.py                      # existing script; DO NOT auto-install
+│   └── preflight.py                       # PROPOSED read-only Brave/MCP verifier
+├── melusense/
+│   └── api.py                             # deliberately unimplemented starter
+├── tests/                                 # frozen visible tests / fixtures
+│
+├── build/                                 # GENERATED, local, Git-ignored
+│   └── runs/
+│       └── <run-id>/
+│           └── workspace/                 # ONLY this run is exposed to worker
+│               ├── AGENTS.md, TASKS.md, config/, docs/, tools/
+│               ├── melusense/             # candidate independently writes code
+│               ├── tests/                 # frozen tests + own additional tests
+│               └── build/
+│                   └── worker-report.json # only worker-writable report
+│
+├── evidence/                              # GENERATED, coordinator-only, ignored
+│   ├── preflight/<run-id>/
+│   └── runs/<run-id>/
+│       ├── manifest.json                  # input/tool/model/budget fingerprints
+│       ├── browser-acceptance.json        # actual worker MCP call evidence
+│       ├── worker-isolation-audit.json    # allowed AND denied access probes
+│       ├── metrics.json                   # tokens, time, vLLM / Prometheus
+│       └── checksums.sha256               # immutable artifact SHA-256 records
+│
+└── reports/                               # GENERATED, coordinator-only, ignored
+    ├── readiness.md                       # PASS / DEVIATION / BLOCKED + reasons
+    ├── runs/<run-id>/
+    │   ├── worker-report.json             # retained verbatim from worker
+    │   └── evaluator-report.json          # independent; never worker-readable
+    └── comparison.md                      # only after independently scored runs
+
+evaluator-private/                         # SEPARATE protected storage/mount
+└── hidden-tests-and-Gold/                 # never visible to coding workers
 ```
 
-The actual frozen API in [contract.md](contract.md) prevails over module aesthetics. The solution must have exact Unicode spans, bounded regex, safe MIME, source evidence and `authorized_removals=[]`.
+**Reality check:** Today, `config/toolchain.json`, `tools/preflight.py`, and the top-level generated `evidence/` and `reports/` paths are **proposed**; they are not present or deployed merely because they appear here. The existing root `build/` is already ignored by Git. When adopting this convention, add top-level `evidence/` and `reports/` to `.gitignore` and verify no correspondence, Gold, secrets or raw logs are committed.
 
-## Idempotent run state machine
+`build/runs/<run-id>/workspace/` is an illustrative **coordinator filesystem path**. Inside a properly isolated container, present only that candidate tree at e.g. `/workspace`. **Do not mount the coordinator root**, sibling runs, reference code, private evaluator files, host HOME or Git credentials. Use independently enforced read-only / writable mounts and deny access by actual negative tests. Merely nesting directories is not security.
 
-```text
-DRAFT ASSIGNMENT
-    |
-    v
-REVIEW + FROZEN BASE SHA
-    |
-    v
-PREFLIGHT (model, context, safe sandbox, hashes, budget)
-    | -- mismatch --> BLOCKED (no silent changes)
-    v
-PREPARED (Run-ID + identical frozen source)
-    |
-    v
-WORKER EXECUTION (capture failures and outputs)
-    |
-    v
-FROZEN CANDIDATE TREE
-    |
-    v
-INDEPENDENT EVALUATION (private Gold)
-    |
-    v
-IMMUTABLE REPORT + optional approved trial branch
-```
+## One command/prompt per model: same sequence everywhere
 
-Same Run-ID and matching fingerprint: **verify/reuse**. Any changed model/config/code/base/tests: **new Run-ID**. If an existing branch or output has conflicting data, **stop**, never reset/force push. Three seeds must remain distinct. Neither task checkboxes nor frozen task files are ever edited to record progress.
+1. **INPUT:** Coordinator transfers one explicitly approved, content-addressed offline package; checks its archive and file hashes and records an immutable Run-ID with exact model revision, backend, KV calibration status and seed (41/42/43). No agent GitHub access.
+2. **C00 / PREFLIGHT:** Verify installed Brave executable, Playwright, MCP server/runtime/config hashes, actual agent-issued browser tool calls, headless/sandbox/isolation, service-worker block and the four allowed documentation origins; verify effective DNS/redirect/IPv4/IPv6 egress denial and filesystem denial **outside the candidate sandbox**. The previously successful Kolibri/Kilo host-open session does not itself satisfy this gate.
+3. **RESULT:** If any mandatory test is absent or different, write `evidence/preflight/<run-id>/` + `reports/readiness.md` as `DEVIATION` or `BLOCKED`. **Stop before C01**; do not install, auto-repair, switch browsers or silently change the frozen task.
+4. **P4 / C01–C07 only if READY:** Worker starts from the same frozen empty `melusense/api.py`, runs the initially *expected failing* acceptance tests, implements the rules-only EN/DE/FR/ES MIME/regex/TOML/BoundaryReviewer parser, keeps `authorized_removals=[]`, and adds its own adversarial tests without modifying provided tests or the task. Worker writes only its own `build/worker-report.json`.
+5. **EVALUATION:** Coordinator freezes worker outputs; a distinct evaluator scores hidden tests/rights-cleared Gold if available. Missing qualified Gold means `NOT_EVALUATED`, never perfect recall or 0 failures. TRAIN is optional and only available with explicit rights/privacy/worker-disclosure approval and an identical bundle hash.
+6. **REPEAT:** Identical complete Run-ID/fingerprint -> verify/reuse; changed model, version, baseline, toolchain, data, budget or seed -> new Run-ID, no overwrite, no reset. Previous P1–P3 receipts are reused with their precise original scope; `PARTIAL` and `BLOCKED` stay as such.
 
-## Preflight checks (not a benchmark launch)
+## Short reusable model-facing instruction
 
-```bash
-git rev-parse benchmark/base-v2
-git rev-parse HEAD
-git status --porcelain
-python3 -B tools/verify_scaffold.py
-python3 -B -m unittest discover -s tests -p 'test_scaffold.py'
-python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
-```
+> Work exclusively in the coordinator-provided offline `/workspace`. Read `AGENTS.md`, `TASKS.md`, `docs/contract.md`, `docs/evaluation.md` and the frozen tests. Confirm the coordinator's signed-off readiness manifest and your own permitted browser-MCP tool availability; no GitHub or private reference data. If not READY, report and stop. Otherwise implement C01–C07 independently, rules-only, with all original source preserved and `authorized_removals=[]`. Do not train any model, change provided tests or claim independent scoring. Save `build/worker-report.json`; stop for evaluator handoff.
 
-Acceptance is **expected to fail on the untouched candidate**. Confirm container and model endpoint isolation externally. No evaluation success is implied by this documentation.
+## Roles, security and retention
+
+| Role | Access | Responsibility |
+| --- | --- | --- |
+| Coordinator | package + outer build/evidence/reports | offline transfer, hash/version pinning, sandbox/egress proofs, immutable run archive |
+| Coding worker | only its own isolated `/workspace` + approved browser tools | independently implement task, produce own report |
+| Independent evaluator | frozen candidate + protected evaluator inputs | hidden tests, qualified Gold scoring, review; never grants workers Gold access |
+
+Do not start a coding run or overwrite the active Chromium-only `base-v2` contract based on this draft. A new Brave-aligned exact source SHA requires changes to the actual task/config/verifier, tested policy enforcement and explicit Owner / independent auditor sign-off. The user-approved cleanup scope is **GitHub-only**; preserve all local DGX Spark runs, measurements and calibration records.
