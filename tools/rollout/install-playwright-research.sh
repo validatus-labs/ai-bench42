@@ -119,6 +119,10 @@ runtime_integrity() {
   grep -Fxq "mcp_version=$MCP_VERSION" "$RELEASE/MANIFEST" || fail 'MCP pin mismatch'
   grep -Fxq "node_version=$NODE_VERSION" "$RELEASE/MANIFEST" || fail 'Node pin mismatch'
   grep -Fxq "node_archive_sha256=$NODE_SHA" "$RELEASE/MANIFEST" || fail 'Node checksum pin mismatch'
+  local recorded_node_sha observed_node_sha recorded_browser_sha browser_binary
+  recorded_node_sha="$(sed -n 's/^node_executable_sha256=//p' "$RELEASE/MANIFEST")"
+  observed_node_sha="$(sha256sum "$RELEASE/node/bin/node" | cut -d' ' -f1)"
+  [[ -n "$recorded_node_sha" && "$recorded_node_sha" == "$observed_node_sha" ]] || fail 'Node executable changed'
   grep -Fxq "tool_allowed_origins=$TOOL_ORIGINS" "$RELEASE/MANIFEST" || fail 'origin policy mismatch'
   local expected actual chromium cli
   expected="$(sed -n 's/^npm_lock_sha256=//p' "$RELEASE/MANIFEST")"
@@ -129,6 +133,8 @@ runtime_integrity() {
   [[ "$cli" == "$MCP_VERSION" || "$cli" == "Version $MCP_VERSION" ]] || fail "MCP version drift: $cli"
   chromium="$(PLAYWRIGHT_BROWSERS_PATH="$RELEASE/browsers" "$RELEASE/node/bin/node" -e "process.stdout.write(require('$RELEASE/mcp/node_modules/playwright').chromium.executablePath())")" || fail 'cannot resolve Chromium'
   [[ -x "$chromium" ]] || fail "Chromium binary unavailable: $chromium"
+  recorded_browser_sha="$(sed -n 's/^chromium_executable_sha256=//p' "$RELEASE/MANIFEST")"
+  [[ -n "$recorded_browser_sha" && "$recorded_browser_sha" == "$(sha256sum "$chromium" | cut -d' ' -f1)" ]] || fail 'Chromium executable changed'
 }
 verify_install() {
   runtime_integrity
@@ -256,6 +262,8 @@ mcp_commit=$MCP_COMMIT
 mcp_version=$MCP_VERSION
 node_version=$NODE_VERSION
 node_archive_sha256=$NODE_SHA
+node_executable_sha256=$(sha256sum "$STAGE/node/bin/node" | cut -d' ' -f1)
+chromium_executable_sha256=$(PLAYWRIGHT_BROWSERS_PATH="$STAGE/browsers" "$STAGE/node/bin/node" -e "process.stdout.write(require('$STAGE/mcp/node_modules/playwright').chromium.executablePath())" | xargs sha256sum | cut -d' ' -f1)
 npm_lock_sha256=$(sha256sum "$STAGE/mcp/package-lock.json" | cut -d' ' -f1)
 tool_allowed_origins=$TOOL_ORIGINS
 EOF
