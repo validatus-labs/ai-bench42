@@ -1,7 +1,7 @@
 # Candidate API and safety contract
 
-Implement `melusense.detect_text(text: str, locale: str = "auto") -> dict` and
-`melusense.detect_eml(raw: bytes, locale: str = "auto") -> dict`.
+Implement `melusense.detect_text(text: str, locale: str = "auto", *, ml_mode: str = "off") -> dict` and
+`melusense.detect_eml(raw: bytes, locale: str = "auto", *, ml_mode: str = "off") -> dict`.
 
 Both return JSON-compatible data with:
 
@@ -28,3 +28,11 @@ exact raw-source positions without a proven mapping ledger. Fail closed.
 The visible contract is deliberately small. Hidden tests and independent real-Gold
 scoring remain evaluator-only. No fixed precision/F1 threshold is guaranteed by
 these starter examples, and a synthetic fixture is never real-mail accuracy.
+
+## Reserved optional classifier-mode interface (new candidate baseline only)
+
+The **only executable parser mode is `ml_mode="off"`**, which uses deterministic rules, dictionaries, MIME handling and BoundaryReviewer. Calling an API with the mode omitted and with `ml_mode="off"` MUST yield exactly the same result, including `authorized_removals=[]`. Neither variant may load weights, perform ML inference or network calls. The future `ml_mode="recover"` is *recognized but unimplemented*: reject it clearly with a stable `NotImplementedError` identifying `ml_mode=recover`, without processing input or writing output. Unsupported modes (including `on`) are a `ValueError`, never a silent fallback. This is a reserved extension point only: no trained classifier or ML score is part of Phase 4.
+
+The locally executable entry point must be `python -m melusense <local-input.eml-or-text> --ml-mode off [--output result.json]`. `--ml-mode recover` must exit nonzero with an explicit unsupported message, without writing a result. File output must never overwrite an existing path and must use restricted permissions because messages may contain private text. No hidden/reference data or external model calls. Use the required source modules in [BUILD_CONTRACT.md](BUILD_CONTRACT.md) and verify with the same frozen tests for all models.
+
+**Important:** This addition is proposed in a separate PR and has **not** changed the old `main` baseline, previous trial inputs or protected evaluator. Approve/freeze a new source SHA and transfer a newly hashed offline package before running it.
