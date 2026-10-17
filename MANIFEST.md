@@ -15,4 +15,4 @@
 12. [Existing greenfield/bootstrap script](tools/greenfield.py) — pinned browser + HPI TRAIN importer.
 13. [Fair browser tools](docs/RESEARCH_TOOLS.md) · [Rights-gated HPI TRAIN](docs/HPI_TRAIN.md).
 
-**Proposal scope:** The standalone English prompt, full build tree and reserved classifier-mode obligation are being revised on an unmerged Brave-proposal branch. No model trial has completed this proposed assignment, and it is NOT an approved freeze. The old main package and Spark installations remain unchanged. No checkbox may be ticked in `TASKS.md`; results are recorded separately.
+**Owner-approved task structure:** English prompt, build tree, Brave/MCP research requirement and inert classifier-mode interface are now the ModelBench contract. **This is not a qualified worker/runtime freeze.** No new model trial has been run, existing Spark installations remain unchanged, and `TASKS.md` checkboxes remain immutable. Results belong in separate run evidence.
