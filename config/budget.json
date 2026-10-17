@@ -1,5 +1,5 @@
 {
-  "version": "brave-offline-v3",
+  "version": "brave-offline-v4",
   "models": [
     "kolibri",
     "mistral",
@@ -8,9 +8,9 @@
   ],
   "repetitions": 3,
   "seeds": [
-    41,
-    42,
-    43
+    1,
+    2,
+    3
   ],
   "context_tokens": 262144,
   "max_output_tokens_per_turn": 32768,
