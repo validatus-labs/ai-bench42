@@ -1,5 +1,7 @@
 # ModelBench — One lab. Many models. Same evidence.
 
+> **DRAFT PROPOSAL, NOT A FROZEN BENCHMARK:** The Brave-based offline-workbench instructions on this review branch are not yet qualified or deployed. The repository's current `main` and previously frozen Spark packages remain unchanged.
+
 *How good is an LLM when it has to build something that actually works?*
 
 ## TL;DR — Too long; didn't read
@@ -79,7 +81,7 @@ The DGX Spark is an example host, not a requirement for every trial. The exact s
 
 **Dictionaries** capture language-specific header words; **regex** finds structural patterns; the **BoundaryReviewer** checks competing evidence and original text positions. Uncertain cases abstain rather than delete: `authorized_removals=[]`.
 
-**Classifier?** Not in this coding benchmark. Previous FN-Recovery research has not demonstrated enough additional benefit to make it a required step; future classifier/LLM recovery is a separate experiment.
+**Classifier?** No model training or classifier inference in this coding benchmark. The proposed new contract requires only a **reserved `--ml-mode off|recover` switch**: `off` is the rule-only implementation; `recover` must say explicitly that it is not implemented. This tests clean extensibility, **not** ML accuracy. Future real FN-Recovery remains a separate experiment. [Exact extension contract →](docs/BUILD_CONTRACT.md).
 
 ## Same research tools. Real training examples.
 
@@ -97,7 +99,7 @@ Browser MCP must actually be wired into every coding agent. `--network-isolated`
 
 [Playwright deployment & fairness →](docs/RESEARCH_TOOLS.md) · [HPI sample download and Gold protocol →](docs/HPI_TRAIN.md)
 
-**Greenfield on the Spark:** `python3 tools/greenfield.py greenfield` installs pinned portable Node and the matching Playwright/Chromium stack into the ignored local workspace. `verify` checks its recorded versions and browser; the installer does not launch the coding benchmark or expose hidden HPI Gold. See [research-tool controls](docs/RESEARCH_TOOLS.md).
+**Brave proposal:** Reuse the independently qualified existing Brave/Playwright/Kilo-MCP environment only after the coordinator validates its exact hashes, per-model MCP functionality, service-worker blocking, documentation-origin restrictions and *real* worker/network isolation. The current `tools/greenfield.py` still contains historical Chromium installation logic; **do not run `install` or `greenfield` to qualify Brave**. An explicit read-only Brave verification adapter remains to be implemented and audited. [Research-tool constraints →](docs/RESEARCH_TOOLS.md).
 
 ## One clean repository. Repeatable agent output.
 
@@ -112,7 +114,9 @@ melusense-benchmark/
 │   └── models.json          # Extensible model profiles
 ├── docs/
 │   ├── BENCHMARKS.md        # Background and official links
-│   ├── WORKSPACE_LAYOUT.md  # Branches, isolation, Run-IDs
+│   ├── WORKSPACE_LAYOUT.md  # Portable offline workbench
+│   ├── BUILD_CONTRACT.md    # Full required source/build ASCII tree
+│   ├── OFFLINE_AGENT_PROMPT.md # Identical English agent task
 │   ├── contract.md          # Parser API and safety
 │   └── evaluation.md        # Independent scoring
 ├── melusense/
@@ -123,22 +127,15 @@ melusense-benchmark/
 
 Agents create matching `melusense/rules/`, `dictionaries/`, `processors/` and reviewer modules as specified in [AGENTS.md](AGENTS.md). The files are organized alike, but the implementations can differ. Agents never edit frozen tasks/tests; their progress stays in ignored `build/`, and independent evaluation stays outside the candidate sandbox.
 
-[Agent contract](AGENTS.md) · [Directory & branch workflow](docs/WORKSPACE_LAYOUT.md) · [Complete assignment](TASKS.md)
+[English reusable agent prompt](docs/OFFLINE_AGENT_PROMPT.md) · [Standard candidate build tree](docs/BUILD_CONTRACT.md) · [Agent contract](AGENTS.md) · [Workspace layout](docs/WORKSPACE_LAYOUT.md) · [Complete assignment](TASKS.md)
 
-## Start from zero
+## Start from one offline package (after future freeze approval)
 
-The tool-enabled trial baseline is [**`benchmark/base-v2`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v2); record its exact commit SHA with `git rev-parse origin/benchmark/base-v2`. `main` contains the same approved starting files. Once frozen, any future assignment change requires a separately approved new baseline.
+Only a **coordinator** with repository access selects and records the exact approved source SHA, exports a **Git-free** candidate starter, hashes it and transfers it to the machine. The DGX Spark and coding models do **not** need repository access. `main` currently remains the old task; **do not confuse this draft branch or the original `benchmark/base-v2` with a signed-off new Brave baseline**.
 
-```bash
-git clone git@github.com:validatusinternal/melusense-benchmark.git
-cd melusense-benchmark
-git fetch origin benchmark/base-v2
-git rev-parse origin/benchmark/base-v2
-python3 -B tools/verify_scaffold.py
-python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
-```
+Every model receives the same English instruction in [OFFLINE_AGENT_PROMPT.md](docs/OFFLINE_AGENT_PROMPT.md), identical parser source/API tree in [BUILD_CONTRACT.md](docs/BUILD_CONTRACT.md), budgets and frozen tests. The coordinator checks a real Brave MCP tool call **from the actual isolated worker**, not only the historical Kolibri/Kilo host-open session, and confirms read/write/egress isolation before C01. The deliberately unimplemented starter must initially fail acceptance; those failures are expected, **not** candidate success.
 
-**Expected:** scaffold PASS; acceptance FAIL on the intentionally empty parser. This is a **not-started coding benchmark**, not evidence of successful Kolibri, Mistral, GLM or Qwen trials.
+No new coding-model trials, training, browser installations, server restarts or data disclosures are authorized merely by this draft.
 
 [DGX Spark](https://developer.nvidia.com/topics/ai/dgx-spark) · [vLLM](https://docs.vllm.ai/en/latest/) · [Evaluation protocol](docs/evaluation.md)
 
