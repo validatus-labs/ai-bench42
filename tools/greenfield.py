@@ -165,6 +165,26 @@ def browser_smoke(root: Path) -> dict:
     return result
 
 
+def runtime_hashes(root: Path) -> dict:
+    """Attest executable bytes, not merely package version strings."""
+    node, _, env = node_commands(root)
+    package = root / "node_modules" / "playwright"
+    js = "const {chromium}=require(process.argv[1]);process.stdout.write(chromium.executablePath())"
+    resolved = checked([node, "-e", js, str(package)], root, {
+        **env, "PLAYWRIGHT_BROWSERS_PATH": str(root / "browsers"),
+    })
+    chromium = Path(resolved).resolve(strict=True)
+    browser_dir = (root / "browsers").resolve(strict=True)
+    if not chromium.is_relative_to(browser_dir):
+        raise Blocked("Chromium executable outside approved browser directory")
+    paths = {
+        "node_executable_sha256": Path(node).resolve(strict=True),
+        "mcp_cli_sha256": root / "node_modules" / "@playwright" / "mcp" / "cli.js",
+        "chromium_executable_sha256": chromium,
+    }
+    return {name: sha256(file.read_bytes()) for name, file in paths.items()}
+
+
 def verify(root: Path, expected: str | None = None, smoke: bool = True) -> dict:
     pkg = root / "package.json"
     lock = root / "package-lock.json"
@@ -185,11 +205,15 @@ def verify(root: Path, expected: str | None = None, smoke: bool = True) -> dict:
     live_node = node_versions(root)
     if live_node != {"node": metadata.get("node"), "npm": metadata.get("npm")}:
         raise Blocked("Node/npm runtime changed since the pinned installation")
+    if runtime_hashes(root) != metadata.get("runtime_hashes"):
+        raise Blocked("Node/MCP/Chromium bytes changed from installation manifest")
     result = {"status": "VERIFIED", "mcp_version": MCP_VERSION,
               "lock_sha256": digest, "arch": metadata["arch"], "os": metadata["os"],
               "node": live_node["node"], "npm": live_node["npm"]}
     if smoke:
         result["browser_smoke"] = browser_smoke(root)
+        if result["browser_smoke"]["version"] != metadata.get("chromium_version"):
+            raise Blocked("Chromium runtime version drift")
     return result
 
 
@@ -239,7 +263,7 @@ def install(root: Path, expected: str | None, deps: bool, greenfield: bool = Fal
         private_write(staging / "stamp.json", jbytes({
             "schema": 1, "lock_sha256": digest, "mcp_version": MCP_VERSION,
             "arch": platform.machine(), "os": platform.system(),
-            "chromium_version": browser["version"], **versions,
+            "chromium_version": browser["version"], "runtime_hashes": runtime_hashes(staging), **versions,
         }))
         if root.exists():
             raise Blocked("Destination appeared during installation; refuse overwrite")
