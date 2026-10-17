@@ -6,6 +6,7 @@ The same tests must be frozen identically for every eligible coding model.
 """
 from __future__ import annotations
 
+import json
 import os
 import pathlib
 import stat
@@ -76,7 +77,7 @@ class ReservedModeContractTests(unittest.TestCase):
             self.assertEqual(first.returncode, 0, first.stderr[:600])
             self.assertTrue(out.is_file())
             self.assertEqual(stat.S_IMODE(out.stat().st_mode), 0o600)
-            self.assertIn('"authorized_removals": []', out.read_text(encoding="utf-8"))
+            self.assertEqual(json.loads(out.read_text(encoding="utf-8"))["authorized_removals"], [])
 
             # Output files are private and never silently overwritten.
             previous = out.read_bytes()
