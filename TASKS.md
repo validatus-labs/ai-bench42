@@ -62,7 +62,7 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 
 ## 1. Reproducibility contract
 
-- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v2`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
+- One candidate = **one isolated runtime and clean Git-free export** from the *same owner-approved exact source SHA*, recorded in the coordinator's signed-off offline package manifest. The new Brave candidate baseline has **not yet been frozen**; do not use an old branch name as an implicit source identity. Never reuse a previous solution, agent cache, tool history or a reference implementation.
 - Coordinator verifies repo SHA, task/fixture/config hashes, tool versions, budgets, available context, isolation and tool/model endpoint before any trial. An unchanged rerun verifies/reuses its existing Run-ID; changed input creates a new Run-ID. **Never reset, overwrite or silently repair** divergent states.
 - Implementation source layout is defined by [AGENTS.md](AGENTS.md) and [WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md); required module paths are fixed for comparable outputs, while internals can differ. Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
 - Use pinned common [budgets](config/budget.json), [agent rules](AGENTS.md), [API contract](docs/contract.md) and [evaluation rules](docs/evaluation.md). Document unsupported context/platform settings; no silent fallback.
@@ -134,4 +134,4 @@ This is a **domain-specific coding benchmark**, not a universal model ranking. R
 
 ## 6. Freeze and next action
 
-This file, tests and budgets describe a **not-started** model-agnostic benchmark. The coordinator freezes an exact `benchmark/base-v2` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, production model, HPI Gold or BLIND assets.
+This proposed assignment, tests and unchanged resource ceilings describe a **not-started** model-agnostic offline benchmark. The coordinator must obtain Owner + independent auditor approval, record a **new exact SHA**, verify the reproducible Brave research tools and worker isolation, transfer a checksum-verified Git-free archive, and then launch C01 only after a separate READY decision. Historical base-v1/base-v2, Spark worktrees, the production model, HPI Gold and BLIND assets must remain untouched until any separately authorized GitHub-only cleanup.
