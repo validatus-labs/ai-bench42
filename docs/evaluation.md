@@ -1,14 +1,15 @@
-# Evaluation and freeze contract — base-v2
+# Evaluation and freeze contract — base-v3
 
-**Status: NOT STARTED.** The coordinator pins the exact `benchmark/base-v2` SHA outside the frozen candidate tree. Old `benchmark/base-v1` and its results are not part of this new trial.
+**Status: NOT STARTED.** The coordinator pins the exact `benchmark/base-v3` SHA outside the candidate sandbox. Preserve previous `benchmark/base-v1` and `benchmark/base-v2` snapshots.
 
-1. Verify the exact frozen tree, budget and fixture hashes before preparing trials. Any unexpected file, dirty checkout, changed SHA, wrong model, missing isolation or incompatible context must fail closed. An identical rerun checks/reuses the existing Run-ID; never reset/delete unexpected work.
-2. Give each candidate the **same** task, contracts, tests, fixed starting SHA, tools, model gateway contract and budgets. Three independent seeds 41/42/43, with each worker in its own isolated unprivileged runtime. Branches and worktrees are not security boundaries.
-3. Block worker access to reference implementation, comparator source, corpus/human Gold, hidden tests, other runs, shared Git objects, host HOME, Git credentials and unrelated network services.
-4. Keep raw outputs and progress in isolated `build/`; include command exit codes, generated tokens, wall time, tool calls, memory, errors and all unsuccessful attempts. Never tick `TASKS.md`.
-5. Candidate first runs scaffold integrity and records **expected initial acceptance failures**. It then implements `detect_text` and `detect_eml` without changing the visible contract and freezes its final source tree.
-6. Only an independent evaluator may access rights-approved hidden HPI Gold after candidate freeze. Do not train or tune on EVAL/BLIND, invent human labels or publish private mail. Report TP/FP/FN/F1 per qualified set, exact-span accuracy, abstentions and `authorized_removals=[]`.
-7. Evaluate implementation code quality, safety and runtime independently of general IFEval/MMLU-Pro/BBH, SWE-bench Verified, BFCL and serving performance. Equal functionality is not equal software-engineering quality.
-8. Deterministic **procedure** does not imply deterministic LLM output. A repeated run must use the same inputs and separate immutable evidence; no best-run-only reporting.
+1. **Immutable assignment:** verify exact tree, instructions, tests, model catalog and budgets before creating any candidate trial. Existing dirty/changed/ambiguous state must fail closed—not silently reset, clean or overwrite.
+2. **Models and seeds:** each eligible model gets the same source snapshot, prompts/test data/tool permissions and the seeds 41/42/43. The model catalog is illustrative, not a claim that every backend can run. Pin exact model checkpoint, tokenizer, serving setup, context and quantization in a per-run manifest.
+3. **Separate execution:** enforce isolation outside Git. Workers must not access reference implementation, competitor source, corpus/HPI Gold, hidden tests, other runs, host HOME, Git credentials, shared Git object stores or unrestricted network endpoints.
+4. **One result branch per model × seed:** a worker uses a Git-free isolated export; after freeze the coordinator may preserve code in `trial/<model-slug>/seed-<n>`. Never continue another model's branch; divergent state requires a new Run-ID.
+5. **Idempotence:** same source/config/test/model/seed fingerprint => verify/reuse complete artifacts. Different input => new Run-ID, never overwrite earlier metrics. Keep raw bounded logs and unsuccessful attempts.
+6. **Candidate implementation:** untouched fixture/API safety contract, rules-only parser, `authorized_removals=[]`. Initial scaffold checks pass; initial acceptance fails by design; candidate must make acceptance pass without changing tests.
+7. **Independent evaluation:** freeze final candidate tree. Only evaluator sees rights-cleared HPI Gold/hidden tests; report TP/FP/FN/F1, exact boundaries, abstentions, source preservation and unsupported cases without self-certification.
+8. **Separate scores:** serving metrics (AIPerf), general IFEval/MMLU-Pro/BBH, SWE-bench/BFCL and Melusense applied coding are complementary measures. Report code quality and run cost separately.
+9. **No classifier gate:** training an FN logistic classifier, Synthetic FN, model-based deletion or extra LLM inference is not part of this benchmark; optional research needs its own separately frozen experiment.
 
-No candidate trial has been executed for base-v2 at this clean start; no metric or platform readiness is inferred from earlier pilots.
+[Required directory contract](WORKSPACE_LAYOUT.md) · [Main task](../TASKS.md) · [API contract](contract.md).

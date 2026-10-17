@@ -1,9 +1,10 @@
 {
-  "version": "base-v2",
+  "version": "base-v3",
   "models": [
     "kolibri",
     "mistral",
-    "qwen"
+    "qwen",
+    "glm"
   ],
   "repetitions": 3,
   "seeds": [
@@ -25,5 +26,7 @@
     2,
     4
   ],
-  "notes": "Common prospective trial ceilings, not evidence that all models support 256K. Incompatibility blocks a trial; never silently lower context."
+  "notes": "Common prospective trial ceilings, not evidence every model supports 262144 context tokens, ARM64 or matching tool calls. No silent downgrade, replacement or truncation.",
+  "model_catalog": "config/models.json",
+  "model_list_note": "Illustrative initial coordinator IDs only; this is not a completeness requirement or proof of model deployment. Exact model revisions must be pinned per Run-ID. Additional models require coordinator support."
 }

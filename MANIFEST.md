@@ -1,14 +1,13 @@
-# Benchmark Navigation — Clean Start
+# ModelBench — Navigation
 
-- [README](README.md) — purpose, not-started status and starting instructions
-- [TASKS](TASKS.md) — **ASCII pipeline**, four phases and unchecked implementation checklist
-- [Agent contract](AGENTS.md)
-- [API and safety contract](docs/contract.md)
-- [Evaluation and isolation contract](docs/evaluation.md)
-- [Shared model budgets](config/budget.json)
-- [Unimplemented parser API](melusense/api.py)
-- [Synthetic fixtures](tests/fixtures.json)
-- [Visible acceptance tests](tests/test_acceptance.py)
-- [Scaffold integrity verifier](tools/verify_scaffold.py)
+1. [README](README.md) — mission, DGX Spark, model examples, four benchmark phases, parser pipeline.
+2. [TASKS](TASKS.md) — **frozen ASCII architecture and all-unchecked task contract**.
+3. [AGENTS](AGENTS.md) — binding coding-agent source layout and safety rules.
+4. [Workspace layout](docs/WORKSPACE_LAYOUT.md) — branches, isolated runtimes, Run-IDs and idempotence.
+5. [Benchmark guide](docs/BENCHMARKS.md) — definitions, official frameworks, references.
+6. [Model profile catalog](config/models.json) — illustrative profiles; deployment verification required.
+7. [Shared budgets](config/budget.json).
+8. [API and safety](docs/contract.md); [Independent evaluation](docs/evaluation.md).
+9. [Empty parser API](melusense/api.py), [synthetic fixtures](tests/fixtures.json), [visible acceptance](tests/test_acceptance.py), [scaffold check](tools/verify_scaffold.py).
 
-All task boxes are open. Never record run results by modifying this frozen source.
+**Not started:** no benchmark candidate has completed this frozen assignment. No checkbox may be ticked in `TASKS.md`; results are recorded separately.

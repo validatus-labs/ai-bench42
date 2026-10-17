@@ -4,7 +4,7 @@
 This file is the immutable *assignment*, not a progress log. Agents must not edit or tick it.
 Results belong only in isolated `build/` artifacts and independent evaluator records.
 
-**Goal:** Compare Kolibri, Mistral and Qwen as coding agents on one bounded, deterministic email-structure parser. No classifier, Silver-label mining, FN-Recovery model, online LLM parsing, or destructive cleanup is required.
+**Goal:** Compare diverse models (e.g. Kolibri, Mistral, GLM, Qwen) as coding agents on one bounded, deterministic email-structure parser. No classifier, Silver-label mining, FN-Recovery model, online LLM parsing, or destructive cleanup is required.
 
 ## 0. Expected parser architecture (normative overview)
 
@@ -62,9 +62,9 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 
 ## 1. Reproducibility contract
 
-- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v2`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
+- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v3`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
 - Coordinator verifies repo SHA, task/fixture/config hashes, tool versions, budgets, available context, isolation and tool/model endpoint before any trial. An unchanged rerun verifies/reuses its existing Run-ID; changed input creates a new Run-ID. **Never reset, overwrite or silently repair** divergent states.
-- Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
+- Implementation source layout is defined by [AGENTS.md](AGENTS.md) and [WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md); required module paths are fixed for comparable outputs, while internals can differ. Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
 - Use pinned common [budgets](config/budget.json), [agent rules](AGENTS.md), [API contract](docs/contract.md) and [evaluation rules](docs/evaluation.md). Document unsupported context/platform settings; no silent fallback.
 - Run three isolated attempts per model with seeds 41, 42 and 43. Keep every failure, timeout, generated token count, tool call, command, model revision and tree SHA.
 - **No progress checkbox is ever ticked in this file.** Store per-run progress and findings under `build/`, which is not committed to the frozen candidate source.
@@ -129,4 +129,4 @@ This is a **domain-specific coding benchmark**, not a universal model ranking. R
 
 ## 6. Freeze and next action
 
-This file, tests and budgets describe a **not-started** benchmark. The coordinator freezes an exact `benchmark/base-v2` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, base-v1, production model, HPI Gold or BLIND assets.
+This file, tests and budgets describe a **not-started** model-agnostic benchmark. The coordinator freezes an exact `benchmark/base-v3` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, base-v1, production model, HPI Gold or BLIND assets.
