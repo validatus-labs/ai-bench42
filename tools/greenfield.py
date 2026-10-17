@@ -284,6 +284,39 @@ def hpi_import(folder: Path, approval: dict) -> dict:
             shutil.rmtree(stage)
 
 
+
+def hpi_bundle(folder: Path, output: Path, approval: dict, worker_approved: bool) -> dict:
+    """Create identical visible TRAIN labels for workers, only after privacy review."""
+    if not worker_approved:
+        raise Blocked("Explicit worker disclosure approval required (--approve-worker-disclosure)")
+    summary = verify_hpi(folder)
+    if PROJECT in output.parents and PROJECT / "build" not in output.parents:
+        raise Blocked("TRAIN bundle cannot be written in tracked repository")
+    records = []
+    for case in sorted(HPI_TRAIN):
+        ann = json.loads((folder / (case + ".ann")).read_text(encoding="utf-8-sig"))
+        # Offsets refer to the authoritative annotated text, not source EML bytes.
+        labels = [{"type": z["type"], "start": z["start"], "end": z["end"]}
+                  for z in ann["denotations"]]
+        records.append({"case_id": case, "text": ann["text"], "labels": labels,
+                        "coordinate_basis": "annotated_text_codepoints"})
+    content = b"".join((json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n").encode()
+                       for item in records)
+    digest = sha256(content)
+    if output.exists():
+        if sha256(output.read_bytes()) != digest:
+            raise Blocked("Existing TRAIN bundle differs; refuse overwrite")
+        action = "REUSED_VERIFIED"
+    else:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        private_write(output, content)
+        action = "CREATED"
+    return {"action": action, "bundle_sha256": digest, "cases": len(records),
+            "source_manifest_sha256": summary["manifest_sha256"],
+            "rights_record_sha256": approval["rights_record_sha256"],
+            "coordinate_basis": "ann.text codepoints", "split": "TRAIN_ONLY"}
+
+
 def cli() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT_DEFAULT)
@@ -301,6 +334,11 @@ def cli() -> int:
         p.add_argument("--network-isolated", action="store_true",
                        help="Coordinator attests external sandbox and egress controls")
     actions.add_parser("hpi-plan")
+    bundle = actions.add_parser("hpi-bundle")
+    bundle.add_argument("--data-dir", type=Path, default=HPI_DEFAULT)
+    bundle.add_argument("--output", type=Path, default=PROJECT / "build" / "hpi-train-visible.jsonl")
+    bundle.add_argument("--rights-record", required=True)
+    bundle.add_argument("--approve-worker-disclosure", action="store_true")
     for command in ("hpi-import", "hpi-verify"):
         p = actions.add_parser(command)
         p.add_argument("--data-dir", type=Path, default=HPI_DEFAULT)
@@ -344,6 +382,11 @@ def cli() -> int:
                                 rights_record(args.rights_record))
         elif args.action == "hpi-verify":
             result = verify_hpi(args.data_dir.expanduser().resolve())
+        elif args.action == "hpi-bundle":
+            approval = rights_record(args.rights_record)
+            result = hpi_bundle(args.data_dir.expanduser().resolve(),
+                                args.output.expanduser().resolve(), approval,
+                                args.approve_worker_disclosure)
         else:
             raise Blocked("Unknown action")
         print(json.dumps(result, indent=2, sort_keys=True))
