@@ -1,5 +1,5 @@
 {
-  "version": "base-v3",
+  "version": "base-v1",
   "models": [
     "kolibri",
     "mistral",

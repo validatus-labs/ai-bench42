@@ -1,6 +1,6 @@
-# Evaluation and freeze contract — base-v3
+# Evaluation and freeze contract — base-v1
 
-**Status: NOT STARTED.** The coordinator pins the exact `benchmark/base-v3` SHA outside the candidate sandbox. Preserve previous `benchmark/base-v1` and `benchmark/base-v2` snapshots.
+**Status: NOT STARTED.** The coordinator pins the exact `benchmark/base-v1` SHA outside the candidate sandbox. Only `benchmark/base-v1` is the approved assignment; previous experimental branches are obsolete.
 
 1. **Immutable assignment:** verify exact tree, instructions, tests, model catalog and budgets before creating any candidate trial. Existing dirty/changed/ambiguous state must fail closed—not silently reset, clean or overwrite.
 2. **Models and seeds:** each eligible model gets the same source snapshot, prompts/test data/tool permissions and the seeds 41/42/43. The model catalog is illustrative, not a claim that every backend can run. Pin exact model checkpoint, tokenizer, serving setup, context and quantization in a per-run manifest.

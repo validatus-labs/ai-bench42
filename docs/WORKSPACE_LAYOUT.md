@@ -7,14 +7,12 @@
 ```text
 source repository: validatusinternal/melusense-benchmark (private)
   main                       # Living human-facing docs and future revisions
-  benchmark/base-v1          # Historical immutable base
-  benchmark/base-v2          # Historical immutable base
-  benchmark/base-v3          # Candidate input: fixed task + tests + budgets
+  benchmark/base-v1          # ONLY active frozen baseline; tasks + tests + budgets
   trial/<model>/seed-<n>     # Candidate output branch, after coordinator freeze
 
 coordinator working storage (outside candidate sandboxes)
   bases/
-    base-v3-<full-sha>/      # Git-free export of the exact frozen tree
+    base-v1-<full-sha>/      # Git-free export of the exact frozen tree
   trials/
     <model-slug>/
       seed-41/               # Isolated worker, fixed source, local build/
@@ -103,7 +101,7 @@ Same Run-ID and matching fingerprint: **verify/reuse**. Any changed model/config
 ## Preflight checks (not a benchmark launch)
 
 ```bash
-git rev-parse benchmark/base-v3
+git rev-parse benchmark/base-v1
 git rev-parse HEAD
 git status --porcelain
 python3 -B tools/verify_scaffold.py

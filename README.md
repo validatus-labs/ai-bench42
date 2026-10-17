@@ -109,13 +109,13 @@ Agents create matching `melusense/rules/`, `dictionaries/`, `processors/` and re
 
 ## Start from zero
 
-The frozen trial baseline is [**`benchmark/base-v3`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v3) at commit `4fe60510526d1b929faaa52670296eee79e6dd3a`. The editorial README on `main` can evolve without altering that benchmark input.
+The frozen trial baseline is [**`benchmark/base-v1`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v1); record its exact commit SHA with `git rev-parse origin/benchmark/base-v1`. `main` contains the same approved starting files. Once frozen, any future assignment change requires a separately approved new baseline.
 
 ```bash
 git clone git@github.com:validatusinternal/melusense-benchmark.git
 cd melusense-benchmark
-git fetch origin benchmark/base-v3
-git rev-parse origin/benchmark/base-v3
+git fetch origin benchmark/base-v1
+git rev-parse origin/benchmark/base-v1
 python3 -B tools/verify_scaffold.py
 python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
 ```
