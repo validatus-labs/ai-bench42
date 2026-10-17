@@ -1,27 +1,14 @@
-# Trial protocol
+# Evaluation and freeze contract — base-v2
 
-Each model starts from the identical full `benchmark/base-v1` commit SHA, with
-[budget.json](../config/budget.json), TASKS.md and visible tests unchanged.
-Three independent runs are mandatory; preserve every failure, no best-run-only
-reporting. Record model checkpoint/quantization, tokenizer/chat-template hashes,
-server options, decoding parameters, agent version, tools, token/time budgets,
-seed, Run-ID and final commit/tree hashes. Do not claim deterministic model output.
+**Status: NOT STARTED.** The coordinator pins the exact `benchmark/base-v2` SHA outside the frozen candidate tree. Old `benchmark/base-v1` and its results are not part of this new trial.
 
-Separate metrics: serving performance; IFEval/MMLU-Pro/BBH; coding/tool calling;
-Melusine correctness and authorized-removal safety. Compare code quality and
-architecture independently; equal function is not equal source code.
+1. Verify the exact frozen tree, budget and fixture hashes before preparing trials. Any unexpected file, dirty checkout, changed SHA, wrong model, missing isolation or incompatible context must fail closed. An identical rerun checks/reuses the existing Run-ID; never reset/delete unexpected work.
+2. Give each candidate the **same** task, contracts, tests, fixed starting SHA, tools, model gateway contract and budgets. Three independent seeds 41/42/43, with each worker in its own isolated unprivileged runtime. Branches and worktrees are not security boundaries.
+3. Block worker access to reference implementation, comparator source, corpus/human Gold, hidden tests, other runs, shared Git objects, host HOME, Git credentials and unrelated network services.
+4. Keep raw outputs and progress in isolated `build/`; include command exit codes, generated tokens, wall time, tool calls, memory, errors and all unsuccessful attempts. Never tick `TASKS.md`.
+5. Candidate first runs scaffold integrity and records **expected initial acceptance failures**. It then implements `detect_text` and `detect_eml` without changing the visible contract and freezes its final source tree.
+6. Only an independent evaluator may access rights-approved hidden HPI Gold after candidate freeze. Do not train or tune on EVAL/BLIND, invent human labels or publish private mail. Report TP/FP/FN/F1 per qualified set, exact-span accuracy, abstentions and `authorized_removals=[]`.
+7. Evaluate implementation code quality, safety and runtime independently of general IFEval/MMLU-Pro/BBH, SWE-bench Verified, BFCL and serving performance. Equal functionality is not equal software-engineering quality.
+8. Deterministic **procedure** does not imply deterministic LLM output. A repeated run must use the same inputs and separate immutable evidence; no best-run-only reporting.
 
-Git branches/worktrees isolate edits, not access. Before any candidate trial,
-use a dedicated unprivileged sandbox with only its checkout, scratch output and
-allowlisted model/tool access. Deny reference/corpus/Gold/other trials, shared Git
-object stores, host HOME and GitHub credentials. Pin allowed network sources;
-block reference/API retrieval. Evaluator runs separately with held-out data.
-No agent trial is READY until these isolation checks actually pass.
-
-Worktree preparation must refuse an existing changed checkout and require the
-recorded base SHA. Repeating preparation verifies the same state; it must never
-reset/delete unexpected work. Freeze candidate results before independent scoring.
-No rollback or container isolation is claimed by the existence of this scaffold.
-
-Current state: starter only. Reference freeze, Gold qualification, trial isolation
-and hidden evaluator are pending. No candidate run or completed phase is claimed.
+No candidate trial has been executed for base-v2 at this clean start; no metric or platform readiness is inferred from earlier pilots.

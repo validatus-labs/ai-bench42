@@ -1,59 +1,103 @@
-# TASKS — Melusense Rule-First Coding Benchmark
+# TASKS — Melusense Rule-First Benchmark / Clean Start
 
-**Status:** benchmark assignment vNext; **not yet executed**.  
-**Purpose:** compare how independently operating coding agents implement a safe, multilingual email structure parser—not whether they can train a classifier.  
-**Authority:** [AGENTS.md](AGENTS.md), [API contract](docs/contract.md), [Evaluation protocol](docs/evaluation.md), [Budget](config/budget.json).
+**Status: NOT STARTED. Every checkbox is intentionally open.**
+This file is the immutable *assignment*, not a progress log. Agents must not edit or tick it.
+Results belong only in isolated `build/` artifacts and independent evaluator records.
 
-> **Research question:** When structured, inexpensive logic already solves predictable input, can a coding model build a reliable deterministic first stage and reserve costly LLM inference for genuinely uncertain downstream work?
+**Goal:** Compare Kolibri, Mistral and Qwen as coding agents on one bounded, deterministic email-structure parser. No classifier, Silver-label mining, FN-Recovery model, online LLM parsing, or destructive cleanup is required.
 
-## Why this still matters in an LLM world
+## 0. Expected parser architecture (normative overview)
 
-A document system does not need an LLM to recognize an RFC-822 header, a MIME boundary, a known reply separator, or an unambiguous quote marker. Use bounded MIME parsing, TOML dictionaries, safe regex and a deterministic reviewer first; **abstain** on uncertainty rather than delete user text. A future optional LLM can examine exceptional *authorized* cases, with its source spans checked independently. This is an architectural hypothesis to **measure**, not an automatic claim that regex is universally better.
+```text
+     .eml (RFC-822 bytes)             Unicode text
+              |                            |
+     [01 MIME/charset ingest]              |
+     - inert attachments                   |
+     - conservative decoding               |
+     - provenance / offset status           |
+              +--------------+-------------+
+                             |
+                [02 Original-source view]
+                  immutable Unicode text
+                  exact codepoint positions
+                  CRLF preserved verbatim
+                             |
+                [03 Canonical Recognition]
+                  typed lines / header roles
+                  source-backed evidence
+                             |
+             [04 TOML dictionaries + safe regex]
+                  EN / DE / FR / ES initially
+                  bounded matching / budgets
+                             |
+               +-------------+-------------+
+               |             |             |
+          Reply/Quote    Forward      Signature/Footer
+               |             |             |
+               +-------------+-------------+
+                             |
+                  [05 Candidate registry]
+                  category, [start, end),
+                  rule ID, evidence, status
+                             |
+                [06 Deterministic reviewer]
+                  context corroboration
+                  negative/code contexts
+                  conflict & overlap review
+                  stable ordering / dedupe
+                  uncertain => ABSTAIN
+                             |
+                  [07 Final safety gate]
+                      KEEP_ALL
+                 authorized_removals = []
+                             |
+               [08 JSON-compatible result]
+                 original/decoded provenance
+                 exact text coordinates
+                 attachment metadata only
+                 candidates + warnings
+```
 
-**Real-world motivation:** ARD/ZDF/Deutschlandradio Beitragsservice tender **BW 04/26 / TED 705814-2026** seeks an AI-supported inbound-document service covering paper/scans, email and fax, classifying document kinds/intent and extracting fields with confidence and structured JSON integration. This is **not** a specification that every item must go through a generative model. An email-boundary parser is only one preprocessing component; it does not replace OCR/handwriting recognition, document understanding or professional workflow review. [Tender notice](https://www.hellotender.eu/de/ausschreibungen/einfuhrung-von-ki-in-der-eingangsverarbeitung-705814-2026).
+A header candidate is **not** a deletion instruction. `detect_text` bypasses MIME ingest; `detect_eml` must not claim exact raw byte offsets unless proven. The frozen [API contract](docs/contract.md) controls actual output field names and coordinates. Preserve all legitimate current-body text.
 
-## Execution rules — idempotence and isolation
+## 1. Reproducibility contract
 
-- **Frozen candidate input:** `benchmark/base-v1`, full SHA `75fcaad909346909115d92b9929b5b91b3ddfbd6`, for existing v1 trials. This updated file on `main` **does not retroactively change that frozen commit**. Before using this revised assignment, the coordinator must review and freeze a **new versioned base** with its full SHA; never retarget the existing tag.
-- **Idempotent preparation:** before any write, verify SHA, clean worktree, candidate isolation, matching budgets/tests and stable run configuration. A repeat with identical parameters must verify and reuse the same prepared artifacts; divergent state must **fail closed**, not reset, delete, merge, overwrite or silently create a different trial.
-- **Idempotent evaluation:** derive a Run-ID/config fingerprint from model revision, code/tree SHA, dataset/test revision, prompt, seed, versions and limits. Repeating a completed run verifies integrity and shows its recorded result; changes need a **new Run-ID**. Raw outputs/logs stay in isolated `build/`.
-- **Isolation:** one model in one sandbox per trial; no access to `validatusinternal/melusense` reference, other trials, private HPI Gold, corpus/BLIND, Git credentials or host secrets. Branches/worktrees alone are **not** security boundaries.
-- **Repetitions:** same frozen input, tests, tool access, budgets and seeds `41/42/43` for Kolibri, Mistral and Qwen; retain all attempts, errors, timeouts and token usage. Repeatable procedure does not imply identical stochastic generated code.
-- **Safety:** no raw mail or private annotations in Git; no destructive text cleanup, unproven offsets, remote data transfer or attachment execution. All documentation and reports in English.
+- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v2`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
+- Coordinator verifies repo SHA, task/fixture/config hashes, tool versions, budgets, available context, isolation and tool/model endpoint before any trial. An unchanged rerun verifies/reuses its existing Run-ID; changed input creates a new Run-ID. **Never reset, overwrite or silently repair** divergent states.
+- Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
+- Use pinned common [budgets](config/budget.json), [agent rules](AGENTS.md), [API contract](docs/contract.md) and [evaluation rules](docs/evaluation.md). Document unsupported context/platform settings; no silent fallback.
+- Run three isolated attempts per model with seeds 41, 42 and 43. Keep every failure, timeout, generated token count, tool call, command, model revision and tree SHA.
+- **No progress checkbox is ever ticked in this file.** Store per-run progress and findings under `build/`, which is not committed to the frozen candidate source.
 
-## Phase checklist
+## 2. Coordinator phases (not candidate implementation tasks)
 
-### P1 — Serving and instrumentation (coordinator)
+### P1 — Serving and instrumentation
+- [ ] Verify pinned serving configuration: weights/quantization, tokenizer, context length, active sequences, memory and logs.
+- [ ] Verify **one central** Prometheus endpoint (not one per worktree): TTFT, prefill/decode, cache/KV memory, throughput, request queue and failures.
+- [ ] Run identical NVIDIA AIPerf probes with 1/2/4 clients and three repetitions; **queueing is not concurrent decoding**.
+- [ ] Record immutable configurations, hashes, timestamps, raw metrics and Run-IDs.
 
-- [ ] Record model revision, quantization, tokenizer, context cap, decoding parameters and source hashes.
-- [ ] Use **one** central Prometheus endpoint; record TTFT, prefill/decode throughput, KV/cache, memory, queue and failures. Do not require one endpoint per worktree.
-- [ ] Run identical NVIDIA AIPerf workloads at concurrency 1/2/4, three runs; distinguish queued requests from *true* concurrently decoded sequences.
-- [ ] Freeze configuration and store machine-readable measurements under each Run-ID.
+### P2 — General model evaluation
+- [ ] Pin evaluation backend and IFEval / MMLU-Pro / BBH revisions, prompts, samples and scoring.
+- [ ] Run matched settings; record truncation, unsupported tasks and failures.
+- [ ] Report each score separately; never call a smoke subset a full benchmark.
 
-### P2 — General model capability (coordinator)
+### P3 — General coding and tool calls
+- [ ] Pin SWE-bench Verified selection, platform/container requirements and scorer.
+- [ ] Pin BFCL selection and official AST/tool-call checks.
+- [ ] Report completion, tests, time, tokens, tool failures and independent code review, without conflating these scores with parser quality.
 
-- [ ] Pin LightEval, IFEval, MMLU-Pro and BBH dataset/task/backend revisions.
-- [ ] Run comparable prompts/sample IDs and publish individual scores; no silent task replacement or calling subsets full benchmarks.
+## 3. P4 — Candidate implementation from a deliberately empty parser
 
-### P3 — General coding and tools (coordinator)
+- [ ] **C01 Baseline:** Read `MANIFEST.md`, `AGENTS.md`, this task, `docs/contract.md`, fixtures and tests. Run and record unchanged scaffold checks **and expected failing acceptance tests**.
+- [ ] **C02 Design:** Define input budgets, canonical line/span model, original-source provenance, rule registry and conservative abstention. Specify exact Unicode codepoint and CRLF behavior.
+- [ ] **C03 Recognize:** Independently implement bounded regex + TOML dictionaries for Reply/Forward/Signature/Footer (EN/DE/FR/ES first), including quoted chains, multiline headers, separators, negative contexts and conflicts.
+- [ ] **C04 MIME:** Implement inert MIME/charset ingest; no attachment fetching/execution/payload export. Return attachment *metadata* and warnings when charset/HTML/source mapping is not provable.
+- [ ] **C05 Review:** Add deterministic BoundaryReviewer and stable evidence-based arbitration. Implement exact `detect_text(text, locale="auto")` and `detect_eml(raw, locale="auto")` public interfaces and JSON fields per contract. `authorized_removals=[]` always.
+- [ ] **C06 Verify:** Add targeted tests for no-history mail, nested forwards, Unicode, CRLF, misleading From/Date inside current body or code/patches, malformed MIME, hostile regex input and budgets. Preserve all provided tests unchanged.
+- [ ] **C07 Freeze candidate:** Run visible tests, document all failures, produce `build/worker-report.json` (Run-ID, hashes, decisions, commands, test outcomes, tokens, wall time, limitations), then stop. Only the independent evaluator may score protected Gold.
 
-- [ ] Freeze an executable SWE-bench Verified selection, environment and scorer; report architecture/platform incompatibilities rather than substituting test cases.
-- [ ] Freeze BFCL tasks, use official tool-call scoring, and distinguish a small smoke test from the full benchmark.
-- [ ] Record task completion, patches, tool errors, wall time, tokens and security violations. Independently review maintainability; benchmarks are complementary, not interchangeable.
-
-### P4 — Melusense Rule-First AgentBench (coding candidate)
-
-- [ ] **C01 Inspect:** read [MANIFEST.md](MANIFEST.md), [AGENTS.md](AGENTS.md), [contract](docs/contract.md), starter and visible fixtures. Run the untouched scaffold check and intentionally failing initial acceptance tests; record baseline.
-- [ ] **C02 Design:** define typed rule registry, immutable original source, codepoint span/evidence/provenance model, bounded processing and fail-closed abstention. State how CRLF and Unicode coordinates are preserved.
-- [ ] **C03 Implement:** independently create `Reply`, `Forward`, `Signature` and `Footer` recognizers using bounded regex + locale dictionaries (start EN/DE/FR/ES); handle multiline, negative contexts, quoted history and overlap.
-- [ ] **C04 MIME:** inert RFC-822/MIME ingest; decode text safely, collect attachment *metadata only*, report unsupported HTML/byte-coordinate mappings, never fetch or execute attachments.
-- [ ] **C05 Review:** deterministic BoundaryReviewer resolves conflicting evidence; expose `detect_text`/`detect_eml` with the **exact frozen** JSON contract. `authorized_removals=[]` always; no automatic body edits.
-- [ ] **C06 Tests:** add original tests for quoted headers, forwarded blocks, signatures, multilingual false positives, empty/malformed mail, CRLF, Unicode, HTML ambiguity, oversized inputs and regex/resource exhaustion. Never change visible/hidden tests.
-- [ ] **C07 Freeze:** pass unchanged acceptance suite where implementable, record every failure and source SHA, and produce `build/worker-report.json` with commands, decisions, limitations, resource use and tests. Stop; independent evaluator scores only frozen outputs.
-
-**Deliberately OUT OF SCOPE:** training, scoring or promoting any logistic/FN classifier, Silver mining, synthetic-FN checkpoint, LLM inference inside the parser, and automatic deletion. These are not completion gates.
-
-## Local verification (candidate checkout)
+**Mandatory candidate smoke commands:**
 
 ```bash
 python3 -B tools/verify_scaffold.py
@@ -61,39 +105,28 @@ python3 -B -m unittest discover -s tests -p 'test_scaffold.py'
 python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
 ```
 
-The first two check **starter integrity**, not parser quality. `test_acceptance.py` is expected to **fail on the untouched scaffold** because `melusense/api.py` is unimplemented; a candidate must make it pass without weakening tests. The independent evaluator alone may run protected HPI Gold tests after candidate freeze and rights/cohort review.
+The untouched starter **must fail acceptance** (`melusense/api.py` is unimplemented). A scaffold PASS is not a parser PASS. Do not weaken the contract, remove tests or mask expected initial failures.
 
-### Independent scoring (one report per run)
+## 4. Independent scoring and why the task is useful
 
-| Dimension | Required evidence |
+| Axis | What is measured |
 |---|---|
-| Functional correctness | Exact source-anchored reply/forward/signature/footer predictions against adjudicated HPI Gold; TP/FP/FN, precision/recall/F1 and exact-case accuracy; count UNKNOWN separately |
-| Safety | Unauthorized removal count **0**; current-body preservation; MIME/HTML/offset abstention; regex input/size/time limits |
-| Code quality | Legible modular design, contract adherence, tests, diagnostics, dependency/supply-chain hygiene, bounded complexity and reviewer rationale |
-| Efficiency | Wall time, memory, throughput, generated tokens/tool calls, coding completion time and failure-recovery rate |
-| Reproducibility | Frozen base, model, source/tree SHA, evaluator version, seeds, immutable metrics, repeatability/failure logs |
+| Correctness | Exact reply/forward/signature/footer boundaries on independently qualified HPI human Gold: TP/FP/FN, P/R/F1, exact case accuracy and ABSTAIN, where rights allow |
+| Safety | Never drop current text, no authorized removals, no invented byte offsets, finite resource limits, inert attachments |
+| Code quality | Modular rules, tests, readability, maintainability, errors, security and disciplined scope |
+| Efficiency | Coding time, generated tokens, tool calls, runtime, memory and throughput |
+| Reproducibility | Frozen input and outputs, identical budgets, isolation, repeatability, failures retained |
 
-**Interpretation:** This is a current, useful **domain-specific coding and software-engineering challenge**, not a universal coding-intelligence ranking. Cross-check outcomes with SWE-bench and BFCL; compare both parser quality and the *coding agent's implementation quality*. If Gold is missing or invalid, report **NOT_EVALUATED**, never infer 100% recall.
+This is a **domain-specific coding benchmark**, not a universal model ranking. Run SWE-bench/BFCL separately. No qualified Gold => **NOT_EVALUATED**, not “0 FN” or “100% recall”.
 
-## Key research finding — why there is no classifier checkpoint
+## 5. Research background (coordinator only; not model-training instructions)
 
-- Historical HPI development (previously examined) contained **1,009 valid cases** and an approximately **90.6% rules F1** under its old development protocol; not a new blind result.
-- The earlier optional FN classifier added **0 true positives and 4 false positives** on the known 145-case HPI evaluation. There is no demonstrated benefit sufficient to make it mandatory.
-- In the separately investigated Thunderbird 4-GiB prefix, **29/29** independently *source-corroborated* historical headers (23 reference-connected groups) were already covered by rules, yielding **0 demonstrated additional FN Silver positives**. This is not proof of perfect recall: plausible/UNKNOWN content and missing parents remain unresolved.
-- Classifier research also encountered labeling shortcuts (quotation and preceding blank-line cues), uncertain MIME provenance and insufficient FR/ES independent positive threads. Retain these lessons as historical context, **not** benchmark gates or scoring data.
+- **HPI Email Structure / Quagga (ECIR 2018):** historically annotated ASF/Enron zones; preserve original TRAIN/TEST/EVAL, provenance, source spans and rights. The previous Melusense HPI development review recorded 1,009 valid cases and ~90.6% historic rule F1; it is **not** new blind evidence.
+- The former experimental FN classifier produced **0 added TP / 4 added FP** on a known 145-case HPI EVAL. In a separate 4-GiB Thunderbird prefix, **29/29 source-corroborated headers** were already rule-covered. Neither result proves perfect recall. Silver labeling also suffered quotation/blank-line shortcuts and few independent FR/ES positives.
+- Classifier development is **not** part of this benchmark. If later justified, open a separately versioned research task and compare rule-only vs optional LLM recovery on independent Gold (additional TP, FP, latency, tokens, safety).
+- Architectural comparisons: [Crisp reply](https://github.com/crisp-oss/email-reply-parser), [Crisp forward](https://github.com/crisp-oss/email-forward-parser), [GitHub reply](https://github.com/github/email_reply_parser), [Mailgun Talon](https://github.com/mailgun/talon) and [HPI Quagga](https://github.com/HPI-Information-Systems/Quagga). These are **evaluator background only**; coding candidates must not inspect their source.
+- **Only approved external corpus reference:** [HPI Email Structure](https://hpi.de/en/database-group/projects/data-integration-projects/web-science/mimir-corpus-exploration-and-knowledge-management/email-structure/). Download availability does not grant permission to republish private correspondence.
 
-**If revisited later (separate opt-in research):** seek independently annotated historical reply/forward header starts from **HPI Email Structure / Quagga** (ASF/Enron TRAIN/TEST/EVAL with original splits and licensing review). Compare rules-only vs optional LLM-assisted recovery on the *same held-out human Gold*, verified source anchors, FP cost, latency and tokens. Do not train on EVAL/BLIND or recycle rule-derived Silver as Gold. No general bulk-mail download is required by this benchmark.
+## 6. Freeze and next action
 
-## Parsers worth comparing (coordinator context, not agent source code)
-
-| Implementation | Approach | Important limitation / lesson |
-|---|---|---|
-| [GitHub Email Reply Parser](https://github.com/github/email_reply_parser) | Small fragment/quote-rule parser | Known language and multiline-header limitations; simple baseline |
-| [Crisp Email Reply Parser](https://github.com/crisp-oss/email-reply-parser) | Actively maintained multilingual regex for plain-text replies; optional RE2 | Demonstrates 2026 operational relevance; not a MIME/offset-verification system |
-| [Crisp Email Forward Parser](https://github.com/crisp-oss/email-forward-parser) | Locale/client-specific forwarded-mail structures | Complementary forward metadata; no automatic deletion authority in Melusense |
-| [Mailgun Talon](https://github.com/mailgun/talon) | Heuristics for quote extraction and optional trained signature model | Hybrid comparator; learned signature stage is outside our assignment |
-| [HPI Quagga](https://github.com/HPI-Information-Systems/Quagga) | ECIR-2018 recurrent-neural zoning; repository includes older Jangada, Zebra, FeatureRNN competitors | Valuable historical scientific reference, not a modern coding-agent benchmark |
-
-**Only corpus reference:** [HPI Email Structure](https://hpi.de/en/database-group/projects/data-integration-projects/web-science/mimir-corpus-exploration-and-knowledge-management/email-structure/). Dataset annotations/code/mail-text rights differ; do not copy or publish original mail without permission. Do not let coding candidates fetch these comparator implementations: equal tasks must be solved independently from the frozen starter.
-
-**Next coordinator action:** review this vNext task and the unchanged contracts, freeze a new candidate base (e.g. `benchmark/base-v2`), verify security isolation, then run three independent model implementations. Never rewrite `benchmark/base-v1`.
+This file, tests and budgets describe a **not-started** benchmark. The coordinator freezes an exact `benchmark/base-v2` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, base-v1, production model, HPI Gold or BLIND assets.
