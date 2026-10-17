@@ -35,4 +35,4 @@ The **only executable parser mode is `ml_mode="off"`**, which uses deterministic
 
 The locally executable entry point must be `python -m melusense <local-input.eml-or-text> --ml-mode off [--output result.json]`. `--ml-mode recover` must exit nonzero with an explicit unsupported message, without writing a result. File output must never overwrite an existing path and must use restricted permissions because messages may contain private text. No hidden/reference data or external model calls. Use the required source modules in [BUILD_CONTRACT.md](BUILD_CONTRACT.md) and verify with the same frozen tests for all models.
 
-**Important:** This addition is proposed in a separate PR and has **not** changed the old `main` baseline, previous trial inputs or protected evaluator. Approve/freeze a new source SHA and transfer a newly hashed offline package before running it.
+**Important:** This approved API addition does **not** change previous trial inputs or protected evaluator datasets. Before running it, the coordinator must freeze/record a new source SHA, independently qualify real worker/runtime isolation and transfer a newly hashed offline package.
