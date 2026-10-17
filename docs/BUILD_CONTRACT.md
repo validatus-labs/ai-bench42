@@ -1,6 +1,6 @@
-# ModelBench — standardized candidate build contract (PROPOSAL)
+# ModelBench — standardized candidate build contract
 
-**Status:** Draft for a **new Brave-based frozen assignment**, not yet the active `main` contract. This is a **coding task**, not model training. The agent builds a reproducible rule-only parser, with an inert classifier extension point for a later separate study.
+**Status:** Owner-approved build/API task structure; exact offline package and runtime readiness still require independent verification. This is a **coding task**, not model training. The agent builds a reproducible rule-only parser, with an inert classifier extension point for a later separate study.
 
 ## A. ASCII folder tree — same for every model/seed
 
@@ -137,4 +137,4 @@ Candidate grading can assign a small, separate `extensibility/API-discipline` ru
 
 The worker owns only source changes in `/workspace/melusense/`, new tests, and `/workspace/build/`; the coordinator creates immutable `evidence` and `reports` records **outside** that mount. Identical model-neutral tasks and tooling apply per seed `41,42,43`, no GitHub needed on Spark. Reused complete fingerprint -> verify/reuse, changed input -> new Run-ID.
 
-This proposal changes the **task definition**, so prior `base-v1`, `base-v2` and previously transferred `031f0cfa` packages cannot be relabeled as implementing the new flag. The new baseline must independently review this extension, update `TASKS.md`, `AGENTS.md`, `docs/contract.md`, starter tests/packaging and `.gitignore`, then freeze an exact source SHA and re-export a new Git-free archive. **Do not** edit historical baselines, run P4, install/modify Brave, or overwrite local Spark evidence as a side effect.
+This **approved task-definition change** does not retroactively modify prior `base-v1`, `base-v2` or previously transferred `031f0cfa` packages; they cannot be relabeled as implementing the new flag. The new baseline must independently review this extension, update `TASKS.md`, `AGENTS.md`, `docs/contract.md`, starter tests/packaging and `.gitignore`, then freeze an exact source SHA and re-export a new Git-free archive. **Do not** edit historical baselines, run P4, install/modify Brave, or overwrite local Spark evidence as a side effect.
