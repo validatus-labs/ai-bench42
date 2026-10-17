@@ -82,7 +82,7 @@ The complete source-file and build tree is specified in [BUILD_CONTRACT.md](BUIL
 3. **Coding agent:** Run the **same [English offline task](OFFLINE_AGENT_PROMPT.md)** for every contender and independently implement C01–C07. The empty parser starter **must initially fail** acceptance tests by design. No reference solution, automatic deletion, classifier inference or ML training is permitted.
 4. **Independent evaluator:** Freeze each candidate, independently score only authorized visible/hidden data, record correctness and safety alongside time, tokens, tool calls and all errors. Never let a coding agent grade its own work.
 
-Human-readable labels `K42-1/2/3`, `M42-1/2/3`, `G42-1/2/3` and `Q42-1/2/3` map to fixed **numeric seeds 41/42/43** respectively; names are not RNG seeds or proof of completed trials. One model × one seed = one independent run. A Git output branch may be created **after** coordinator freeze, but is not a sandbox.
+Human-readable labels `K42-1/2/3`, `M42-1/2/3`, `G42-1/2/3` and `Q42-1/2/3` map to fixed **numeric seeds 1/2/3** respectively; names are not RNG seeds or proof of completed trials. One model × one seed = one independent run. A Git output branch may be created **after** coordinator freeze, but is not a sandbox.
 
 ### Readiness and retained evidence
 
