@@ -1,6 +1,6 @@
 # ModelBench Research Tools — one Brave/Playwright MCP contract
 
-**PROPOSED / NOT YET QUALIFIED.** This document belongs to the new offline Brave-based assignment draft. It does not retroactively change the approved old Chromium baseline or prove the DGX Spark worker is isolated.
+**OWNER-APPROVED BRAVE TOOL CHOICE / NOT YET RUNTIME-QUALIFIED.** This is the intended offline Brave-based research-tool contract. Approval of the task does not prove that any DGX Spark benchmark worker is isolated or READY.
 
 ## Principle
 
@@ -38,7 +38,7 @@ These reported values are an **inventory lead** only. The coordinator must obtai
 
 ## Deployment and reproducibility
 
-The **coordinator** distributes the signed-off, immutable package and a separately permission-controlled browser runtime. A **proposed** `tools/preflight.py` could check the existing runtime without mutation; it is **not deployed yet**. The earlier `tools/greenfield.py` script on this draft's source tree retains **legacy Chromium install code**. **Do not execute its `install` or `greenfield` operation for the Brave benchmark** or silently substitute Chromium; keep HPI TRAIN import capability gated by explicit rights. A new, reviewed read-only Brave checker and tests are required before this draft can become a freeze.
+The **coordinator** distributes the signed-off, immutable package and a separately permission-controlled browser runtime. A planned `tools/preflight.py` would check the existing runtime without mutation; it is **not deployed yet**. The earlier `tools/greenfield.py` script on this draft's source tree retains **legacy Chromium install code**. **Do not execute its `install` or `greenfield` operation for the Brave benchmark** or silently substitute Chromium; keep HPI TRAIN import capability gated by explicit rights. A new, reviewed read-only Brave checker and tests are required before this draft can become a freeze.
 
 Capture the exact current source SHA, runtime hashes, tool schema, effective security flags, approved egress policy, model checkpoint, budgets and seed in coordinator-owned `evidence/preflight/<run-id>/`; keep worker logs sanitized and bounded. Store the independent decision in `reports/readiness.md`. Worker inputs exclude the coordinator's `evidence/`, `reports/` and evaluator-only storage.
 
