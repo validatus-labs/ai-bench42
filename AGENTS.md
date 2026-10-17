@@ -1,6 +1,6 @@
 # Agent Contract — ModelBench / Melusense AgentBench
 
-**Candidate instruction for the proposed new baseline.** Read [MANIFEST.md](MANIFEST.md), [TASKS.md](TASKS.md), [docs/contract.md](docs/contract.md), [docs/WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md), [docs/BUILD_CONTRACT.md](docs/BUILD_CONTRACT.md), [English offline agent prompt](docs/OFFLINE_AGENT_PROMPT.md) and [docs/evaluation.md](docs/evaluation.md) before editing code.
+**Owner-approved offline coding-agent contract; run execution still requires independent readiness qualification.** Read [MANIFEST.md](MANIFEST.md), [TASKS.md](TASKS.md), [docs/contract.md](docs/contract.md), [docs/WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md), [docs/BUILD_CONTRACT.md](docs/BUILD_CONTRACT.md), [English offline agent prompt](docs/OFFLINE_AGENT_PROMPT.md) and [docs/evaluation.md](docs/evaluation.md) before editing code.
 
 ## Core obligations
 
