@@ -97,7 +97,7 @@ The root `melusense/api.py` is an immutable *empty starter*. The generated `buil
 
 The existing production Melusense public CLI accepts `--ml-mode off|recover`, default `off`. Its Python functions also expose `ml_mode="off"`; it is **not** a Boolean `classifier=on/off` switch. Production `--mode A|B` is separate and is **not** classifier activation. For scientific comparability, this future candidate contract reserves the same two mode names without shipping or copying any reference source.
 
-Required candidate Python signatures **if this proposal is approved and frozen**:
+Required candidate Python signatures in the **approved task contract** (actual offline source and runtime still need qualification):
 
 ```python
 def detect_text(text: str, locale: str = "auto", *, ml_mode: str = "off") -> dict: ...
@@ -112,7 +112,7 @@ Required behavior:
 5. **Future hook:** include `melusense/processors/recovery_hook.py` with only an extension interface/explicit unsupported stub. It must not contain an inference model, trained weights, logits, optimizer, dataset loader, activation policy, threshold learner or remote network call.
 6. **No required trained model:** tests exercise the switch **only**. Applied benchmark scoring uses the rules-only `off` path exclusively; `recover` is deliberately **not scored as ML functionality**.
 
-Proposed CLI contract (minimal, standard-library `argparse`, no network, local files only):
+Approved CLI contract (minimal, standard-library `argparse`, no network, local files only):
 
 ```bash
 python -m melusense sample.eml --ml-mode off --output result.json
@@ -121,9 +121,9 @@ python -m melusense sample.eml --ml-mode recover  # explicit unsupported/nonzero
 
 Do not silently overwrite `result.json`; because it may hold private mail data, create it with restricted permissions and fail if it exists. `__main__.py` should only dispatch to `cli.main()`. Use the already available packaging environment; do not introduce a new dependency merely for the CLI.
 
-## C. Proposed acceptance cases and fair scoring
+## C. Visible acceptance cases and fair scoring
 
-The new frozen starter should add the **same** visible tests for every model:
+The checked-in `tests/test_reserved_ml_mode.py` provides the **same** visible tests for every model. They are expected to fail while the starter is empty:
 - `detect_text(s)` equals `detect_text(s, ml_mode="off")`, likewise `detect_eml(raw)` equals explicit `off`, including JSON-compatible output and safety.
 - `ml_mode="recover"` raises the documented unsupported exception, **without any email mutation, model import or network call**.
 - `ml_mode="on"` and other unrecognized values are rejected (do not accept silent aliases).
@@ -137,4 +137,4 @@ Candidate grading can assign a small, separate `extensibility/API-discipline` ru
 
 The worker owns only source changes in `/workspace/melusense/`, new tests, and `/workspace/build/`; the coordinator creates immutable `evidence` and `reports` records **outside** that mount. Identical model-neutral tasks and tooling apply per seed `41,42,43`, no GitHub needed on Spark. Reused complete fingerprint -> verify/reuse, changed input -> new Run-ID.
 
-This **approved task-definition change** does not retroactively modify prior `base-v1`, `base-v2` or previously transferred `031f0cfa` packages; they cannot be relabeled as implementing the new flag. The new baseline must independently review this extension, update `TASKS.md`, `AGENTS.md`, `docs/contract.md`, starter tests/packaging and `.gitignore`, then freeze an exact source SHA and re-export a new Git-free archive. **Do not** edit historical baselines, run P4, install/modify Brave, or overwrite local Spark evidence as a side effect.
+The current approved repository contract includes the new mode interface and visible tests, but older `base-v1`, `base-v2` and previously transferred `031f0cfa` packages cannot be relabeled as implementing them. The coordinator must verify the exact approved source SHA, package it into a **new** Git-free archive, and independently qualify real model-to-tool/inference isolation before any C01 run. **Do not** edit historical baselines, run P4, install/modify Brave, or overwrite local Spark evidence as a side effect.

@@ -1,136 +1,140 @@
 # ModelBench — One lab. Many models. Same evidence.
 
-> **OWNER-APPROVED TASK CONTRACT; RUNTIME NOT READY:** This repository defines the shared offline Brave/Playwright-MCP coding assignment. Approval of the task structure does **not** qualify the deployed tools, isolation or evaluator, or authorize Phase-4 C01–C07. Existing DGX Spark worktrees and P1–P3 receipts remain untouched.
+*The answer might be 42. The code still has to pass.*
 
-*How good is an LLM when it has to build something that actually works?*
+ModelBench asks a practical question: **Can a locally served language model build software that works, rather than merely write convincing code?**
 
-## TL;DR — Too long; didn't read
+## TL;DR
 
-We give **Kolibri, Mistral Small 4, GLM-5.3 Flash, Qwen and other models** the same engineering challenge, tools and budget. We measure **speed, reasoning, tool use and real coding quality**—and keep the code, failures and costs, not just a leaderboard score. Our first challenge is **Melusense**: independently build a multilingual email parser from an empty starter.
+- **One challenge:** build **Melusense**, a multilingual email-structure parser, independently from an intentionally empty starter.
+- **Many contenders:** Kolibri-1, Mistral Small 4, GLM-5.3 Flash, Qwen — and additional models once their endpoints qualify.
+- **One coding harness:** **Kilo Code**; each model connects through an explicitly configured, reproducible local inference endpoint.
+- **One research browser:** **Brave + Playwright MCP**, restricted to approved technical documentation. No GitHub access for coding workers.
+- **Three shots per model:** **`x42` · `xx42` · `xxx42`** — separate, isolated attempts from the same frozen assignment.
+- **Real evidence:** source changes, passing and failing tests, tool calls, token usage, elapsed time, safety checks and independent evaluation.
+- **No model training in the scored challenge.** The final parser is rule-first; optional FN-Recovery research lives in the bonus section below.
 
-![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1775519520461-6b6e068d9250?auto=format&fit=crop&w=1400&h=300&q=80)
+## Four phases. Four different questions.
 
-<sub>Photo: [Eric Stoynov / Unsplash](https://unsplash.com/photos/two-server-racks-filled-with-electronic-components-and-wires-k27hkqXuveo) · Unsplash License.</sub>
+| Phase | Question | Evidence |
+| --- | --- | --- |
+| **01 · Speed** | How quickly and reliably does the model serve requests? | TTFT, prefill/decode, throughput, KV cache, queues, memory |
+| **02 · Reasoning** | Does it follow instructions and reason over fixed examples? | IFEval, MMLU-Pro and BBH; samples, truncations and scorer versions recorded |
+| **03 · Tools** | Can it use tools and solve programming tasks? | BFCL, SWE-bench where supported, execution traces and honest blockers |
+| **04 · Engineering** | Can it independently build a safe, maintainable parser? | Frozen source and visible tests, independent hidden evaluation, time and token cost |
 
-## The twist: use AI to need less AI
+An impressive tokens/second figure cannot compensate for incorrect code. **Report quality, safety, speed and cost separately.** Smoke tests are not full benchmark scores. See [benchmark methodology](docs/BENCHMARKS.md).
 
-**We ask an LLM to build software that could make many LLM calls unnecessary.** Email history often follows recognizable structures—MIME, replies, forwards and signatures—that a deterministic parser can process without generating tokens. We test whether a coding agent can engineer that cheaper first stage **without sacrificing correctness or safety**.
+## x42 · xx42 · xxx42
 
-That is the hypothesis, not a promised result.
-
-## Four benchmarks. Four different questions.
-
-| Phase | What do we learn? | Method & references |
-|---|---|---|
-| **01 — Speed** | How fast does the model process prompts and generate tokens under load? | [NVIDIA AIPerf](https://docs.nvidia.com/aiperf/getting-started/profiling-with-ai-perf) · [Prometheus](https://prometheus.io/docs/introduction/overview/) |
-| **02 — Reasoning** | Can it follow instructions and solve hard questions? | [LightEval](https://huggingface.co/docs/lighteval/index) · [IFEval](https://github.com/google-research/google-research/tree/master/instruction_following_eval) · [MMLU-Pro](https://github.com/TIGER-AI-Lab/MMLU-Pro) · [BBH](https://github.com/suzgunmirac/BIG-Bench-Hard) |
-| **03 — Tools & coding** | Can it call tools correctly and fix real software issues? | [BFCL](https://gorilla.cs.berkeley.edu/leaderboard) · [SWE-bench](https://github.com/swe-bench/SWE-bench) |
-| **04 — Engineering** | Can it build the *same* reliable parser from zero? | [Melusense task](TASKS.md) · [API contract](docs/contract.md) |
-
-**A model can produce 50 tokens per second and still write a broken parser.** Speed, correctness, code quality and token cost must be reported separately—not compressed into one mysterious score.
-
-[What each benchmark means →](docs/BENCHMARKS.md)
-
-## Same task. Three attempts per model.
-
-> **Seed = a reproducible random starting point.** Each model attempts the same coding task three times (seeds **41, 42, 43**) to measure reliability, not just one lucky result. The seed improves reproducibility; GPU and agent runs may still differ.
+Every contender gets the **same task, initial code, tool permissions and resource limits**. Each attempt starts clean; no candidate may read another candidate or the reference solution.
 
 ```text
-                     NVIDIA DGX Spark
-                       vLLM + metrics
-                             |
-                   FROZEN TASK + BUDGET
-                             |
-                  +----------+----------+
-                  |          |          |
-                Kolibri    Mistral    GLM / Qwen / ...
-                41/42/43   41/42/43   41/42/43
-                  |          |          |
-                  +----------+----------+
-                             |
-                  INDEPENDENT EVALUATION
-                  Quality · Safety · Cost
+                        FROZEN CHALLENGE
+                   same task · tools · budget
+                               |
+           +-------------------+-------------------+
+           |                   |                   |
+        Kolibri             Mistral             GLM / Qwen / ...
+           |                   |                   |
+    x42 · xx42 · xxx42  x42 · xx42 · xxx42  x42 · xx42 · xxx42
+           |                   |                   |
+           +-------------------+-------------------+
+                               |
+                      INDEPENDENT EVALUATOR
+                     Quality · Safety · Effort
 ```
 
-One model × one seed = one **isolated coding trial**. The coordinator may later save its result on a branch such as `trial/kolibri-1/seed-41`; every worker starts from the **same frozen commit**, never another agent's solution. A Git branch stores code—it is **not** a security sandbox.
+The names are a nod to the answer to life, the universe and everything. **They are run labels, not random seeds:** the pinned numeric seeds are still `41`, `42` and `43`, respectively, in [config/budget.json](config/budget.json). Run IDs, model revisions, context and quantization are recorded separately. A seed improves reproducibility; it does not guarantee identical model output.
 
-The DGX Spark is an example host, not a requirement for every trial. The exact served model revision, quantization, context, KV-cache settings and tool gateway must be pinned per run.
+## The first challenge: build Melusense
 
-## What does the coding agent build?
+The coding agent must make a safe, deterministic pipeline from scratch:
 
 ```text
-       RFC-822 email                Plain text
-             |                          |
-        MIME / charset                  |
-             +------------+-------------+
-                          |
-                 Immutable source
-                          |
+     Raw .eml / RFC-822         Unicode text
+             |                      |
+        MIME / charset              |
+             +----------+-----------+
+                        |
+               Immutable source
+                        |
                Canonical recognition
-                          |
-           TOML dictionaries + safe Regex
-                          |
-          Reply · Forward · Signature · Footer
-                          |
-                  BoundaryReviewer
-                          |
+                        |
+          TOML dictionaries + bounded regex
+                 (EN · DE · FR · ES)
+                        |
+        Reply · Forward · Signature · Footer
+                        |
+             Deterministic BoundaryReviewer
+                        |
                    KEEP_ALL gate
-                          |
-                JSON + exact spans
+                        |
+              JSON + exact source spans
 ```
 
-**Dictionaries** capture language-specific header words; **regex** finds structural patterns; the **BoundaryReviewer** checks competing evidence and original text positions. Uncertain cases abstain rather than delete: `authorized_removals=[]`.
+The challenge is not to delete anything. **Original text stays intact**; ambiguous boundaries abstain, and `authorized_removals=[]` is mandatory. Candidate modules and the local CLI follow the same [build contract](docs/BUILD_CONTRACT.md), [API contract](docs/contract.md) and [tasks C00–C07](TASKS.md).
 
-**Classifier?** No model training or classifier inference in this coding benchmark. The proposed new contract requires only a **reserved `--ml-mode off|recover` switch**: `off` is the rule-only implementation; `recover` must say explicitly that it is not implemented. This tests clean extensibility, **not** ML accuracy. Future real FN-Recovery remains a separate experiment. [Exact extension contract →](docs/BUILD_CONTRACT.md).
+## Why Kilo Code?
 
-## Same verified research tools; optional real TRAIN examples.
+**Kilo Code is our coding-agent harness — not the model, the inference server, or the browser.** It supplies the agent workflow for inspecting and editing files, running commands/tests, and invoking approved MCP tools.
 
-Every agent must receive the **same independently qualified, hash-pinned Brave/Playwright MCP browser tools**, approved documentation origins and budgets. The coordinator may separately provision **12 HPI/Quagga ASF TRAIN email/annotation pairs** only after explicit data-rights, privacy and worker-disclosure approval and SHA-256 equality. TRAIN is optional; independent TEST/EVAL Gold remains sealed.
+We favor it for three practical reasons:
 
-The existing `tools/greenfield.py` still includes an **obsolete Chromium installer** and is **not** the approved Brave verifier. Do **not** invoke its `install` or `greenfield` operations. The coordinator must qualify the *existing* Brave/MCP toolchain and effective sandbox/egress before starting any agent. No GitHub access is needed on Spark. [Exact requirements →](docs/RESEARCH_TOOLS.md).
+- **Plug in local models:** connect a vLLM/OpenAI-compatible endpoint by base URL and model ID, or use supported local providers such as Ollama and LM Studio. Context and tool-use capabilities can be configured per model.
+- **Keep the workflow constant:** pin the Kilo build, tool permissions and agent instructions while swapping only the qualified model endpoint. This makes comparisons more meaningful.
+- **Use one browser tool:** Brave + Playwright MCP is exposed through the same permission-controlled agent interface. A connected MCP server is not proof a model can actually use it; verify a real tool call for each contender.
 
-Browser MCP must actually be wired into every coding agent. `--network-isolated` is an **operator attestation**, not a firewall; the coordinator must enforce sandbox and egress restrictions externally. HPI download is **not automatic**: it requires documented rights/privacy approval.
+Kilo Code supports these capabilities in its [OpenAI-compatible provider guide](https://kilo.ai/docs/ai-providers/openai-compatible), [VS Code agent guide](https://kilo.ai/docs/code-with-ai/platforms/vscode) and [MCP documentation](https://kilo.ai/docs/automate/mcp/using-in-kilo-code). A local model endpoint keeps **model inference** local; other Kilo integrations still need explicit network controls.
 
-[Playwright deployment & fairness →](docs/RESEARCH_TOOLS.md) · [HPI sample download and Gold protocol →](docs/HPI_TRAIN.md)
+## Same tools, fair boundaries
 
-**Brave runtime gate:** The existing Brave/Playwright/Kilo-MCP installation is the chosen toolchain, but each model worker must pass real MCP calls and independently enforced filesystem/egress restrictions. A read-only Brave verification adapter is **not yet implemented or audited**; do not treat browser connectivity as worker isolation. [Research-tool requirements →](docs/RESEARCH_TOOLS.md).
+- The coordinator prepares one **Git-free, SHA-256-verified offline package**. Workers do not clone GitHub or receive repository credentials.
+- Each model gets an **isolated workspace**, its own clean browser profile and the same pinned Kilo, Brave/Playwright MCP tools and budgets.
+- Browser research is limited to approved Python, RFC Editor, IETF Datatracker and MDN documentation. Egress and file access must be enforced by the sandbox, not merely a browser flag.
+- Each candidate may see only visible fixtures and explicitly approved development examples. Hidden tests, private Gold, the existing Melusense implementation and competitor runs remain inaccessible.
+- The coordinator saves technical evidence; a **separate evaluator** scores each frozen candidate. Missing tests or unsupported platforms stay `BLOCKED` or `NOT_EVALUATED` — never a made-up zero or success.
 
-## One clean repository. Repeatable agent output.
+**Offline** means *no GitHub dependency in the coding worker*, not automatically *zero network access*. Permitted documentation requests use controlled access separate from the model-inference transport. See the [research-tool contract](docs/RESEARCH_TOOLS.md).
+
+## One workbench, predictable output
 
 ```text
-melusense-benchmark/
-├── README.md                # Why this lab exists
-├── TASKS.md                 # All tasks open; frozen assignment
-├── AGENTS.md                # Required candidate source layout
-├── MANIFEST.md              # Navigation
-├── config/
-│   ├── budget.json          # Common limits and seeds
-│   └── models.json          # Extensible model profiles
-├── docs/
-│   ├── BENCHMARKS.md        # Background and official links
-│   ├── WORKSPACE_LAYOUT.md  # Portable offline workbench
-│   ├── BUILD_CONTRACT.md    # Full required source/build ASCII tree
-│   ├── OFFLINE_AGENT_PROMPT.md # Identical English agent task
-│   ├── contract.md          # Parser API and safety
-│   └── evaluation.md        # Independent scoring
-├── melusense/
-│   └── api.py               # Deliberately unimplemented
-├── tests/                   # Frozen acceptance tests
-└── tools/                   # Scaffold verification
+modelbench/                         # logical offline workspace root
+├── README.md
+├── AGENTS.md · TASKS.md · MANIFEST.md
+├── config/                         # common limits and model/tool profiles
+├── docs/                           # one English prompt, API and build contract
+├── tools/                          # scaffold and coordinator utilities
+├── melusense/                      # deliberately unfinished parser starter
+├── tests/                          # frozen, visible tests
+├── build/runs/<run-id>/workspace/  # ONE isolated model attempt
+├── evidence/runs/<run-id>/         # coordinator-only technical receipts
+└── reports/runs/<run-id>/          # coordinator/evaluator findings
+
+evaluator-private/                  # protected outside worker mounts
 ```
 
-Agents create matching `melusense/rules/`, `dictionaries/`, `processors/` and reviewer modules as specified in [AGENTS.md](AGENTS.md). The files are organized alike, but the implementations can differ. Agents never edit frozen tasks/tests; their progress stays in ignored `build/`, and independent evaluation stays outside the candidate sandbox.
+The `build/`, `evidence/` and `reports/` directories are **generated, Git-ignored outputs**, not proof that any trials have run. No worker may mount the coordinator root or another run. The complete ASCII tree is in [BUILD_CONTRACT.md](docs/BUILD_CONTRACT.md) and [WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md).
 
-[English reusable agent prompt](docs/OFFLINE_AGENT_PROMPT.md) · [Standard candidate build tree](docs/BUILD_CONTRACT.md) · [Agent contract](AGENTS.md) · [Workspace layout](docs/WORKSPACE_LAYOUT.md) · [Complete assignment](TASKS.md)
+## How to run a challenge
 
-## Start from one offline package (after future freeze approval)
+1. **Coordinator:** select the approved exact source SHA, package it without Git history, verify hashes on both sides and pin the model/tool profile.
+2. **C00 preflight:** prove real agent-to-MCP and agent-to-model operation **inside the isolated worker**, plus effective browser, filesystem and network restrictions. Missing proof means stop.
+3. **Coding agent:** use the **same [English task prompt](docs/OFFLINE_AGENT_PROMPT.md)** and independently implement C01–C07. The empty starter deliberately fails initial acceptance tests.
+4. **Evaluator:** freeze the result, run authorized hidden checks separately and report correctness, safety, time, tokens and failures. Never let an agent grade its own code.
 
-Only a **coordinator** with repository access records the exact owner-approved source SHA, exports a **Git-free** candidate starter, hashes it and transfers it to the machine. The DGX Spark and coding models do **not** need repository access. A merged task contract is **not** proof that a particular offline runtime/package has passed security or readiness qualification.
+The **assignment has been approved, but this README does not claim the model-specific runtime or Phase 4 is READY**. Existing historical P1–P3 receipts keep their original scope; no Phase-4 candidate result is claimed. The model server and existing Spark evidence are not changed by GitHub documentation.
 
-Every model receives the same English instruction in [OFFLINE_AGENT_PROMPT.md](docs/OFFLINE_AGENT_PROMPT.md), identical parser source/API tree in [BUILD_CONTRACT.md](docs/BUILD_CONTRACT.md), budgets and frozen tests. The coordinator checks a real Brave MCP tool call **from the actual isolated worker**, not only the historical Kolibri/Kilo host-open session, and confirms read/write/egress isolation before C01. The deliberately unimplemented starter must initially fail acceptance; those failures are expected, **not** candidate success.
+## Bonus round · Recovery Lab (optional, unscored)
 
-No new coding-model trials, training, browser installations, server restarts or data disclosures are authorized merely by approval or merge of the task contract.
+**Want to explore whether a classifier can find boundaries missed by rules?** That is a separate playground, **not part of the x42/xx42/xxx42 coding score**.
 
-[DGX Spark](https://developer.nvidia.com/topics/ai/dgx-spark) · [vLLM](https://docs.vllm.ai/en/latest/) · [Evaluation protocol](docs/evaluation.md)
+- The scored parser runs with `--ml-mode off`. The `--ml-mode recover` option is only a reserved extension point and must clearly report *not implemented*.
+- For a future, separately versioned experiment, you may research, train or compare an FN-Recovery classifier **only on rights-cleared TRAIN material**, with separately authorized tools and compute.
+- Evaluate additional true positives **and** false positives on independent, sealed human Gold. Keep `KEEP_ALL`, preserve every source byte and never turn candidate detection into automatic deletion.
+- No hidden TEST/EVAL data, real correspondence or trained weights belong in ordinary coding-worker packages or public reports.
+
+If you want the bonus challenge, start with the [HPI TRAIN data/rights protocol](docs/HPI_TRAIN.md) and the [reserved extension API](docs/BUILD_CONTRACT.md). It needs its **own approval, dataset split, run IDs and independent evaluation**, outside the main benchmark.
 
 *Build independently. Measure what survives the tests.*

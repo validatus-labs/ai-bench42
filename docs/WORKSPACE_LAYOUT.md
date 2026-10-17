@@ -1,7 +1,7 @@
 # ModelBench — one portable offline workbench
 
 **Status: OWNER-APPROVED DIRECTORY CONTRACT; WORKER DEPLOYMENT NOT YET QUALIFIED.**
-This is the compact directory convention to review before changing the active assignment. It replaces the *proposed* multi-root coordinator layout with one predictable workbench. Historical branches, Spark worktrees, receipts and reference/corpus repositories remain untouched.
+This is the approved directory convention for the current assignment. It replaces an earlier multi-root proposal with one predictable offline workbench. Historical branches, Spark worktrees, receipts and reference/corpus repositories remain untouched.
 
 ## The idea
 
@@ -68,7 +68,7 @@ evaluator-private/                         # SEPARATE protected storage/mount
 └── hidden-tests-and-Gold/                 # never visible to coding workers
 ```
 
-**Reality check:** Today, `config/toolchain.json`, `tools/preflight.py`, and the top-level generated `evidence/` and `reports/` paths are **proposed**; they are not present or deployed merely because they appear here. The existing root `build/` is already ignored by Git. When adopting this convention, add top-level `evidence/` and `reports/` to `.gitignore` and verify no correspondence, Gold, secrets or raw logs are committed.
+**Reality check:** `config/toolchain.json` and `tools/preflight.py` remain **proposed**, not implemented merely because they appear in this tree. The generated `build/`, `evidence/` and `reports/` paths are already ignored by Git; naming them does not mean they exist or contain qualified results. Never commit correspondence, Gold, secrets or raw logs.
 
 `build/runs/<run-id>/workspace/` is an illustrative **coordinator filesystem path**. Inside a properly isolated container, present only that candidate tree at e.g. `/workspace`. **Do not mount the coordinator root**, sibling runs, reference code, private evaluator files, host HOME or Git credentials. Use independently enforced read-only / writable mounts and deny access by actual negative tests. Merely nesting directories is not security.
 
@@ -95,4 +95,4 @@ Use **[OFFLINE_AGENT_PROMPT.md](OFFLINE_AGENT_PROMPT.md)** verbatim for every mo
 | Coding worker | only its own isolated `/workspace` + approved browser tools | independently implement task, produce own report |
 | Independent evaluator | frozen candidate + protected evaluator inputs | hidden tests, qualified Gold scoring, review; never grants workers Gold access |
 
-Do not start a coding run or overwrite the active Chromium-only `base-v2` contract based on this draft. A new Brave-aligned exact source SHA requires changes to the actual task/config/verifier, tested policy enforcement and explicit Owner / independent auditor sign-off. The user-approved cleanup scope is **GitHub-only**; preserve all local DGX Spark runs, measurements and calibration records.
+The active repository contract now specifies Brave and the reserved classifier-mode interface; Chromium-only `base-v2` is a **historical** branch, not the current assignment. A new exact-SHA Git-free offline package and live model-to-tool/inference isolation checks still require coordinator verification and independent approval. Do not start a coding run merely because this documentation is merged. The user-approved cleanup scope is **GitHub-only**; preserve all local DGX Spark runs, measurements and calibration records.

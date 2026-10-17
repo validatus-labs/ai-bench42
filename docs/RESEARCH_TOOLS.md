@@ -1,12 +1,12 @@
 # ModelBench Research Tools — one Brave/Playwright MCP contract
 
-**OWNER-APPROVED BRAVE TOOL CHOICE / NOT YET RUNTIME-QUALIFIED.** This is the intended offline Brave-based research-tool contract. Approval of the task does not prove that any DGX Spark benchmark worker is isolated or READY.
+**OWNER-APPROVED BRAVE TOOL CHOICE / FULL PHASE-4 WORKER NOT YET QUALIFIED.** The operator-supplied 2026-10-17 independent report accepted a bounded native Brave/browser-tool isolation boundary, but did **not** run an actual model inside it. Per-model MCP attachment, restricted inference transport and evaluator readiness remain separate gates; the host tool audit is not a Phase-4 READY decision.
 
 ## Principle
 
 **Use an existing, version-pinned native Brave + Playwright Headless + real browser-MCP toolchain** for each model; no new browser installation and no GitHub access for agent workers. Actual tool access and security are checked on the specific isolated worker. One model and one seed = one clean worker/profiles. The coordinator runs the trusted preflight, records the fingerprints and issues a signed-off readiness decision.
 
-A five-call Kolibri/Kilo host-open MCP smoke was reported, as was the previous Melusine R00 independent 10/10 Brave audit. Those show technical browser functionality **in that environment only**, not benchmark worker confinement or cross-model parity.
+The earlier Melusine R00 10/10 audit and five actual Kolibri/Kilo MCP calls established browser functionality **outside the new sandbox**. A later separately supplied native auditor report records 11 passing tool-policy tests and bounded host isolation; its sandboxed Kilo/MCP protocol smoke involved **zero model requests**. It cannot be used as proof that a Kolibri, Mistral, GLM or Qwen coding agent has performed an MCP tool call **inside the new sandbox**.
 
 ## Evidence available for coordinator requalification (not approved global pins)
 
@@ -38,7 +38,7 @@ These reported values are an **inventory lead** only. The coordinator must obtai
 
 ## Deployment and reproducibility
 
-The **coordinator** distributes the signed-off, immutable package and a separately permission-controlled browser runtime. A planned `tools/preflight.py` would check the existing runtime without mutation; it is **not deployed yet**. The earlier `tools/greenfield.py` script on this draft's source tree retains **legacy Chromium install code**. **Do not execute its `install` or `greenfield` operation for the Brave benchmark** or silently substitute Chromium; keep HPI TRAIN import capability gated by explicit rights. A new, reviewed read-only Brave checker and tests are required before this draft can become a freeze.
+The **coordinator** distributes the signed-off, immutable package and a separately permission-controlled browser runtime. A generic `tools/preflight.py` in this GitHub repository is **not yet present**; an operator-reported Spark-specific script `scripts/benchmark/brave_baseline.py` was audited separately, but is not shipped by this repository. The existing `tools/greenfield.py` still contains **historical Chromium installation code**, not the approved Brave qualification path: **do not run `install` or `greenfield`** or silently substitute Chromium. HPI TRAIN import rights remain separately gated. Before a coding trial, an auditor must bind actual deployed tool and model-to-MCP evidence to the newly approved exact offline package SHA, rather than claim an older package is equivalent.
 
 Capture the exact current source SHA, runtime hashes, tool schema, effective security flags, approved egress policy, model checkpoint, budgets and seed in coordinator-owned `evidence/preflight/<run-id>/`; keep worker logs sanitized and bounded. Store the independent decision in `reports/readiness.md`. Worker inputs exclude the coordinator's `evidence/`, `reports/` and evaluator-only storage.
 
@@ -50,4 +50,4 @@ Real HPI/Quagga TRAIN is **optional**; it requires a real privacy/rights review 
 
 [Full ASCII source/build tree](BUILD_CONTRACT.md) · [Identical English agent prompt](OFFLINE_AGENT_PROMPT.md) · [Workspace and Run-IDs](WORKSPACE_LAYOUT.md) · [Rights-gated HPI](HPI_TRAIN.md).
 
-**Not ready:** existing Brave works, but browser policy and **effective isolated worker/gateway egress/reference denial** have not yet been proven. Only the Owner and independent auditor may approve a new exact frozen SHA for Phase 4.
+**Not ready for coding:** the operator-provided independent audit supports **bounded browser/tool isolation on the Spark**, including documented egress and filesystem denial tests. It does **not** prove a real model-driven MCP call inside that boundary, qualified restricted access to the local inference server, or complete evaluator/Gold readiness. Source-hash reconciliation and per-model evidence still require a separate coordinator/auditor gate before C01.

@@ -12,7 +12,7 @@
 10. [API and safety](docs/contract.md); [Independent evaluation](docs/evaluation.md).
 11. [Empty parser API](melusense/api.py), [synthetic fixtures](tests/fixtures.json), [visible acceptance](tests/test_acceptance.py), [scaffold check](tools/verify_scaffold.py).
 
-12. [Existing greenfield/bootstrap script](tools/greenfield.py) — pinned browser + HPI TRAIN importer.
+12. [Legacy greenfield/bootstrap script](tools/greenfield.py) — historical Chromium installer (NOT a Brave verifier); rights-gated HPI TRAIN importer remains available.
 13. [Fair browser tools](docs/RESEARCH_TOOLS.md) · [Rights-gated HPI TRAIN](docs/HPI_TRAIN.md).
 
 **Owner-approved task structure:** English prompt, build tree, Brave/MCP research requirement and inert classifier-mode interface are now the ModelBench contract. **This is not a qualified worker/runtime freeze.** No new model trial has been run, existing Spark installations remain unchanged, and `TASKS.md` checkboxes remain immutable. Results belong in separate run evidence.
