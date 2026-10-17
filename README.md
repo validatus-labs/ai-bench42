@@ -1,131 +1,115 @@
-# ModelBench — LLM Engineering & Evaluation Lab
+# ModelBench — One lab. Many models. Same evidence.
 
-**One lab. Many models. Same evidence.**
+*How good is an LLM when it has to build something that actually works?*
 
-A model-agnostic, reproducible benchmark workspace for testing what local and self-hosted LLMs **can do**, **how fast they do it**, and **how reliably a coding agent turns instructions into working software**. The first applied engineering challenge is **Melusense**: build a safe, multilingual email-structure parser from an intentionally empty Python starter.
+## TL;DR — Too long; didn't read
 
-**Status: STARTER ONLY · NO MODEL TRIALS RUN FROM THIS BASELINE.** A passing scaffold check is not a successful coding benchmark.
+We give **Kolibri, Mistral Small 4, GLM-5.3 Flash, Qwen and other models** the same engineering challenge, tools and budget. We measure **speed, reasoning, tool use and real coding quality**—and keep the code, failures and costs, not just a leaderboard score. Our first challenge is **Melusense**: independently build a multilingual email parser from an empty starter.
 
-> **Built for experiments on NVIDIA DGX Spark and other compatible inference hosts.** Example candidate profiles: **Kolibri-1, Mistral Small 4, GLM-5.3 Flash, Qwen and DeepSeek**. These are *targets*, not claims that all models are installed, have compatible context lengths, or have been benchmarked. Each run pins its exact served model ID, revision and quantization.
+![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1775519520461-6b6e068d9250?auto=format&fit=crop&w=1400&q=80)
 
-[**Task & pipeline**](TASKS.md) · [**Agent contract**](AGENTS.md) · [**Directory layout**](docs/WORKSPACE_LAYOUT.md) · [**Benchmark guide**](docs/BENCHMARKS.md) · [**API**](docs/contract.md) · [**Evaluation**](docs/evaluation.md)
+<sub>Photo: [Eric Stoynov / Unsplash](https://unsplash.com/photos/two-server-racks-filled-with-electronic-components-and-wires-k27hkqXuveo) · Unsplash License.</sub>
 
-## What are we measuring?
+## The twist: use AI to need less AI
 
-A single tokens-per-second chart cannot tell whether a model follows constraints, solves difficult problems, uses tools correctly, or produces maintainable software. This lab deliberately keeps **serving performance**, **general quality**, **tool/coding ability**, and **end-to-end engineering** separate.
+**We ask an LLM to build software that could make many LLM calls unnecessary.** Email history often follows recognizable structures—MIME, replies, forwards and signatures—that a deterministic parser can process without generating tokens. We test whether a coding agent can engineer that cheaper first stage **without sacrificing correctness or safety**.
 
-| Phase | Benchmark | In two sentences | Official reference |
-|---|---|---|---|
-| **01 · Speed** | **NVIDIA AIPerf + Prometheus** | Measure TTFT, prompt/prefill speed, decode tokens/s, memory, queueing and concurrency. Client concurrency is **not** proof of parallel model decoding. | [AIPerf](https://docs.nvidia.com/aiperf/getting-started/profiling-with-ai-perf) · [Prometheus](https://prometheus.io/docs/introduction/overview/) |
-| **02 · Reasoning** | **LightEval · IFEval · MMLU-Pro · BBH** | Measure instruction following and reasoning on fixed datasets, prompts and scorers. Scores must include truncation and backend limitations—not just headline percentages. | [LightEval](https://huggingface.co/docs/lighteval/index) · [IFEval](https://github.com/google-research/google-research/tree/master/instruction_following_eval) · [MMLU-Pro](https://github.com/TIGER-AI-Lab/MMLU-Pro) · [BBH](https://github.com/suzgunmirac/BIG-Bench-Hard) |
-| **03 · Tools & code** | **BFCL · SWE-bench Verified** | BFCL checks whether a model selects and calls tools correctly; SWE-bench tests code changes against real software issues. A tiny smoke test is not a complete leaderboard result. | [BFCL](https://gorilla.cs.berkeley.edu/leaderboard) · [SWE-bench](https://github.com/swe-bench/SWE-bench) |
-| **04 · Build something** | **Melusense AgentBench** | Each coding agent independently implements the **same** rule-first email parser, starting with the same empty files. Independent tests assess correctness, safety, architecture, speed, token cost and reproducibility. | [Assignment](TASKS.md) · [Contract](docs/contract.md) |
+That is the hypothesis, not a promised result.
 
-A benchmark is not an all-purpose ranking. A fast model can code poorly; a model that passes small tool tests can fail complex workflows. Results are comparable **only when task revisions, hardware/serving conditions, seeds and evaluation procedures are explicitly matched**.
+## Four benchmarks. Four different questions.
 
-## How a DGX Spark experiment works
+| Phase | What do we learn? | Method & references |
+|---|---|---|
+| **01 — Speed** | How fast does the model process prompts and generate tokens under load? | [NVIDIA AIPerf](https://docs.nvidia.com/aiperf/getting-started/profiling-with-ai-perf) · [Prometheus](https://prometheus.io/docs/introduction/overview/) |
+| **02 — Reasoning** | Can it follow instructions and solve hard questions? | [LightEval](https://huggingface.co/docs/lighteval/index) · [IFEval](https://github.com/google-research/google-research/tree/master/instruction_following_eval) · [MMLU-Pro](https://github.com/TIGER-AI-Lab/MMLU-Pro) · [BBH](https://github.com/suzgunmirac/BIG-Bench-Hard) |
+| **03 — Tools & coding** | Can it call tools correctly and fix real software issues? | [BFCL](https://gorilla.cs.berkeley.edu/leaderboard) · [SWE-bench](https://github.com/swe-bench/SWE-bench) |
+| **04 — Engineering** | Can it build the *same* reliable parser from zero? | [Melusense task](TASKS.md) · [API contract](docs/contract.md) |
 
-```text
-                  NVIDIA DGX Spark (or other qualified host)
-                                  |
-                       vLLM / model server
-                                  |
-                    one active model at a time
-                                  |
-            +---------------------+--------------------+
-            |                     |                    |
-     AIPerf + metrics         LightEval / BFCL     Coding-agent gateway
-         P1 / P2                   P2 / P3                 P4
-                                                         |
-                                        frozen base SHA + identical task
-                                                         |
-                                  +----------------------+---------------------+
-                                  |                      |                     |
-                              Kolibri                 Mistral                 GLM / Qwen / ...
-                             seed 41/42/43            seed 41/42/43          seed 41/42/43
-                                  |                      |                     |
-                                  +----------------------+---------------------+
-                                                         |
-                                           Independent evaluator
-                                                         |
-                                        Accuracy · Safety · Cost · Quality
-```
+**A model can produce 50 tokens per second and still write a broken parser.** Speed, correctness, code quality and token cost must be reported separately—not compressed into one mysterious score.
 
-Only the **coordinator** may see reference implementations and private evaluator data. Each coding worker receives an isolated, **Git-free export** of the same pinned task. Branches preserve the resulting work; they do **not** enforce security isolation.
+[What each benchmark means →](docs/BENCHMARKS.md)
 
-### One task, one candidate branch per repetition
+## Same task. Three attempts per model.
 
-A candidate is saved to a uniquely named output branch **after** its isolated run:
-
-| Model profile (examples) | Result branches (examples) |
-|---|---|
-| Kolibri-1 | `trial/kolibri-1/seed-41`, `.../seed-42`, `.../seed-43` |
-| Mistral Small 4 | `trial/mistral-small-4/seed-41`, ... |
-| GLM-5.3 Flash | `trial/glm-5.3-flash/seed-41`, ... |
-| Qwen / others | `trial/<model-slug>/seed-41`, ... |
-
-Each branch starts from the **same frozen commit**, never from another model's solution. Progress reports, telemetry, credentials and private Gold stay **outside Git**, in per-Run-ID artifacts. See the [complete filesystem and module layout](docs/WORKSPACE_LAYOUT.md).
-
-## Our first engineering challenge: Melusense
-
-An email often contains new text, replies, older quoted content, signatures and forwarded history. The assignment is to recognize their **source-anchored boundaries** without changing or deleting the original message.
+> **Seed = a reproducible random starting point.** Each model attempts the same coding task three times (seeds **41, 42, 43**) to measure reliability, not just one lucky result. The seed improves reproducibility; GPU and agent runs may still differ.
 
 ```text
-   EML bytes           Text input
-       |                    |
-   MIME decode               |
-       +----------+---------+
-                  |
-        Immutable source view
-                  |
-       Canonical line / header roles
-                  |
-        TOML language dictionaries
-                  +
-             bounded Regex
-                  |
-       Reply · Forward · Signature · Footer
-                  |
-          Candidate registry
-                  |
-      Deterministic BoundaryReviewer
-                  |
-        KEEP_ALL safety gate
-                  |
-       JSON + provenance + offsets
+                     NVIDIA DGX Spark
+                       vLLM + metrics
+                             |
+                   FROZEN TASK + BUDGET
+                             |
+                  +----------+----------+
+                  |          |          |
+                Kolibri    Mistral    GLM / Qwen / ...
+                41/42/43   41/42/43   41/42/43
+                  |          |          |
+                  +----------+----------+
+                             |
+                  INDEPENDENT EVALUATION
+                  Quality · Safety · Cost
 ```
 
-**Dictionary?** Curated words and header variants for EN/DE/FR/ES. **Regex?** Fast, bounded structural pattern matching. **Reviewer?** Checks evidence, competing candidates, negative contexts and exact original positions; uncertain cases abstain. **Classifier?** *Not part of this coding assignment*: prior FN-Recovery experiments did not prove additive benefit. An optional LLM/classifier recovery stage can be researched independently **after** establishing a rules-only baseline, never by weakening KEEP_ALL.
+One model × one seed = one **isolated coding trial**. The coordinator may later save its result on a branch such as `trial/kolibri-1/seed-41`; every worker starts from the **same frozen commit**, never another agent's solution. A Git branch stores code—it is **not** a security sandbox.
 
-Why build deterministic software in an LLM era? Common MIME/headers and known reply structures can often be processed without repeatedly paying for generative tokens. The **speed/cost versus generalization** trade-off is something we will *measure*, not assume.
+The DGX Spark is an example host, not a requirement for every trial. The exact served model revision, quantization, context, KV-cache settings and tool gateway must be pinned per run.
 
-## Repository map
+## What does the coding agent build?
+
+```text
+       RFC-822 email                Plain text
+             |                          |
+        MIME / charset                  |
+             +------------+-------------+
+                          |
+                 Immutable source
+                          |
+               Canonical recognition
+                          |
+           TOML dictionaries + safe Regex
+                          |
+          Reply · Forward · Signature · Footer
+                          |
+                  BoundaryReviewer
+                          |
+                   KEEP_ALL gate
+                          |
+                JSON + exact spans
+```
+
+**Dictionaries** capture language-specific header words; **regex** finds structural patterns; the **BoundaryReviewer** checks competing evidence and original text positions. Uncertain cases abstain rather than delete: `authorized_removals=[]`.
+
+**Classifier?** Not in this coding benchmark. Previous FN-Recovery research has not demonstrated enough additional benefit to make it a required step; future classifier/LLM recovery is a separate experiment.
+
+## One clean repository. Repeatable agent output.
 
 ```text
 melusense-benchmark/
-├── README.md                # Start here: project and benchmarks
+├── README.md                # Why this lab exists
+├── TASKS.md                 # All tasks open; frozen assignment
+├── AGENTS.md                # Required candidate source layout
 ├── MANIFEST.md              # Navigation
-├── AGENTS.md                # Binding rules for candidate agents
-├── TASKS.md                 # Frozen, all-unchecked benchmark assignment
 ├── config/
-│   ├── budget.json          # Shared resource and run limits
-│   └── models.json          # Candidate profiles; deployment NOT verified
+│   ├── budget.json          # Common limits and seeds
+│   └── models.json          # Extensible model profiles
 ├── docs/
-│   ├── BENCHMARKS.md        # Method, definitions and official links
-│   ├── WORKSPACE_LAYOUT.md  # Per-agent directory and branch contract
-│   ├── contract.md          # Immutable parser API and safety
-│   └── evaluation.md        # Independent evaluator & isolation
+│   ├── BENCHMARKS.md        # Background and official links
+│   ├── WORKSPACE_LAYOUT.md  # Branches, isolation, Run-IDs
+│   ├── contract.md          # Parser API and safety
+│   └── evaluation.md        # Independent scoring
 ├── melusense/
-│   └── api.py               # Deliberately raises NotImplementedError
-├── tests/                   # Unchanged visible fixtures/acceptance
-└── tools/                   # Read-only scaffold verifier
+│   └── api.py               # Deliberately unimplemented
+├── tests/                   # Frozen acceptance tests
+└── tools/                   # Scaffold verification
 ```
 
-Candidate-created modules (MIME, canonical parser, TOML dictionaries and processors) follow the same required layout in [AGENTS.md](AGENTS.md). No production Melusense code or private messages are included in this starter.
+Agents create matching `melusense/rules/`, `dictionaries/`, `processors/` and reviewer modules as specified in [AGENTS.md](AGENTS.md). The files are organized alike, but the implementations can differ. Agents never edit frozen tasks/tests; their progress stays in ignored `build/`, and independent evaluation stays outside the candidate sandbox.
+
+[Agent contract](AGENTS.md) · [Directory & branch workflow](docs/WORKSPACE_LAYOUT.md) · [Complete assignment](TASKS.md)
 
 ## Start from zero
 
-The old bases remain available. **The documentation-rich task baseline is `benchmark/base-v3`**; the coordinator must verify and record its full SHA before giving it to any agent. Never overwrite `benchmark/base-v1` or `benchmark/base-v2`.
+The frozen trial baseline is [**`benchmark/base-v3`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v3) at commit `4fe60510526d1b929faaa52670296eee79e6dd3a`. The editorial README on `main` can evolve without altering that benchmark input.
 
 ```bash
 git clone git@github.com:validatusinternal/melusense-benchmark.git
@@ -133,14 +117,11 @@ cd melusense-benchmark
 git fetch origin benchmark/base-v3
 git rev-parse origin/benchmark/base-v3
 python3 -B tools/verify_scaffold.py
-python3 -B -m unittest discover -s tests -p 'test_scaffold.py'
 python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
 ```
 
-**Expected on untouched starter:** scaffold PASS, acceptance FAIL because the implementation is intentionally missing. These are inspection commands, **not** a benchmark launch. Only the coordinator may provision isolated trials, model endpoints, hidden scoring, and a real Run-ID.
+**Expected:** scaffold PASS; acceptance FAIL on the intentionally empty parser. This is a **not-started coding benchmark**, not evidence of successful Kolibri, Mistral, GLM or Qwen trials.
 
-**DGX Spark docs:** [NVIDIA Developer](https://developer.nvidia.com/topics/ai/dgx-spark) · [vLLM](https://docs.vllm.ai/en/latest/). No real Kolibri/Mistral/GLM/Qwen results are claimed by this repository snapshot.
+[DGX Spark](https://developer.nvidia.com/topics/ai/dgx-spark) · [vLLM](https://docs.vllm.ai/en/latest/) · [Evaluation protocol](docs/evaluation.md)
 
----
-
-*Build reproducibly. Measure independently. Keep every failure.*
+*Build independently. Measure what survives the tests.*
