@@ -9,13 +9,13 @@ import re
 import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 errors = []
-for path in ["README.md", "MANIFEST.md", "AGENTS.md", "TASKS.md", "docs/contract.md", "docs/evaluation.md", "config/budget.json", "melusense/api.py", "tests/fixtures.json"]:
+for path in ["README.md", "MANIFEST.md", "AGENTS.md", "TASKS.md", "docs/contract.md", "docs/evaluation.md", "docs/RESEARCH_TOOLS.md", "docs/HPI_TRAIN.md", "config/budget.json", "melusense/api.py", "tools/greenfield.py", "tests/test_greenfield.py", "tests/fixtures.json"]:
     if not (ROOT / path).is_file():
         errors.append("missing " + path)
 for p in ROOT.rglob("*"):
     if any(part in {".git", "build", "__pycache__"} for part in p.relative_to(ROOT).parts):
         continue
-    if p.is_file() and p.suffix in {".eml", ".mbox", ".key", ".pem", ".gguf", ".safetensors"}:
+    if p.is_file() and p.suffix in {".eml", ".mbox", ".key", ".pem", ".gguf", ".safetensors", ".ann"}:
         errors.append("forbidden payload " + str(p.relative_to(ROOT)))
     if p.is_file() and p.suffix == ".md":
         for link in re.findall(r"\[[^\]]*\]\(([^)]+)\)", p.read_text()):

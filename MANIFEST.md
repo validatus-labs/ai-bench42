@@ -10,4 +10,7 @@
 8. [API and safety](docs/contract.md); [Independent evaluation](docs/evaluation.md).
 9. [Empty parser API](melusense/api.py), [synthetic fixtures](tests/fixtures.json), [visible acceptance](tests/test_acceptance.py), [scaffold check](tools/verify_scaffold.py).
 
+10. [Single greenfield bootstrap](tools/greenfield.py) — pinned browser + HPI TRAIN importer.
+11. [Fair browser tools](docs/RESEARCH_TOOLS.md) · [Rights-gated HPI TRAIN](docs/HPI_TRAIN.md).
+
 **Not started:** no benchmark candidate has completed this frozen assignment. No checkbox may be ticked in `TASKS.md`; results are recorded separately.

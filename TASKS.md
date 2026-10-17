@@ -62,7 +62,7 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 
 ## 1. Reproducibility contract
 
-- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v1`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
+- One candidate = **one isolated runtime and clean export** from the *same frozen commit SHA* of `benchmark/base-v2`. Never reuse a previous solution, agent cache, tool history or a reference implementation.
 - Coordinator verifies repo SHA, task/fixture/config hashes, tool versions, budgets, available context, isolation and tool/model endpoint before any trial. An unchanged rerun verifies/reuses its existing Run-ID; changed input creates a new Run-ID. **Never reset, overwrite or silently repair** divergent states.
 - Implementation source layout is defined by [AGENTS.md](AGENTS.md) and [WORKSPACE_LAYOUT.md](docs/WORKSPACE_LAYOUT.md); required module paths are fixed for comparable outputs, while internals can differ. Source permissions prohibit access to `validatusinternal/melusense`, corpus and human Gold, other agent runs, hidden tests, Git credentials or comparator implementations. A Git branch/worktree is **not** a security boundary.
 - Use pinned common [budgets](config/budget.json), [agent rules](AGENTS.md), [API contract](docs/contract.md) and [evaluation rules](docs/evaluation.md). Document unsupported context/platform settings; no silent fallback.
@@ -88,6 +88,8 @@ A header candidate is **not** a deletion instruction. `detect_text` bypasses MIM
 - [ ] Report completion, tests, time, tokens, tool failures and independent code review, without conflating these scores with parser quality.
 
 ## 3. P4 — Candidate implementation from a deliberately empty parser
+
+- [ ] **C00 Tool + TRAIN preflight (coordinator):** run `python3 tools/greenfield.py plan`, verify the pinned Playwright MCP/Chromium lock fingerprint and live tool availability, prove external network isolation and identical origins for every worker, and validate the rights-approved HPI TRAIN-only bundle SHA. Any missing parity/rights blocks the real-corpus trial; never substitute hidden Gold or synthetic labels silently. See [Research tools](docs/RESEARCH_TOOLS.md) and [HPI data](docs/HPI_TRAIN.md).
 
 - [ ] **C01 Baseline:** Read `MANIFEST.md`, `AGENTS.md`, this task, `docs/contract.md`, fixtures and tests. Run and record unchanged scaffold checks **and expected failing acceptance tests**.
 - [ ] **C02 Design:** Define input budgets, canonical line/span model, original-source provenance, rule registry and conservative abstention. Specify exact Unicode codepoint and CRLF behavior.
@@ -129,4 +131,4 @@ This is a **domain-specific coding benchmark**, not a universal model ranking. R
 
 ## 6. Freeze and next action
 
-This file, tests and budgets describe a **not-started** model-agnostic benchmark. The coordinator freezes an exact `benchmark/base-v1` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, production model, HPI Gold or BLIND assets.
+This file, tests and budgets describe a **not-started** model-agnostic benchmark. The coordinator freezes an exact `benchmark/base-v2` commit, records its SHA separately, verifies isolated execution and launches the first Kolibri trial only after readiness checks. Do not change the frozen assignment, production model, HPI Gold or BLIND assets.

@@ -1,5 +1,5 @@
 {
-  "version": "base-v1",
+  "version": "base-v2",
   "models": [
     "kolibri",
     "mistral",
@@ -28,5 +28,27 @@
   ],
   "notes": "Common prospective trial ceilings, not evidence every model supports 262144 context tokens, ARM64 or matching tool calls. No silent downgrade, replacement or truncation.",
   "model_catalog": "config/models.json",
-  "model_list_note": "Illustrative initial coordinator IDs only; this is not a completeness requirement or proof of model deployment. Exact model revisions must be pinned per Run-ID. Additional models require coordinator support."
+  "model_list_note": "Illustrative initial coordinator IDs only; this is not a completeness requirement or proof of model deployment. Exact model revisions must be pinned per Run-ID. Additional models require coordinator support.",
+  "research_tool": {
+    "kind": "playwright-mcp",
+    "pin": "@playwright/mcp@0.0.83",
+    "browser": "chromium",
+    "lock_sha256": "COORDINATOR_MUST_PIN_BEFORE_TRIAL",
+    "allowed_origins": [
+      "https://docs.python.org",
+      "https://www.rfc-editor.org",
+      "https://datatracker.ietf.org",
+      "https://developer.mozilla.org"
+    ],
+    "network_isolation": "MUST_BE_VERIFIED_EXTERNALLY",
+    "bootstrap": "tools/greenfield.py"
+  },
+  "hpi_train": {
+    "pinned_ref": "4ba5be0fd4a0a5954527ea93cf6592f54f4fc3f0",
+    "dataset": "ASF/TRAIN",
+    "pair_count": 12,
+    "rights_gate": "REQUIRED",
+    "worker_bundle_sha256": "COORDINATOR_MUST_PIN_IF_APPROVED",
+    "blind_hidden": true
+  }
 }

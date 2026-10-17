@@ -30,6 +30,11 @@ class GreenfieldTests(unittest.TestCase):
         with self.assertRaises(greenfield.Blocked):
             greenfield.verify_annotation("abc", sample)
 
+    def test_hpi_bundle_requires_disclosure_approval(self):
+        with self.assertRaises(greenfield.Blocked):
+            greenfield.hpi_bundle(pathlib.Path("/missing"), pathlib.Path("/tmp/unused"),
+                                  {"rights_record_sha256": "unit-test"}, False)
+
     def test_browser_sources_exclude_reference_repositories(self):
         self.assertEqual(greenfield.MCP_VERSION, "0.0.83")
         self.assertFalse(any("github.com" in url for url in greenfield.ALLOWED_ORIGINS))

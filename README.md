@@ -81,6 +81,22 @@ The DGX Spark is an example host, not a requirement for every trial. The exact s
 
 **Classifier?** Not in this coding benchmark. Previous FN-Recovery research has not demonstrated enough additional benefit to make it a required step; future classifier/LLM recovery is a separate experiment.
 
+## Same research tools. Real training examples.
+
+Every agent gets the **same pinned Playwright MCP browser**, approved documentation sites and tool budgets. A separate, rights-gated importer prepares **12 HPI/Quagga ASF TRAIN email/annotation pairs**; only an explicitly approved, SHA-256-identical TRAIN bundle may enter agent sandboxes, while independent TEST/EVAL Gold stays sealed.
+
+```bash
+python3 tools/greenfield.py plan
+python3 tools/greenfield.py install
+python3 tools/greenfield.py verify
+python3 tools/greenfield.py mcp-config --network-isolated
+python3 tools/greenfield.py hpi-plan
+```
+
+Browser MCP must actually be wired into every coding agent. `--network-isolated` is an **operator attestation**, not a firewall; the coordinator must enforce sandbox and egress restrictions externally. HPI download is **not automatic**: it requires documented rights/privacy approval.
+
+[Playwright deployment & fairness →](docs/RESEARCH_TOOLS.md) · [HPI sample download and Gold protocol →](docs/HPI_TRAIN.md)
+
 ## One clean repository. Repeatable agent output.
 
 ```text
@@ -109,13 +125,13 @@ Agents create matching `melusense/rules/`, `dictionaries/`, `processors/` and re
 
 ## Start from zero
 
-The frozen trial baseline is [**`benchmark/base-v1`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v1); record its exact commit SHA with `git rev-parse origin/benchmark/base-v1`. `main` contains the same approved starting files. Once frozen, any future assignment change requires a separately approved new baseline.
+The tool-enabled trial baseline is [**`benchmark/base-v2`**](https://github.com/validatusinternal/melusense-benchmark/tree/benchmark/base-v2); record its exact commit SHA with `git rev-parse origin/benchmark/base-v2`. `main` contains the same approved starting files. Once frozen, any future assignment change requires a separately approved new baseline.
 
 ```bash
 git clone git@github.com:validatusinternal/melusense-benchmark.git
 cd melusense-benchmark
-git fetch origin benchmark/base-v1
-git rev-parse origin/benchmark/base-v1
+git fetch origin benchmark/base-v2
+git rev-parse origin/benchmark/base-v2
 python3 -B tools/verify_scaffold.py
 python3 -B -m unittest discover -s tests -p 'test_acceptance.py'
 ```

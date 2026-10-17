@@ -7,12 +7,13 @@
 ```text
 source repository: validatusinternal/melusense-benchmark (private)
   main                       # Living human-facing docs and future revisions
-  benchmark/base-v1          # ONLY active frozen baseline; tasks + tests + budgets
+  benchmark/base-v1          # Historical immutable pre-tool baseline
+  benchmark/base-v2          # Current frozen tool-enabled baseline
   trial/<model>/seed-<n>     # Candidate output branch, after coordinator freeze
 
 coordinator working storage (outside candidate sandboxes)
   bases/
-    base-v1-<full-sha>/      # Git-free export of the exact frozen tree
+    base-v2-<full-sha>/      # Git-free export of the exact frozen tree
   trials/
     <model-slug>/
       seed-41/               # Isolated worker, fixed source, local build/
@@ -25,6 +26,9 @@ coordinator working storage (outside candidate sandboxes)
       worker-report.json     # Unedited candidate report and failures
       evaluator-report.json  # Independent pass/fail and Gold scoring
       logs/                  # Bounded non-secret raw diagnostics
+  toolchain-private/
+    greenfield-playwright/   # Verified MCP/Chromium + npm lock fingerprint
+    hpi-train/               # Rights-reviewed data and SHA256 TRAIN bundle
   evaluator-private/         # Gold and hidden fixtures: worker has NO access
 ```
 
@@ -42,6 +46,12 @@ One output branch per **model × seed** is useful for reviewing, comparing and p
 - New profile: `trial/<validated-model-slug>/seed-<validated-seed>`
 
 Names are *conventions*, not evidence that a trial has been run. Coordinator records the exact served model name, checkpoint revision and all quantization/KV/backend settings in `results/<run-id>/manifest.json`.
+
+## Shared browser research and HPI TRAIN inputs
+
+The coordinator provisions the same [single greenfield bootstrap](../tools/greenfield.py) for all model trials. The pinned browser version, MCP endpoint, exact npm lock SHA256, allowed origins, browser invocation and optional rights-approved HPI TRAIN bundle SHA must match in each run manifest. Git-free worker snapshots may include an identical sanitized TRAIN bundle **only after rights approval**; evaluator-only Gold and reference code remain inaccessible. Browser-origin filtering is not enough—enforce network isolation outside Git.
+
+[Playwright setup](RESEARCH_TOOLS.md) · [HPI TRAIN rights and data](HPI_TRAIN.md).
 
 ## Candidate module layout
 
@@ -101,7 +111,7 @@ Same Run-ID and matching fingerprint: **verify/reuse**. Any changed model/config
 ## Preflight checks (not a benchmark launch)
 
 ```bash
-git rev-parse benchmark/base-v1
+git rev-parse benchmark/base-v2
 git rev-parse HEAD
 git status --porcelain
 python3 -B tools/verify_scaffold.py
