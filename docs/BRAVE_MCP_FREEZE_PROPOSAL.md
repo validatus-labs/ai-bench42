@@ -2,7 +2,7 @@
 
 **Decision intent (2026-10-17):** Prefer the existing, proven native **Brave + Playwright Headless + Kilo MCP** research toolchain over provisioning a second Chromium browser, **provided every ModelBench worker receives an equally pinned, isolated and restricted configuration**. This proposal is not an evaluation result, installation order, or permission to start Phase 4.
 
-**Source commit for this proposal:** `031f0cfa5a33383aafd073899e29294af9c8dfc2` (`main` on 2026-10-17). The historical `benchmark/base-v1` and `benchmark/base-v2` references, original Spark trials and published reports remain unchanged. No new baseline SHA has been approved or frozen.
+**Source commit for this proposal:** `031f0cfa5a33383aafd073899e29294af9c8dfc2` (`main` on 2026-10-17). The historical `benchmark/base-v1` and `benchmark/base-v2` references, original Spark trials and published reports remain unchanged. **This draft branch now changes proposed tasks, API contract, agent instructions, new tests and docs only; none of these have been merged into `main` or approved as a frozen benchmark.** No new baseline SHA has been approved or frozen.
 
 ## A. Verified evidence versus outstanding claims
 
@@ -33,18 +33,18 @@ The coordinator, not the model, qualifies the following on the real host and the
 7. **Idempotence:** same signed-off source/tools/model/data/seed inputs -> verify/reuse immutable Run-ID; mismatched inputs -> BLOCKED and a new Run-ID only with explicit authorization. No silent installation, updates, fallback to Chromium, or silent replacement of the current Brave version.
 8. **Models:** pin exact model revision/tokenizer/backend, context/KV settings and supported tool gateway for each candidate. The presence of a Kolibri MCP connection does not qualify a Mistral/GLM endpoint.
 9. **Data:** no HPI real-mail TRAIN bundle without independent rights, privacy and worker-disclosure approval and an identical SHA-256 for every worker. No real-mail content or Gold in Git.
-10. **Evaluation:** C01–C07 stays rules-only, with no classifier, training, or LLM parsing. Keep `authorized_removals=[]`; allow independent evaluator-only scoring only when qualified Gold exists.
+10. **Evaluation:** C01–C07 stays rules-only, with no executing classifier, training, or LLM parsing. A **reserved `ml_mode=off|recover` extension point** is proposed: `off` runs exactly the rule-only pipeline; `recover` reports unsupported and never loads or runs a model. Keep `authorized_removals=[]`; permit independent evaluator-only scoring only when qualified Gold exists.
 
 ## C. Proposed *minimum* changes for an approved freeze
 
 Do not update existing `benchmark/base-v1` or `benchmark/base-v2` refs. Prepare a new exact-SHA branch/freeze only **after** qualification:
 
 - `AGENTS.md`: replace the Chromium-only *research-tool identity* clause with the pinned, verified Brave/Kilo/Playwright tool contract, while preserving research prohibitions, source and evaluation isolation.
-- `TASKS.md`: change C00 to verify the exact approved Brave adapter, effective policy and per-worker MCP proof; leave C01–C07 and rule-only API/safety requirements unchanged.
+- `TASKS.md`: revise C00 for the approved Brave adapter and verified worker policies (STILL OPEN), and C05–C07 for the reserved, non-executing ML-mode switch and reproducible local CLI. Keep original parsing/safety requirements; never train a model.
 - `docs/RESEARCH_TOOLS.md`: define the existing Brave verification path, metadata/hash capture, `data:` smoke, permitted RFC/Python/MDN research, negative egress/worker-denial tests; no installation as a prerequisite.
 - `config/budget.json`: version an explicit research tool descriptor for a new baseline; preserve seeds, budgets and source contract, never replace pending hashes with made-up values.
 - `tools/greenfield.py`: keep rights-gated HPI functions; either add a **non-mutating** Brave verification adapter with tests, or separate a read-only checker. The current Chromium installer must never run as an implicit Brave fallback.
-- `tests/`: add offline mocked compatibility/policy checks and confirm unchanged starter scaffold and **expected-failing** acceptance tests.
+- `tests/`: include the same proposed reserved-mode API/CLI acceptance test for all models, plus future offline mocked browser-compatibility/policy tests; initial parser acceptance is **expected to fail** until each agent implements the candidate.
 - `docs/evaluation.md` and `docs/WORKSPACE_LAYOUT.md`: name the new exact freeze SHA only after approved review; preserve existing historical versions.
 
 **No automatic Brave configuration changes or service restarts.** Where a required safeguard is absent, prepare an owner-reviewed change and independently re-probe that *specific* safeguard.
@@ -64,4 +64,4 @@ The coordinator should produce a private, redacted and independently reviewed:
 
 Only the **coordinator with GitHub access** fetches and freezes the eventual new source. The Spark has no GitHub access by design. Transfer a signed-off Git-free archive with SHA-256 receipt, validate it on both ends, instantiate independent worker sandboxes/seeds 41/42/43, and keep the original 22-file transfer and past Kolibri P1–P3 reports untouched.
 
-This proposal intentionally does **not** change `TASKS.md`, `AGENTS.md`, `config/budget.json`, `tools/greenfield.py`, any fixture or benchmark outcome. The operational contract remains the current Chromium `base-v2` until another revision is explicitly frozen and qualified.
+**Current draft PR implementation:** [English reusable prompt](OFFLINE_AGENT_PROMPT.md), [ASCII candidate/build tree and reserved ML interface](BUILD_CONTRACT.md), proposed edits to `TASKS.md`, `AGENTS.md`, `docs/contract.md`, `docs/evaluation.md`, `MANIFEST.md`, `docs/WORKSPACE_LAYOUT.md`, `.gitignore`, and a **new** `tests/test_reserved_ml_mode.py`. This is only a future assignment proposal, **not** proof those new tests have passed. `config/budget.json`, `tools/greenfield.py`, the original tests/fixtures, the old `main`/historical baseline refs and all Spark runtime/evidence remain unchanged. The active operational contract still requires the original Chromium baseline until the newly approved Brave instructions and a new SHA have actually been qualified and frozen.
