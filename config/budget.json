@@ -1,5 +1,5 @@
 {
-  "version": "base-v1",
+  "version": "base-v2",
   "models": [
     "kolibri",
     "mistral",
@@ -18,7 +18,7 @@
   "max_tool_calls": 200,
   "wall_seconds": 3600,
   "temperature": 0.2,
-  "top_p": 1.0,
+  "top_p": 1,
   "server_models_loaded_concurrently": 1,
   "phase1_client_concurrency": [
     1,
