@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import platform
+import tarfile
 import shutil
 import subprocess
 import sys
@@ -25,6 +26,11 @@ ROOT_DEFAULT = PROJECT / "build" / "greenfield-playwright"
 HPI_DEFAULT = PROJECT / "build" / "hpi-asf-train"
 MCP = "@playwright/mcp"
 MCP_VERSION = "0.0.83"
+NODE_PIN = "22.22.2"
+NODE_ARCHIVE_SHA256 = {
+    "aarch64": "e9e1930fd321a470e29bb68f30318bf58e3ecb4acb4f1533fb19c58328a091fe",
+    "x86_64": "88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a",
+}
 HPI_REPO = "HPI-Information-Systems/Quagga"
 HPI_REF = "4ba5be0fd4a0a5954527ea93cf6592f54f4fc3f0"
 ALLOWED_ORIGINS = (
@@ -80,18 +86,58 @@ def checked(command: list[str], cwd: Path, env: dict | None = None, timeout: int
     return r.stdout.strip()
 
 
-def node_versions() -> dict:
-    if not shutil.which("node") or not shutil.which("npm"):
-        raise Blocked("Node.js >=20 and npm required; no system packages changed")
-    version = checked(["node", "--version"], PROJECT)
+def node_commands(root: Path) -> tuple[str, str, dict]:
+    """Prefer private, pinned portable Node; otherwise qualify system Node."""
+    portable = root / ".node" / "bin"
+    if (portable / "node").is_file():
+        env = {**os.environ, "PATH": str(portable) + os.pathsep + os.environ.get("PATH", "")}
+        return str(portable / "node"), str(portable / "npm"), env
+    node, npm = shutil.which("node"), shutil.which("npm")
+    if not node or not npm:
+        raise Blocked("Node.js/npm missing: use 'greenfield' to install pinned portable Node")
+    return node, npm, os.environ.copy()
+
+
+def node_versions(root: Path | None = None) -> dict:
+    node, npm, env = node_commands(root or PROJECT)
+    version = checked([node, "--version"], PROJECT, env)
     try:
         major = int(version.removeprefix("v").split(".")[0])
     except ValueError as exc:
         raise Blocked("Unrecognized Node.js version") from exc
     if major < 20:
-        raise Blocked("Node.js >=20 is required")
-    return {"node": version, "npm": checked(["npm", "--version"], PROJECT)}
+        raise Blocked("Node.js >=20 required; use 'greenfield' for pinned portable Node")
+    if root and (root / ".node" / "bin" / "node").is_file() and version != "v" + NODE_PIN:
+        raise Blocked("Portable Node pin changed")
+    return {"node": version, "npm": checked([npm, "--version"], PROJECT, env)}
 
+
+def install_portable_node(stage: Path) -> None:
+    """Fetch Node LTS by pinned SHA256 into this installer-owned staging dir."""
+    machine = platform.machine()
+    if platform.system() != "Linux" or machine not in NODE_ARCHIVE_SHA256:
+        raise Blocked("Greenfield Node supports Linux aarch64/x86_64 only")
+    arch = "arm64" if machine == "aarch64" else "x64"
+    filename = f"node-v{NODE_PIN}-linux-{arch}.tar.xz"
+    url = f"https://nodejs.org/dist/v{NODE_PIN}/{filename}"
+    archive = stage / filename
+    sha = hashlib.sha256()
+    req = urllib.request.Request(url, headers={"User-Agent": "ModelBench-Greenfield"})
+    with urllib.request.urlopen(req, timeout=120) as response:
+        if response.geturl() != url:
+            raise Blocked("Node download redirect changed trusted origin")
+        with archive.open("xb") as target:
+            while block := response.read(1024 * 1024):
+                sha.update(block)
+                target.write(block)
+    if sha.hexdigest() != NODE_ARCHIVE_SHA256[machine]:
+        raise Blocked("Node archive SHA256 does not match pinned release")
+    with tarfile.open(archive, "r:xz") as tar:
+        tar.extractall(stage, filter="data")
+    (stage / filename.removesuffix(".tar.xz")).rename(stage / ".node")
+    archive.unlink()
+    if node_versions(stage)["node"] != "v" + NODE_PIN:
+        raise Blocked("Portable Node extraction or version failed")
 
 def browser_smoke(root: Path) -> dict:
     bundled = root / "node_modules" / "playwright"
@@ -105,8 +151,9 @@ def browser_smoke(root: Path) -> dict:
         "console.log(JSON.stringify({status:'PASS',browser:'chromium',version:b.version()}));"
         "}finally{await b.close()}})().catch(e=>{console.error(e.message);process.exit(2)})"
     )
-    env = {**os.environ, "PLAYWRIGHT_BROWSERS_PATH": str(root / "browsers")}
-    output = checked(["node", "-e", js, str(bundled)], root, env, timeout=90)
+    node, _, base_env = node_commands(root)
+    env = {**base_env, "PLAYWRIGHT_BROWSERS_PATH": str(root / "browsers")}
+    output = checked([node, "-e", js, str(bundled)], root, env, timeout=90)
     try:
         result = json.loads(output.splitlines()[-1])
     except (ValueError, IndexError) as exc:
@@ -133,33 +180,42 @@ def verify(root: Path, expected: str | None = None, smoke: bool = True) -> dict:
         raise Blocked("Toolchain lock SHA mismatch; don't mix models or trials")
     if metadata.get("arch") != platform.machine() or metadata.get("os") != platform.system():
         raise Blocked("Browser binaries are installed for another platform")
+    live_node = node_versions(root)
+    if live_node != {"node": metadata.get("node"), "npm": metadata.get("npm")}:
+        raise Blocked("Node/npm runtime changed since the pinned installation")
     result = {"status": "VERIFIED", "mcp_version": MCP_VERSION,
-              "lock_sha256": digest, "arch": metadata["arch"], "os": metadata["os"]}
+              "lock_sha256": digest, "arch": metadata["arch"], "os": metadata["os"],
+              "node": live_node["node"], "npm": live_node["npm"]}
     if smoke:
         result["browser_smoke"] = browser_smoke(root)
     return result
 
 
-def install(root: Path, expected: str | None, deps: bool) -> dict:
+def install(root: Path, expected: str | None, deps: bool, greenfield: bool = False) -> dict:
     if root.exists():
         return {"action": "REUSED", **verify(root, expected)}
     if platform.system() != "Linux":
         raise Blocked("Linux only; DGX Spark ARM64 supported when upstream binaries are available")
-    versions = node_versions()
+    if not greenfield:
+        node_versions()
     root.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=".modelbench-owned-", dir=root.parent))
     os.chmod(staging, 0o700)
     try:
+        if greenfield:
+            install_portable_node(staging)
+        node, npm, node_env = node_commands(staging)
+        versions = node_versions(staging)
         private_write(staging / "package.json", jbytes({
             "name": "modelbench-playwright", "version": "1.0.0", "private": True,
             "dependencies": {MCP: MCP_VERSION},
         }))
-        checked(["npm", "install", "--package-lock-only", "--ignore-scripts",
-                 "--no-audit", "--no-fund"], staging)
+        checked([npm, "install", "--package-lock-only", "--ignore-scripts",
+                 "--no-audit", "--no-fund"], staging, node_env)
         digest = sha256((staging / "package-lock.json").read_bytes())
         if expected and digest != expected:
             raise Blocked("Fresh npm lockfile not equal to the coordinator-approved SHA256")
-        checked(["npm", "ci", "--ignore-scripts", "--no-audit", "--no-fund"], staging)
+        checked([npm, "ci", "--ignore-scripts", "--no-audit", "--no-fund"], staging, node_env)
         cli = staging / "node_modules" / "playwright" / "cli.js"
         if not cli.is_file():
             raise Blocked("Matching Playwright browser installer missing")
@@ -171,8 +227,10 @@ def install(root: Path, expected: str | None, deps: bool) -> dict:
                 prefix = ["sudo"]
             else:
                 raise Blocked("Explicit system dependencies requested but sudo/root unavailable")
-            checked(prefix + ["node", str(cli), "install-deps", "chromium"], staging, env, 1200)
-        checked(["node", str(cli), "install", "chromium"], staging, env, 1200)
+            checked(prefix + [node, str(cli), "install-deps", "chromium"], staging,
+                    {**node_env, **env}, 1200)
+        checked([node, str(cli), "install", "chromium"], staging,
+                {**node_env, **env}, 1200)
         browser = browser_smoke(staging)  # Offline, data: URL only.
         private_write(staging / "stamp.json", jbytes({
             "schema": 1, "lock_sha256": digest, "mcp_version": MCP_VERSION,
@@ -250,7 +308,11 @@ def verify_hpi(folder: Path) -> dict:
 
 def hpi_import(folder: Path, approval: dict) -> dict:
     if folder.exists():
-        return {"action": "REUSED", **verify_hpi(folder)}
+        summary = verify_hpi(folder)
+        original_approval = json.loads((folder / "manifest.json").read_text()).get("rights_record_sha256")
+        if original_approval != approval["rights_record_sha256"]:
+            raise Blocked("Existing HPI TRAIN data belong to a different rights approval")
+        return {"action": "REUSED", **summary}
     folder.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(tempfile.mkdtemp(prefix=".hpi-owned-", dir=folder.parent))
     os.chmod(stage, 0o700)
@@ -290,6 +352,9 @@ def hpi_bundle(folder: Path, output: Path, approval: dict, worker_approved: bool
     if not worker_approved:
         raise Blocked("Explicit worker disclosure approval required (--approve-worker-disclosure)")
     summary = verify_hpi(folder)
+    original_approval = json.loads((folder / "manifest.json").read_text()).get("rights_record_sha256")
+    if original_approval != approval["rights_record_sha256"]:
+        raise Blocked("TRAIN bundle rights approval differs from imported dataset")
     if PROJECT in output.parents and PROJECT / "build" not in output.parents:
         raise Blocked("TRAIN bundle cannot be written in tracked repository")
     records = []
@@ -326,6 +391,10 @@ def cli() -> int:
     p.add_argument("--expected-lock-sha256")
     p.add_argument("--with-system-deps", action="store_true",
                    help="Explicit opt-in: install Chromium OS dependencies with root/sudo")
+    p = actions.add_parser("greenfield")
+    p.add_argument("--expected-lock-sha256")
+    p.add_argument("--with-system-deps", action="store_true",
+                   help="Explicit opt-in: system Chromium dependencies with root/sudo")
     p = actions.add_parser("verify")
     p.add_argument("--expected-lock-sha256")
     for command in ("mcp-config", "mcp-serve"):
@@ -349,10 +418,12 @@ def cli() -> int:
     try:
         if args.action == "plan":
             result = {"mcp": f"{MCP}@{MCP_VERSION}", "root": str(root),
+                      "portable_node_pin": NODE_PIN, "greenfield_supported": True,
                       "allowed_origins": ALLOWED_ORIGINS, "hpi_ref": HPI_REF,
                       "warning": "MCP origin filtering is NOT a network security boundary"}
-        elif args.action == "install":
-            result = install(root, args.expected_lock_sha256, args.with_system_deps)
+        elif args.action in ("install", "greenfield"):
+            result = install(root, args.expected_lock_sha256, args.with_system_deps,
+                             greenfield=args.action == "greenfield")
         elif args.action == "verify":
             result = verify(root, args.expected_lock_sha256)
         elif args.action in ("mcp-config", "mcp-serve"):
@@ -370,8 +441,9 @@ def cli() -> int:
                              "--network-isolated"],
                 }}}
             else:
-                env = {**os.environ, "PLAYWRIGHT_BROWSERS_PATH": str(root / "browsers")}
-                os.execvpe("node", ["node", *command], env)
+                node, _, base_env = node_commands(root)
+                env = {**base_env, "PLAYWRIGHT_BROWSERS_PATH": str(root / "browsers")}
+                os.execvpe(node, [node, *command], env)
                 raise AssertionError("execvpe returned")
         elif args.action == "hpi-plan":
             result = {"scope": "ASF/TRAIN", "source_revision": HPI_REF,
