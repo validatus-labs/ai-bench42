@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "description": "Coordinator template. Copy outside the worker, fill pins and paths, then use tools/worker.py. Null pins are deliberately BLOCKED.",
+  "bwrap": {"path": "/usr/bin/bwrap", "sha256": null},
+  "rootfs": {"path": null, "tree_sha256": null},
+  "agent": {
+    "argv": [],
+    "canary_argv": [],
+    "environment": {},
+    "config_files": []
+  },
+  "artifacts": {
+    "kilo": {"path": null, "sha256": null},
+    "brave": {"path": null, "sha256": null},
+    "node": {"path": null, "sha256": null},
+    "mcp_schema": {"path": null, "sha256": null},
+    "dependency_lock": {"path": null, "sha256": null},
+    "browser_policy": {"path": null, "sha256": null},
+    "agent_instructions": {"path": null, "sha256": null}
+  },
+  "channels": {
+    "inference": {"socket": null, "peer_uid": null, "peer_executable_sha256": null, "peer_cmdline_sha256": null},
+    "browser": {"socket": null, "peer_uid": null, "peer_executable_sha256": null, "peer_cmdline_sha256": null}
+  },
+  "qualification": {
+    "path": null,
+    "sha256": null,
+    "description": "Pinned coordinator executable: reads a JSON request on stdin, inspects the real canary transcript and external browser controls, returns the evidence schema in docs/WORKERS.md. Never runs in the candidate workspace."
+  },
+  "model": {
+    "id": null,
+    "revision": null,
+    "tokenizer_sha256": null,
+    "context_tokens": null,
+    "backend_identity_sha256": null,
+    "local_inference_only": true
+  },
+  "limits": {"address_space_mib": 4096, "file_size_mib": 64, "open_files": 256, "processes": 256},
+  "policy": {
+    "direct_network": "deny",
+    "host_home": "deny",
+    "git": "deny",
+    "service_workers": "block",
+    "research": "task-scoped-public-https-read-only",
+    "browser_channel": "mcp-json-lines-v1",
+    "inference_channel": "http-over-unix-v1"
+  }
+}

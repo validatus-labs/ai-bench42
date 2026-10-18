@@ -1,0 +1,17 @@
+[
+  {
+    "id": "synthetic-en-plain",
+    "locale": "en",
+    "text": "Hello team,\r\nPlease keep this complete message.\r\n"
+  },
+  {
+    "id": "synthetic-fr-plain",
+    "locale": "fr",
+    "text": "Bonjour,\nMerci de conserver ce texte : été, cœur, 🙂.\n"
+  },
+  {
+    "id": "synthetic-de-plain",
+    "locale": "de",
+    "text": "Guten Tag,\nDas Wort On ist hier normaler Inhalt.\n"
+  }
+]

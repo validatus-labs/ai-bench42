@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "CANDIDATE_CATALOG_ONLY_NOT_DEPLOYMENT_VERIFIED",
+  "model_profiles": [
+    {
+      "slug": "kolibri-1",
+      "display_name": "Kolibri-1",
+      "served_model_id": null,
+      "revision": null
+    },
+    {
+      "slug": "mistral-small-4",
+      "display_name": "Mistral Small 4",
+      "served_model_id": null,
+      "revision": null
+    },
+    {
+      "slug": "glm-5.3-flash",
+      "display_name": "GLM-5.3 Flash",
+      "served_model_id": null,
+      "revision": null
+    },
+    {
+      "slug": "qwen",
+      "display_name": "Qwen (exact variant TBD)",
+      "served_model_id": null,
+      "revision": null
+    },
+    {
+      "slug": "deepseek",
+      "display_name": "DeepSeek (exact variant TBD)",
+      "served_model_id": null,
+      "revision": null
+    }
+  ],
+  "rule": "Coordinator must resolve and pin the exact server model ID, revision, tokenizer, context and runtime settings per Run-ID; no profile here is proof of availability."
+}

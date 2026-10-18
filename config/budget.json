@@ -1,0 +1,78 @@
+{
+  "version": "brave-offline-v5",
+  "models": [
+    "kolibri",
+    "mistral",
+    "qwen",
+    "glm"
+  ],
+  "repetitions": 3,
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "context_tokens": 262144,
+  "max_output_tokens_per_turn": 32768,
+  "max_total_generated_tokens": 262144,
+  "max_agent_turns": 100,
+  "max_tool_calls": 200,
+  "wall_seconds": 3600,
+  "temperature": 0.2,
+  "top_p": 1,
+  "server_models_loaded_concurrently": 1,
+  "phase1_client_concurrency": [
+    1,
+    2,
+    4
+  ],
+  "notes": "Common prospective trial ceilings, not evidence every model supports 262144 context tokens, ARM64 or matching tool calls. No silent downgrade, replacement or truncation.",
+  "model_catalog": "config/models.json",
+  "model_list_note": "Illustrative initial coordinator IDs only; this is not a completeness requirement or proof of model deployment. Exact model revisions must be pinned per Run-ID. Additional models require coordinator support.",
+  "research_tool": {
+    "kind": "brave-playwright-mcp",
+    "browser": "brave",
+    "toolchain_policy": "SAME_VERIFIED_HASHES_AND_TOOL_SCHEMA_PER_MODEL",
+    "browser_binary_sha256": "COORDINATOR_MUST_PIN_BEFORE_TRIAL",
+    "mcp_server_and_schema_sha256": "COORDINATOR_MUST_PIN_BEFORE_TRIAL",
+    "package_lock_or_module_seal_sha256": "COORDINATOR_MUST_PIN_BEFORE_TRIAL",
+    "effective_config_sha256": "COORDINATOR_MUST_PIN_BEFORE_TRIAL",
+    "navigation_scope": "TASK_SCOPED_PUBLIC_HTTPS_READ_ONLY",
+    "blocked_destinations": "LOCALHOST_PRIVATE_LINK_LOCAL_METADATA_INTERNAL_AUTHENTICATED",
+    "dns_redirect_ipv4_ipv6_checks": "REQUIRED_PER_WORKER",
+    "service_workers": "MUST_BE_BLOCKED_AND_VERIFIED",
+    "real_agent_mcp_call": "REQUIRED_PER_MODEL",
+    "network_isolation": "MUST_BE_VERIFIED_EXTERNALLY_FOR_EACH_WORKER",
+    "reference_and_gold_denial": "MUST_BE_VERIFIED_EXTERNALLY_FOR_EACH_WORKER",
+    "verification_plan": "docs/RUNBOOK.md",
+    "read_only_verifier": "tools/preflight.py",
+    "no_installations_or_silent_fallback": true
+  },
+  "hpi_train": {
+    "required": true,
+    "pinned_ref": "4ba5be0fd4a0a5954527ea93cf6592f54f4fc3f0",
+    "dataset": "ASF/TRAIN",
+    "pair_count": 12,
+    "rights_gate": "REQUIRED",
+    "worker_disclosure_approval": "REQUIRED",
+    "worker_bundle_sha256": "COORDINATOR_MUST_PIN_BEFORE_TRIAL",
+    "candidate_checks": "REQUIRED_ALL_12_EXAMPLES_PER_MODEL_AND_SEED",
+    "blind_hidden": true
+  },
+  "candidate_interface": {
+    "ml_mode": {
+      "default": "off",
+      "allowed": [
+        "off",
+        "recover"
+      ],
+      "implemented": [
+        "off"
+      ],
+      "recover_behavior": "EXPLICIT_NOT_IMPLEMENTED_NO_FALLBACK"
+    },
+    "local_cli": "python -m melusense",
+    "training_allowed": false,
+    "ml_inference_allowed": false
+  }
+}

@@ -1,0 +1,10 @@
+# Managed by ModelBench bootstrap maintenance v1
+[Unit]
+Description=ModelBench weekly maintenance on Sunday at 05:00 UTC
+[Timer]
+OnCalendar=Sun *-*-* 05:00:00 UTC
+Persistent=true
+RandomizedDelaySec=0
+Unit=ai-model-apt-update@weekly.service
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "mistral-small-4",
+  "enabled": false,
+  "blocked_reason": "Spark memory and architecture/backend compatibility are not qualified for Mistral Small 4 at 262144 tokens. This profile must be reviewed before enabling; Q8 GGUF is not a vLLM checkpoint.",
+  "repository": "mistralai/Mistral-Small-4-119B-2603",
+  "revision": "a11f36bebf709121056b1dbcc943d1c6afbe494d",
+  "architecture_name": "Mistral3ForConditionalGeneration",
+  "quantization": "fp8",
+  "packages": [
+    "vllm==0.29.0"
+  ],
+  "compatibility": {
+    "python_min": "3.12",
+    "vllm_version": "0.29.0",
+    "torch_cuda_major": 13,
+    "compute_capability": "12.1",
+    "native_context": 262144
+  },
+  "memory": {
+    "minimum_available_gib": 128,
+    "host_reserve_gib": 10,
+    "weights_gib": 119,
+    "kv_estimate_gib": 6,
+    "overhead_gib": 8,
+    "minimum_disk_gib": 240
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8001,
+    "max_model_len": 262144,
+    "max_num_seqs": 1,
+    "kv_cache_dtype": "fp8",
+    "gpu_memory_utilization": 0.8,
+    "max_num_batched_tokens": 8192,
+    "reasoning_parser": "mistral",
+    "tool_call_parser": "mistral",
+    "enable_auto_tool_choice": true,
+    "enforce_eager": true,
+    "enable_prefix_caching": true
+  },
+  "verification": {
+    "smoke_tokens": 64,
+    "long_context_prompt_tokens": 262112,
+    "long_context_output_tokens": 32
+  }
+}

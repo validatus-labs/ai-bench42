@@ -1,0 +1,7 @@
+// Events only: no downloads, npm, pin changes or nested APT work in this hook.
+APT::Update::Post-Invoke-Success {
+  "if test -d /var/lib/modelbench-toolchain-updates; then touch /var/lib/modelbench-toolchain-updates/pending || true; fi";
+};
+DPkg::Post-Invoke {
+  "if test -d /var/lib/modelbench-toolchain-updates; then touch /var/lib/modelbench-toolchain-updates/pending /var/lib/modelbench-toolchain-updates/last-package-event || true; fi";
+};
