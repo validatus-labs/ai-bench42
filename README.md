@@ -25,9 +25,9 @@ We measure:
 
 We also preserve the code, failures, and costs—not just a leaderboard score. Our first challenge is **Melusense**: each model must independently build a multilingual email parser from an empty starter.
 
-![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1775519520461-6b6e068d9250?auto=format&fit=crop&w=1400&h=300&q=80)
+![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&h=400&q=80)
 
-<sub>Photo: [Eric Stoynov / Unsplash](https://unsplash.com/photos/two-server-racks-filled-with-electronic-components-and-wires-k27hkqXuveo) · Unsplash License.</sub>
+<sub>Photo: [Franck V. / Unsplash](https://images.unsplash.com/photo-1531746790731-6c087fecd65a) · Unsplash License.</sub>
 
 ## The twist: use AI to need less AI
 
