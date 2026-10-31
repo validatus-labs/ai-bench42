@@ -1,0 +1,240 @@
+{
+  "format_version": 1,
+  "scope": "32 sanitized editorial editions; not raw evidence or new experiments",
+  "reports": [
+    {
+      "id": "R01",
+      "title": "Inventory audit: publication scope",
+      "path": "inventory-scope.md",
+      "sha256": "12e62b56b896c39404a9e32f95ada6b85f81b385ed57d7a37017705a92c99b23",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R02",
+      "title": "Capacity planning: estimates versus measurements",
+      "path": "capacity-planning.md",
+      "sha256": "9093ca20226490f3d99d9ea415b4d5a790340e2ac02c14a37ed90e6e4a9637b2",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R03",
+      "title": "Model selection and qualification limits",
+      "path": "model-selection.md",
+      "sha256": "948e6a5096373e0d841a83f3231b9c291956c450b0df718f1ff333cf04364694",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R04",
+      "title": "Repository verification and synchronization",
+      "path": "repository-checks.md",
+      "sha256": "f127601c69b0d58740d6172111465c10aa66af6ca040558cbb756372e4b82ced",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R05",
+      "title": "Kolibri serving and context-capacity qualification",
+      "path": "kolibri-serving.md",
+      "sha256": "6092cadb52c190a28c3b5182bb2e0ed3df230030a786d0eb1e98228b40033aaf",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R06",
+      "title": "A real browser task through Kolibri and Kilo",
+      "path": "browser-agent-proof.md",
+      "sha256": "fd9a7f32e55a6e598e77cd00f30c88e774e682192689243dc7b49d5c6c9a2864",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R07",
+      "title": "Four-phase benchmark: initial pilot scope",
+      "path": "four-phase-pilot.md",
+      "sha256": "fa0829232a306d747711ff5084984663a82694ec0d494da1dfc4bec488ab6238",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R08",
+      "title": "Kolibri before cache calibration",
+      "path": "general-baseline.md",
+      "sha256": "3a3be399670c6ca7a77677eefdb1cee2b5ca01bed8922ac0bc0ebd667c6f7fee",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R09",
+      "title": "Cache calibration: method and rejected export",
+      "path": "cache-calibration-method.md",
+      "sha256": "847ed854cca4350def3b41982f1ac8aea1c58263134e0ec3c00d36f6c69f5d55",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R10",
+      "title": "Kolibri after accepted cache calibration",
+      "path": "general-calibrated.md",
+      "sha256": "505fd3020b825af07e4cfae21513b0066e9bbfae8f18384adb7aefab35083abf",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R11",
+      "title": "With and without cache calibration",
+      "path": "calibration-comparison.md",
+      "sha256": "19c04627796002ea6ee3050389024e5c80ca9152ae9828748aa4bff7bb94615f",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R12",
+      "title": "Early coding readiness: missing evidence",
+      "path": "early-readiness.md",
+      "sha256": "f53dc68c1661b80984af0faed8ed96afc9680af942e3bd1c4b738238396affa7",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R13",
+      "title": "Working browser versus frozen contract",
+      "path": "browser-contract-deviation.md",
+      "sha256": "e2b4da23da37d8dbb0981379e7a1dda4b65a4a24c64e3fcf2930a2aca00707d3",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R14",
+      "title": "Browser qualification: observed boundary gaps",
+      "path": "browser-boundary-gaps.md",
+      "sha256": "8cce01e2b47343df890d1a1c51901dd4703f65872f924d3c04247cb5be0ee085",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R15",
+      "title": "An independently checked isolated browser baseline",
+      "path": "isolated-browser-baseline.md",
+      "sha256": "c4ead1477641025d4ffdc658670aeccde4220252f569071e10df5e462e89ea58",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R16",
+      "title": "Isolated model-to-browser proof and follow-up failure",
+      "path": "isolated-model-tool-proof.md",
+      "sha256": "c6ba254e130a542ec63275c0faa79bccddfff232f1843efb24f7a44bfa068f05",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R17",
+      "title": "First bootstrap validation: partial success",
+      "path": "bootstrap-first-validation.md",
+      "sha256": "cfffdd203c24baa3f25db6ecc536db83ba960191365fd98e85ef9d3c40e22c2e",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R18",
+      "title": "Adopting an existing installation without reinstalling",
+      "path": "existing-installation-adoption.md",
+      "sha256": "db7af70ecbd675fd1262aecfb40e8d7130d664c1b79a8abf3465b403af5fbb54",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R19",
+      "title": "Preparing inputs without claiming experiment readiness",
+      "path": "experiment-preparation.md",
+      "sha256": "bf4576bbfd08df110156d7b38760df34a2af133054eb668e511973638dc19eaf",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R20",
+      "title": "Resuming experiments without replaying uncertain work",
+      "path": "resumable-controller.md",
+      "sha256": "3fe8e315e08992181d268d594ff51cd1dc640a4afdb1ad7dd0f1e46e122b608e",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R21",
+      "title": "Release readiness versus completed benchmark",
+      "path": "release-gates.md",
+      "sha256": "dc773f4e9b32d2064b27d3d7923c91899b004812fc8dad2754da12bd2d8293eb",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R22",
+      "title": "Three early independent coding attempts",
+      "path": "coding-three-attempts.md",
+      "sha256": "7416b371a4552dc3dde2cce256ecdf9070eb9873c02cad566678c4ec19f75371",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R23",
+      "title": "The coding attempt that exhausted its tool budget",
+      "path": "coding-loop-failure.md",
+      "sha256": "66f7715e3a4d829733123553057bf13b310bb184eac579583e01e27b4ec11b66",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R24",
+      "title": "A separate Codex-assisted repair",
+      "path": "assisted-repair.md",
+      "sha256": "c13133bfeb95001ca34737e23e1e065e3ed81c16ebffc04ede3fc5ad86981317",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R25",
+      "title": "Why did Kolibri read the same files repeatedly?",
+      "path": "repeated-read-diagnosis.md",
+      "sha256": "31c8fc483d96f2d85f6d028c838c004f740c1ce2d4f6fbbaf5f52a23a707e5f6",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R26",
+      "title": "A bounded feedback and sampling diagnostic",
+      "path": "feedback-sampling.md",
+      "sha256": "e9620bda4b6583fa090d72793f0b490324fed1c2f8119c4494579316d6c1302b",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R27",
+      "title": "A fresh coding attempt with declared recipe changes",
+      "path": "coding-recommended-sampling.md",
+      "sha256": "74da9bb84fae27236d35b85a1fccefe2417680c6fae0d377fb2c874b7de85618",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R28",
+      "title": "Measuring duration without a whole-trial deadline",
+      "path": "elapsed-only-policy.md",
+      "sha256": "b2879611573da74afe114ffcbd0221558e9f48b3daab1f477d04e2ca14b27bf2",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R29",
+      "title": "The independent attempt without a wall deadline",
+      "path": "coding-no-wall-deadline.md",
+      "sha256": "fb42693a0d6e36677519afb75e0b459e78064b7d1c6a05a67f22dddd073f3d90",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R30",
+      "title": "What the independent coding attempts established",
+      "path": "coding-retrospective.md",
+      "sha256": "82d906bcf01dda5857ea0bc822a03cc6048cedd5cafcda3f9f805198bfe749de",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R31",
+      "title": "Guided development: progress, invalid tests and truncation",
+      "path": "guided-development.md",
+      "sha256": "0d1a94a03731e42d1d8febff8a51a0c54b7eb37d1f84a9734b0c83503e074e8b",
+      "edition": "editorial summary; original retained privately"
+    },
+    {
+      "id": "R32",
+      "title": "What we learned from asking Kolibri to build an email parser",
+      "path": "kolibri-overview.md",
+      "sha256": "66ca1b9ff6cbcea9b863d31ea810621ffd7515805c66b0169eb3c26897161249",
+      "edition": "reader report with collection navigation added"
+    }
+  ],
+  "supporting_documents": [
+    {
+      "path": "README.md",
+      "sha256": "de6adfc19163bec1ddfa4b0ff1aa56a1fab8d75028c2bb624e92f0925e8c8040"
+    },
+    {
+      "path": "METHODS.md",
+      "sha256": "7e0defa693cc11f68c4a04dde1e927b853308e1aa42ef07a8444a49da95dda20"
+    }
+  ]
+}

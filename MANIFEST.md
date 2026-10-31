@@ -23,3 +23,12 @@
 19. [One experiment, one report](docs/PIPELINE.md) — deployment/verification, standard-suite adapters, three isolated coding seeds, independent scoring and one HTML report; [controller](scripts/benchmark.py), [target configuration](config/benchmark.example.json).
 
 The English prompt, build tree, Brave/MCP research rules and classifier-mode interface define the common candidate handoff. Record each trial's readiness and results in its own run evidence.
+
+## Results for readers and coordinators
+
+- [Sanitized report collection](docs/reports/README.md) — 32 edited historical result reports.
+- [Plain-English Kolibri overview](docs/reports/kolibri-overview.md).
+- [Methods, privacy scope and limitations](docs/reports/METHODS.md).
+
+Reports must stay outside candidate offline packages. This documentation commit
+is not a new approved assignment or benchmark freeze.

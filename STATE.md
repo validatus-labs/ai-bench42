@@ -1,3 +1,26 @@
+# AI-Bench42 — result-publication update
+
+Updated 31 October 2026. The [sanitized collection](docs/reports/README.md)
+contains 32 editorial editions of retained preparation, evaluation and coding
+reports. The [reader overview](docs/reports/kolibri-overview.md) explains the
+findings; [publication scope](docs/reports/METHODS.md) records omissions and limits.
+Actual historical P1–P3 subsets and Phase-4 attempts now have readable reports.
+No reviewed Kolibri trial completed the full parser; no held-out email accuracy
+or completed SWE-bench score is claimed. Assisted work is separately labelled.
+These are historical observations, not a live readiness decision for this checkout.
+
+Only report documentation and navigation are added. The starter, task/API/tests,
+config and freeze references remain unchanged. Keep reports outside independent
+candidate packages; this commit is not an approved task baseline. Existing
+repository visibility and history are preserved. Publication sanitization does not
+certify other files or old Git history. No model requests or host changes occur.
+
+## Preserved earlier repository snapshot
+
+The following 18 October snapshot describes that earlier checkout and local
+verification scope. Its statements about absent runtime evidence predate the
+historical result reports now linked above.
+
 # AI-Bench42 — current repository state
 
 **Checked on 18 October 2026.** This is a human-readable snapshot of this
