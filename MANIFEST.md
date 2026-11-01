@@ -26,9 +26,9 @@ The English prompt, build tree, Brave/MCP research rules and classifier-mode int
 
 ## Results for readers and coordinators
 
-- [Sanitized report collection](docs/reports/README.md) — 32 edited historical result reports.
-- [Plain-English Kolibri overview](docs/reports/kolibri-overview.md).
-- [Methods, privacy scope and limitations](docs/reports/METHODS.md).
+- [Kolibri coding-quality assessment](docs/reports/kolibri-overview.md) — concise findings, benchmark interpretation and Mistral/GLM comparison.
+- [Supporting result records](docs/reports/README.md) — measurements and historical preparation.
+- [Evaluation methods and limitations](docs/reports/METHODS.md).
 
 Reports must stay outside candidate offline packages. This documentation commit
 is not a new approved assignment or benchmark freeze.

@@ -4,15 +4,13 @@
 
 How good is an LLM when it has to build something that actually works?
 
-## Observed results
+## What can Kolibri actually do?
 
-[Read the sanitized result collection](docs/reports/README.md) ·
-[What we learned from Kolibri](docs/reports/kolibri-overview.md).
-The 32 edited reports retain failures, sample sizes and limitations. No reviewed
-Kolibri coding attempt completed the full parser challenge. Historical results
-are separate from this unimplemented starter and its current readiness gates.
-Reports are coordinator material: exclude them from fresh candidate packages.
-See [publication scope and reproducibility limits](docs/reports/METHODS.md).
+[Read the two-page coding-quality assessment](docs/reports/kolibri-overview.md).
+It connects our measured results with published coding benchmarks and gives a
+qualified comparison with Mistral Small 4 and GLM-5.3-Flash. Kolibri produced useful
+code but did not complete the full parser in the reviewed trials.
+[Supporting measurements](docs/reports/README.md) remain available separately.
 
 ## TL;DR — Too long; didn't read
 

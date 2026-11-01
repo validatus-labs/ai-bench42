@@ -1,6 +1,6 @@
 {
   "format_version": 1,
-  "scope": "32 sanitized editorial editions; not raw evidence or new experiments",
+  "scope": "Concise model-quality assessment and supporting experimental records; no new experiments",
   "reports": [
     {
       "id": "R01",
@@ -221,20 +221,20 @@
     },
     {
       "id": "R32",
-      "title": "What we learned from asking Kolibri to build an email parser",
+      "title": "Kolibri-1 \u2014 Coding Quality in Practice",
       "path": "kolibri-overview.md",
-      "sha256": "66ca1b9ff6cbcea9b863d31ea810621ffd7515805c66b0169eb3c26897161249",
-      "edition": "reader report with collection navigation added"
+      "sha256": "a534d0669a72a014e6d734e91a4271c85696c00855467acfe5683c72a676538e",
+      "edition": "concise capability assessment with cited external benchmark interpretation"
     }
   ],
   "supporting_documents": [
     {
       "path": "README.md",
-      "sha256": "de6adfc19163bec1ddfa4b0ff1aa56a1fab8d75028c2bb624e92f0925e8c8040"
+      "sha256": "278f780ad9f488b3a5ea7c7eb6227261a913c47665f3833b0ced39d81f080d59"
     },
     {
       "path": "METHODS.md",
-      "sha256": "7e0defa693cc11f68c4a04dde1e927b853308e1aa42ef07a8444a49da95dda20"
+      "sha256": "0f067af80c9a1c17e31207101e1210c63d513b995d1f149c8a4d031873dedce6"
     }
   ]
 }

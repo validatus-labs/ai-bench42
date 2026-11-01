@@ -1,28 +1,24 @@
-# AI-Bench42 — Reports
+# Kolibri results
 
-**Start with [What we learned from Kolibri](kolibri-overview.md).**
-Kolibri generated useful code and used real tools. None of the reviewed coding
-attempts completed the full email-parser challenge. The general evaluations
-showed mixed results; cache calibration did not deliver a universal improvement.
+[Read the two-page quality assessment](kolibri-overview.md).
 
-These are 32 sanitized editorial editions of the retained result reports, with
-failed trials and limitations preserved. Historical preparation reports describe
-their own checkpoints; they are not current live-state claims. Read the
-[methods and publication scope](METHODS.md) before reusing a result. The
-[collection manifest](collection.json) inventories every edition and its content
-hash. The manifest excludes itself; navigation and methodology are additional
-documents, not additional experiments.
+Kolibri showed useful coding and tool-use ability, but did not deliver the complete
+parser in the reviewed trials. The report explains how this fits published
+coding benchmarks and what to expect from Mistral Small 4 and GLM-5.3-Flash.
+Measured project results, external developer-reported scores and expectations
+are distinguished throughout.
 
-## Main findings
+For individual scores, read the [baseline](general-baseline.md),
+[calibrated evaluation](general-calibrated.md) and
+[calibration comparison](calibration-comparison.md). For project development,
+read the [independent result](coding-no-wall-deadline.md) and
+[guided result](guided-development.md).
 
-| Question | Read |
-| --- | --- |
-| What did we learn, in plain English? | [Reader overview](kolibri-overview.md) |
-| What changed with calibration? | [Comparison](calibration-comparison.md) |
-| Why did independent coding fail? | [Retrospective](coding-retrospective.md) |
-| Did removing the time limit help? | [Elapsed-only attempt](coding-no-wall-deadline.md) |
-| Did guided development finish? | [Guided experiment](guided-development.md) |
-| Which claims remain unproven? | [Scope and limitations](METHODS.md) |
+[Evaluation methods](METHODS.md) define the scope and denominators.
+The [collection manifest](collection.json) inventories the supporting records.
+
+<details>
+<summary>Supporting measurements and historical preparation records</summary>
 
 ## General evaluation, serving and tools
 
@@ -76,7 +72,4 @@ documents, not additional experiments.
 | [Resumable controller](resumable-controller.md) | Verified reuse, no uncertain-action replay |
 | [Release gates](release-gates.md) | Repeatable infrastructure is not benchmark PASS |
 
-No reports in this collection establish a successful full Phase 4, a completed
-SWE-bench score or held-out email accuracy. Raw evidence and candidate/data
-payloads remain outside the publication. This collection belongs outside fresh
-benchmark worker packages.
+</details>
