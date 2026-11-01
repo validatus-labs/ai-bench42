@@ -26,9 +26,11 @@ The English prompt, build tree, Brave/MCP research rules and classifier-mode int
 
 ## Results for readers and coordinators
 
-- [Kolibri coding-quality assessment](docs/reports/kolibri-overview.md) — concise findings, benchmark interpretation and Mistral/GLM comparison.
-- [Supporting result records](docs/reports/README.md) — measurements and historical preparation.
-- [Evaluation methods and limitations](docs/reports/METHODS.md).
+- [Results at a glance](docs/reports/README.md) — conclusions and what is still unmeasured.
+- [Kolibri: abilities and limits](docs/reports/kolibri.md) — concise capability assessment and benchmark interpretation.
+- [How we measure](docs/reports/methodology.md) — conditions, effort, assistance and comparison limits.
 
+The results page leads to an experiment-grouped evidence index. Historical reports
+are preserved there; old paths are compatibility links, not additional reader reports.
 Reports must stay outside candidate offline packages. This documentation commit
 is not a new approved assignment or benchmark freeze.
