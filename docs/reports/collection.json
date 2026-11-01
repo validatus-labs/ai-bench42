@@ -4,15 +4,15 @@
   "reader_documents": [
     {
       "path": "README.md",
-      "sha256": "d5fa793020323fb0c8a3f55560d92ba7fb20c87b733e804dc3a2d29f26656c7c"
+      "sha256": "d08612afe7e2d89be25645a2b6dc1f22dc284eba69ca379b9fee9adfc05cbb77"
     },
     {
       "path": "kolibri.md",
-      "sha256": "caadffa550125aa69ea36a425b467684333895f436cf1bcff9b6dbac1c850a11"
+      "sha256": "6b48d9d8ef58204b680f6dd7b7c2ae113a1189e7652c9d15224667102cfeb61d"
     },
     {
       "path": "methodology.md",
-      "sha256": "9ec4a78fd0f46627b34d5e346f1880dfc38973a8c74d61cd8b8e0245aebb714b"
+      "sha256": "350791112759d9eec558a19b27461e7878d776474c3c13a8a70c8107a793e972"
     }
   ],
   "reports": [

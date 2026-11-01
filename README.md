@@ -24,9 +24,12 @@ python3 scripts/bootstrap.py --brave --playwright --maintenance --health --kolib
 
 [Requirements and setup →](scripts/deploy/README.md) · [Run benchmarks, the coding task and get one report →](docs/PIPELINE.md)
 
-We give **Kolibri, Mistral Small 4, GLM-5.3 Flash, Qwen and other models** the same engineering challenge, tools and budget.
+Our comparison protocol gives **Kolibri, Mistral Small 4, GLM-5.3 Flash, Qwen
+and other qualified models** the same engineering challenge, tools and budget.
+**The reported model trials currently concern Kolibri.** Other named models are
+planned contenders; a matched local comparison has not yet been completed.
 
-We measure:
+The four phases examine:
 
 - **Speed**
 - **Reasoning**
@@ -39,11 +42,19 @@ We also preserve the code, failures, and costs—not just a leaderboard score. O
 
 <sub>Photo: [Franck V. / Unsplash](https://images.unsplash.com/photo-1531746790731-6c087fecd65a) · Unsplash License.</sub>
 
-## The twist: use AI to need less AI
+## Why this task matters
 
-**We ask an LLM to build software that could make many LLM calls unnecessary.** Email history often follows recognizable structures—MIME, replies, forwards and signatures—that a deterministic parser can process without generating tokens. We test whether a coding agent can engineer that cheaper first stage **without sacrificing correctness or safety**.
+**We ask an LLM to build software that could make repeated LLM processing
+unnecessary.** Business emails often repeat earlier messages, signatures and
+footers. A useful preprocessing layer should identify that structure while
+preserving the original message and making uncertainty visible. This could
+reduce repeated context in ERP assistants, reply drafting and reporting;
+actual token, time and cost savings remain unmeasured.
 
-That is the hypothesis, not a promised result.
+Melusense is our private research reference for this problem. AI-Bench42 gives
+coding agents a separate unimplemented assignment with explicit requirements.
+The reference, independent model attempts and assisted repairs are different
+artifacts. Workers do not receive the finished reference implementation.
 
 ## Real-mail development examples
 
@@ -55,7 +66,9 @@ New to the benchmark? Start with the [command-by-command beginner guide](docs/QU
 to download and pin the source package. The [runbook](docs/RUNBOOK.md) covers
 worker isolation and trial operation.
 
-## Four benchmarks. Four different questions.
+<a id="four-benchmarks-four-different-questions"></a>
+
+## Four phases. Four different questions.
 
 | Phase | What do we learn? | Method & references |
 |---|---|---|
@@ -66,11 +79,17 @@ worker isolation and trial operation.
 
 **A model can produce 50 tokens per second and still write a broken parser.** Speed, correctness, code quality and token cost must be reported separately—not compressed into one mysterious score.
 
+This table describes the intended protocol. Available results include bounded
+pilots and fixed task selections; no completed local SWE-bench score is available.
+
 [What each benchmark means →](docs/BENCHMARKS.md)
 
 ## Same task. Three attempts per model.
 
-**One model × one seed = one isolated coding trial.** Every model receives the same frozen assignment, tools and budget. No agent can inspect another model's solution.
+**One model × one seed = one isolated coding trial.** This is the target
+comparison design: each contender receives the same frozen assignment, tools and
+budget, without access to another model's solution. Historical diagnostic and
+guided trials include recorded differences and are not pooled into a matched ranking.
 
 ```text
                    NVIDIA DGX SPARK

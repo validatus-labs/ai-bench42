@@ -6,6 +6,12 @@ project.** These observations support trying it as a coding assistant on
 bounded changes with review; broader reliability remains unmeasured. The missing capability in this task was carrying
 all requirements through integration, edge cases and final verification.
 
+We started with Kolibri to examine a locally deployed, German- and English-focused
+model on a concrete business engineering task. The task required correct MIME handling, original-text
+positions, connected components and conservative decisions. Our English general
+evaluation and parser trials do not yet validate German ERP assistance or email
+reply quality. Those require direct application tests.
+
 ## What our measurements show
 
 | Capability | Observed result | Practical meaning |
@@ -79,9 +85,8 @@ the same project, inputs, review criteria and comparable budgets can establish
 that. These small subsets and repeated attempts on one project establish neither
 a general project-success rate nor held-out email accuracy.
 
-The purpose is to measure the gap between code generation and complete delivery,
-not to prove a model unsuitable in advance. Repeated attempts on this parser
-remain one task. Independent and guided outcomes must stay separate.
+We measure complete delivery, not to prove a model unsuitable in advance.
+Independent and guided outcomes stay separate.
 
 [Results overview](README.md) · [Methodology and effort](methodology.md) ·
 [Experiment evidence](evidence/README.md)

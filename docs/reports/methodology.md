@@ -26,6 +26,21 @@ do not establish a causal improvement: cache state, execution time and other
 historical conditions were not fully controlled. The tool pilot's 9/9 calls
 cover three distinct simple cases, not full BFCL or long-workflow reliability.
 
+## Reference scope and evaluation boundaries
+
+The private Melusense reference is a research candidate, not a certified production
+system or a source of substitute Gold labels. Its multilingual infrastructure is
+broader than independently validated language coverage. Its optional historical
+recovery experiment is outside the rules-only coding challenge. Reference CI checks
+software regressions and repository contracts; it does not establish blind parser
+accuracy or attribute reference functionality to Kolibri.
+
+The coding task evaluates delivery against its frozen requirements rather than
+source-code similarity to the reference. Historical reference metrics, synthetic
+checks and model-written tests are separate from held-out evaluation. The reference
+and its data remain unavailable to workers. These pages disclose no reference
+implementation; they do not provide full independent reproduction of its results.
+
 ## Independent work, guidance and direct repair
 
 Independent trials receive the assignment and approved tools. Guided trials

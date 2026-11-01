@@ -28,7 +28,7 @@ The English prompt, build tree, Brave/MCP research rules and classifier-mode int
 
 - [Results at a glance](docs/reports/README.md) — conclusions and what is still unmeasured.
 - [Kolibri: abilities and limits](docs/reports/kolibri.md) — concise capability assessment and benchmark interpretation.
-- [How we measure](docs/reports/methodology.md) — conditions, effort, assistance and comparison limits.
+- [How we measure](docs/reports/methodology.md) — conditions, effort, private-reference boundaries and comparison limits.
 
 The results page leads to an experiment-grouped evidence index. Historical reports
 are preserved there; old paths are compatibility links, not additional reader reports.

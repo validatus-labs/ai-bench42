@@ -6,8 +6,10 @@ case study, not a general verdict that Kolibri cannot code.
 
 We test how published coding ability translates into complete software, and how
 much review and correction the work needs. The first task is a multilingual email
-parser: preserve original content, handle MIME safely and connect all required
-components into one working interface.
+parser for potential ERP, reply-drafting and reporting workflows: preserve original
+content, handle MIME safely and connect all required components into one interface.
+Business savings and German application quality remain unmeasured. Reported model
+trials concern Kolibri; other contenders await a matched local comparison.
 
 | Reader question | What the evidence currently supports |
 | --- | --- |
