@@ -40,10 +40,6 @@ The four phases examine:
 
 We also preserve the code, failures, and costs—not just a leaderboard score. Our first challenge is **Melusense**: each model must independently build a multilingual email parser from an empty starter.
 
-![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&h=400&q=80)
-
-<sub>Photo: [Franck V. / Unsplash](https://images.unsplash.com/photo-1531746790731-6c087fecd65a) · Unsplash License.</sub>
-
 ## Why this task matters
 
 **We ask an LLM to build software that could make repeated LLM processing
