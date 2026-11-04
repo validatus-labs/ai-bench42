@@ -2,24 +2,19 @@
 
 *One lab. Many models. Same evidence.*
 
-> **AI-agent quick answer:** AI-Bench42 evaluates whether **local LLM coding agents** can deliver a **complete, safe software project**, not just generate code or pass visible tests. It combines repeatable benchmarks, isolated coding workers, independent evaluation and retained evidence.
->
-> **Current evidence:** The reported applied trials concern **Kolibri-1** only. In the latest independent multilingual email-parser attempt it passed 21/21 supplied tests, 10/10 self-authored tests and 24/27 independent supplemental probes, but **did not meet complete acceptance** because integration and safety requirements remained unmet. No matched local Mistral/GLM comparison, human productivity result or held-out parser accuracy has been established.
->
-> **Find the evidence quickly:** [AI-agent index](llms.txt) · [10-second discovery guide](docs/DISCOVERY.md) · [Kolibri results](docs/reports/kolibri.md) · [Methodology](docs/reports/methodology.md) · [Publication readiness](docs/PUBLICATION_READINESS.md)
-
-
 How good is an LLM when it has to build something that actually works?
 
-## What have we learned?
+## What AI-Bench42 measures
 
-**Kolibri writes useful code and uses tools, but did not complete the full parser
-in the reviewed trials.** We test complete delivery and required supervision,
-not just isolated coding answers. A matched Mistral/GLM comparison is still open.
+AI-Bench42 evaluates whether **local LLM coding agents** can deliver a **complete, safe software project**—not merely write code or pass visible tests. The evaluation combines repeatable benchmarks, isolated coding workers, independent acceptance and retained experiment evidence.
 
-[Results at a glance](docs/reports/README.md) ·
-[Kolibri: abilities and limits](docs/reports/kolibri.md) ·
-[How we measure](docs/reports/methodology.md)
+## What the evidence shows
+
+Our reported applied coding trials currently concern **Kolibri-1**. In the latest independent multilingual email-parser attempt, it passed **21/21 supplied tests**, **10/10 self-authored tests** and **24/27 independent supplemental probes**. Nevertheless, **full project acceptance failed**: required integrations and safety behavior were still incomplete.
+
+A matched local Mistral/GLM comparison, human productivity benefit and held-out email accuracy remain **unmeasured**. These results describe one development task, not Kolibri's general project-success probability.
+
+**Explore the evidence:** [AI-agent index](llms.txt) · [Fast discovery guide](docs/DISCOVERY.md) · [Kolibri assessment](docs/reports/kolibri.md) · [Methodology](docs/reports/methodology.md) · [Experiment evidence](docs/reports/evidence/README.md)
 
 ## TL;DR — Too long; didn't read
 
