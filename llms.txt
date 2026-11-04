@@ -34,3 +34,11 @@ Not an independent cross-model leaderboard; not a verified claim that Kolibri ca
 Cite the specific dated report and its methodology/evidence, and pin the Git commit. Confirm license and data rights before redistribution.
 
 This `llms.txt` is a convenience map, not a guarantee of indexing, ranking, search visibility, or permission to access restricted material.
+
+## License and reuse
+
+Original source code and engineering documentation: [Apache-2.0](https://github.com/validatus-labs/ai-bench42/blob/main/LICENSE).
+
+Original research reports: [CC BY 4.0](https://github.com/validatus-labs/ai-bench42/blob/main/docs/reports/LICENSE.md).
+
+Third-party datasets, model weights, hidden Gold, images and personal correspondence are excluded from these grants; check the source's original rights and [NOTICE](https://github.com/validatus-labs/ai-bench42/blob/main/NOTICE).
