@@ -16,9 +16,9 @@ A matched local Mistral/GLM comparison, human productivity benefit and held-out 
 
 **Explore the evidence:** [AI-agent index](llms.txt) · [Fast discovery guide](docs/DISCOVERY.md) · [Kolibri assessment](docs/reports/kolibri.md) · [Methodology](docs/reports/methodology.md) · [Experiment evidence](docs/reports/evidence/README.md)
 
-![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&h=400&q=80)
+![A robotic hand illustrating the use of AI in engineering](https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&h=400&q=80)
 
-<sub>Photo: [Franck V. / Unsplash](https://images.unsplash.com/photo-1531746790731-6c087fecd65a) · Third-party image, not covered by AI-Bench42 licenses.</sub>
+<sub>Illustrative photo via [Unsplash](https://unsplash.com/license). Third-party image, not part of the AI-Bench42 software or research-report licenses.</sub>
 
 ## TL;DR — Too long; didn't read
 
