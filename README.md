@@ -16,6 +16,10 @@ A matched local Mistral/GLM comparison, human productivity benefit and held-out 
 
 **Explore the evidence:** [AI-agent index](llms.txt) · [Fast discovery guide](docs/DISCOVERY.md) · [Kolibri assessment](docs/reports/kolibri.md) · [Methodology](docs/reports/methodology.md) · [Experiment evidence](docs/reports/evidence/README.md)
 
+![Server racks and cabling in a research data center](https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1400&h=400&q=80)
+
+<sub>Photo: [Franck V. / Unsplash](https://images.unsplash.com/photo-1531746790731-6c087fecd65a) · Third-party image, not covered by AI-Bench42 licenses.</sub>
+
 ## TL;DR — Too long; didn't read
 
 **Bootstrap your DGX Spark with one command:**
@@ -191,6 +195,14 @@ Kilo Code supports these capabilities in its [OpenAI-compatible provider guide](
 - Evaluate additional true positives **and** false positives on independent, sealed human Gold. Keep `KEEP_ALL`, preserve every source byte and never turn candidate detection into automatic deletion.
 - No hidden TEST/EVAL data, real correspondence or trained weights belong in ordinary coding-worker packages or public reports.
 
-If you want the bonus challenge, start with the [HPI TRAIN data/rights protocol](docs/HPI_TRAIN.md) and the [reserved extension API](docs/CONTRACT-BUILD.md). This optional experiment requires its **own approval, dataset split, run IDs, and independent evaluation**. It remains outside the main benchmark.
+If you want the bonus challenge, start with the [HPI TRAIN data/rights protocol](docs/HPI_TRAIN.md) and the [reserved extension API](docs/CONTRACT-BUILD.md). This optional experiment requires its **own approval, dataset split, run IDs, and independent evaluation**. It remains outside the main benchmark. 
+
+## License and data rights
+
+AI-Bench42's original source code, scripts, tests and engineering documentation outside `docs/reports/` are made available under the [Apache License, Version 2.0](LICENSE) (SPDX: `Apache-2.0`).
+
+Original research analysis and prose under `docs/reports/`, including its historical evidence reports, are licensed under [Creative Commons Attribution 4.0 International](docs/reports/LICENSE.md) (SPDX: `CC-BY-4.0`). Attribution and indication of changes are required.
+
+These grants **do not** include third-party data, model weights, images, papers, trademarks, rights-gated HPI/Quagga resources, private correspondence, hidden Gold or the Melusense private reference implementation. Read [NOTICE](NOTICE) and each original source's rights statement.
 
 *Build independently. Measure what survives the tests.*
