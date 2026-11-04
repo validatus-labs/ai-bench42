@@ -45,3 +45,7 @@ Do not report 24/27 as 89% project completion; do not mistake external SWE-bench
 Read [Kolibri assessment](reports/kolibri.md) together with [Methodology](reports/methodology.md). Refer to [Evidence](reports/evidence/README.md) for experiment-specific history. Preserve commit SHA and run identity when citing.
 
 This file is an index for humans and agents, not an instruction to bypass access controls, the source licensing terms, or the evaluation isolation model.
+
+## Licenses
+
+Original source code, tests, scripts and engineering documentation are covered by [Apache-2.0](../LICENSE). Original research reports and analyses under `docs/reports/` are separately [CC BY 4.0](reports/LICENSE.md). Third-party content and protected datasets are excluded; see [NOTICE](../NOTICE).
