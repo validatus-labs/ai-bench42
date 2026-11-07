@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "runtime_root": null,
+  "deployment": {
+    "enabled": true,
+    "components": ["brave", "playwright", "maintenance", "health", "kolibri"],
+    "calibration": "on",
+    "retention": "30"
+  },
+  "model": {
+    "id": "kolibri-1",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "revision": "258cae8ffffc8c12db670bdbc6ac01bcf8826c87",
+    "context_tokens": 262144,
+    "quantization": "fp8",
+    "kv_cache_dtype": "fp8",
+    "auth_file": null
+  },
+  "benchmarks": {
+    "aiperf": {
+      "enabled": true,
+      "runtime": {
+        "python": {"path": null, "sha256": null},
+        "requirements_lock": {"path": null, "sha256": null},
+        "distribution": "aiperf", "version": null, "provision": null
+      },
+      "tokenizer": null,
+      "data_manifest": {"path": null, "sha256": null},
+      "concurrency": [1, 2, 4], "repetitions": 3,
+      "input_tokens": 512, "output_tokens": 128,
+      "request_count": 12, "timeout_seconds": 3600
+    },
+    "lm_eval": {
+      "enabled": true,
+      "runtime": {
+        "python": {"path": null, "sha256": null},
+        "requirements_lock": {"path": null, "sha256": null},
+        "distribution": "lm_eval", "version": null, "provision": null
+      },
+      "backend": "local-completions",
+      "cli_style": "run",
+      "tokenizer": null, "hf_home": null, "include_path": null,
+      "data_manifest": {"path": null, "sha256": null},
+      "tasks": ["ifeval", "mmlu_pro", "bbh"],
+      "apply_chat_template": true,
+      "output_tokens": 4096, "limit": null, "timeout_seconds": 21600
+    },
+    "bfcl": {"enabled": true, "adapter": null},
+    "swe_bench": {"enabled": true, "adapter": null}
+  },
+  "coding": {
+    "elapsed_only": true,
+    "seeds": [1, 2, 3], "source_sha": null,
+    "package": {"path": null, "sha256": null},
+    "train_bundle": {"path": null, "sha256": null},
+    "rights_record": {"path": null, "sha256": null},
+    "approve_worker_disclosure": false,
+    "toolchain": {"path": null, "sha256": null},
+    "evaluator": null
+  }
+}

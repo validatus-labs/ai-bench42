@@ -1,0 +1,44 @@
+# AI-Bench42
+
+> Reproducible evaluation of local LLM coding agents, complete software delivery, independent verification, security gates, and human review effort. The current applied challenge is a multilingual email parser built from an empty starter.
+
+AI-Bench42 asks a narrower question than generic leaderboard comparisons: can a coding agent integrate requirements into safe, working software and pass independent acceptance, not merely produce plausible code or pass its own tests?
+
+## Current findings — read before citing
+
+- **Only Kolibri-1 has reported local model trials** in this repository. Mistral, GLM, and Qwen are planned comparison candidates, not locally established winners.
+- The latest cohort contains three independent Kolibri trials: **0/3 complete deliveries**. Two passed **21/21 supplied tests**, with **4/11** and **7/11** supplemental probes; the third left the starter unchanged. Older cohorts remain separate.
+- These counts do **not** establish 89% project completion, general coding reliability, German-language application quality, held-out real-mail accuracy, or human productivity savings.
+- Published benchmark scores cited in the reports are external developer-reported numbers and not comparable to our local trial without matched conditions.
+- The repository provides protocols, code, and selected evidence reports. It does not grant access to protected real correspondence, hidden evaluation data, or the private Melusense reference implementation.
+
+## Fast navigation
+
+- [Project overview, scope, and setup](https://github.com/validatus-labs/ai-bench42/blob/main/README.md)
+- [Agent and search discovery guide](https://github.com/validatus-labs/ai-bench42/blob/main/docs/DISCOVERY.md)
+- [Reader-facing results overview](https://github.com/validatus-labs/ai-bench42/blob/main/docs/reports/README.md)
+- [Kolibri-1: coding quality and limits](https://github.com/validatus-labs/ai-bench42/blob/main/docs/reports/kolibri.md)
+- [Methodology, limitations, and recorded effort](https://github.com/validatus-labs/ai-bench42/blob/main/docs/reports/methodology.md)
+- [Experiment evidence index](https://github.com/validatus-labs/ai-bench42/blob/main/docs/reports/evidence/README.md)
+- [Experiment controller and reporting pipeline](https://github.com/validatus-labs/ai-bench42/blob/main/docs/PIPELINE.md)
+- [Independent evaluation and safety contract](https://github.com/validatus-labs/ai-bench42/blob/main/docs/EVALUATION.md)
+- [Frozen coding challenge](https://github.com/validatus-labs/ai-bench42/blob/main/TASKS.md)
+- [Candidate API and data safety contract](https://github.com/validatus-labs/ai-bench42/blob/main/docs/CONTRACT.md)
+
+## What the project is not
+
+Not an independent cross-model leaderboard; not a verified claim that Kolibri can or cannot finish arbitrary projects; not a production-ready email parser; not a public dataset of customer correspondence.
+
+## Use and citation
+
+Cite the specific dated report and its methodology/evidence, and pin the Git commit. Confirm license and data rights before redistribution.
+
+This `llms.txt` is a convenience map, not a guarantee of indexing, ranking, search visibility, or permission to access restricted material.
+
+## License and reuse
+
+Original source code and engineering documentation: [Apache-2.0](https://github.com/validatus-labs/ai-bench42/blob/main/LICENSE).
+
+Original research reports: [CC BY 4.0](https://github.com/validatus-labs/ai-bench42/blob/main/docs/reports/LICENSE.md).
+
+Third-party datasets, model weights, hidden Gold, images and personal correspondence are excluded from these grants; check the source's original rights and [NOTICE](https://github.com/validatus-labs/ai-bench42/blob/main/NOTICE).

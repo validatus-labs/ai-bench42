@@ -1,0 +1,27 @@
+build/
+# Coordinator-generated evidence and evaluation reports stay local/private.
+evidence/
+reports/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.env
+.env.*
+*.mbox
+*.eml
+*.zip
+*.sqlite*
+*.jsonl
+
+# Raw or annotated correspondence belongs outside Git.
+*.ann
+private-data/
+Datasets/
+
+# Per-host bootstrap jobs, model environments, browser outputs and caches.
+runtime/
+
+# Original import archive; the maintained sources live under scripts/deploy/.
+/deploy.tar.xz

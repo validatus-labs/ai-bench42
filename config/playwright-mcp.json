@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hostname": "spark-a922",
+  "user": "validatus",
+  "node": "/usr/bin/node",
+  "minimum_node_major": 22,
+  "module_root": "/home/validatus/workspace/AI-Model/runtime/spark-a922/tools/playwright/node_modules",
+  "packages": {
+    "@playwright/mcp": "0.0.83",
+    "playwright": "1.64.0-alpha-1790635538000",
+    "playwright-core": "1.64.0-alpha-1790635538000"
+  },
+  "browser": "/opt/brave.com/brave/brave",
+  "runtime": "/home/validatus/workspace/AI-Model/runtime/spark-a922/tools/playwright-tool",
+  "temporary_root": "/home/validatus/workspace/AI-Model/runtime/spark-a922/tmp"
+}

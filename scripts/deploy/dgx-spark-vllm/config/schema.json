@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DGX Spark vLLM profiles",
+  "$defs": {
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "user": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z_][a-z0-9_-]*$"
+        },
+        "hostname": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9.-]+$"
+        },
+        "architecture": {
+          "enum": [
+            "aarch64"
+          ]
+        },
+        "runtime_root": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^/[a-zA-Z0-9_./-]+$"
+        },
+        "python": {
+          "const": "/usr/bin/python3"
+        },
+        "pip_version": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+        },
+        "index_url": {
+          "const": "https://pypi.org/simple"
+        },
+        "health": {
+          "type": "object",
+          "properties": {
+            "startup_seconds": {
+              "type": "integer",
+              "minimum": 30,
+              "maximum": 7200
+            },
+            "request_seconds": {
+              "type": "integer",
+              "minimum": 5,
+              "maximum": 3600
+            },
+            "interval_seconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            }
+          },
+          "required": [
+            "startup_seconds",
+            "request_seconds",
+            "interval_seconds"
+          ],
+          "additionalProperties": false
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "VLLM_PLUGINS": {
+              "type": "string",
+              "minLength": 1
+            },
+            "CUDA_HOME": {
+              "const": "/usr/local/cuda"
+            },
+            "TORCH_CUDA_ARCH_LIST": {
+              "const": "12.1"
+            },
+            "VLLM_TARGET_DEVICE": {
+              "const": "cuda"
+            }
+          },
+          "required": [
+            "VLLM_PLUGINS",
+            "CUDA_HOME",
+            "TORCH_CUDA_ARCH_LIST",
+            "VLLM_TARGET_DEVICE"
+          ],
+          "additionalProperties": false
+        },
+        "wheel_metadata_exceptions": {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "distribution",
+              "version",
+              "filename",
+              "sha256",
+              "metadata_tag",
+              "diagnostic",
+              "library"
+            ],
+            "properties": {
+              "distribution": {
+                "const": "nvidia-cusparselt-cu13"
+              },
+              "version": {
+                "const": "0.8.1"
+              },
+              "filename": {
+                "const": "nvidia_cusparselt_cu13-0.8.1-py3-none-manylinux2014_aarch64.whl"
+              },
+              "sha256": {
+                "const": "4dca476c50bf4780d46cd0bfbd82e2bc10a08e4fef7950917ce8d7578d22a23f"
+              },
+              "metadata_tag": {
+                "const": "py3-none-manylinux2014_sbsa"
+              },
+              "diagnostic": {
+                "const": "nvidia-cusparselt-cu13 0.8.1 is not supported on this platform"
+              },
+              "library": {
+                "const": "nvidia/cusparselt/lib/libcusparseLt.so.0"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "version",
+        "user",
+        "hostname",
+        "architecture",
+        "runtime_root",
+        "python",
+        "pip_version",
+        "index_url",
+        "health",
+        "environment",
+        "wheel_metadata_exceptions"
+      ],
+      "additionalProperties": false
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "blocked_reason": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "architecture_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quantization": {
+          "enum": [
+            "fp8",
+            "compressed-tensors"
+          ]
+        },
+        "packages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_.-]+==[a-zA-Z0-9_.+!-]+$"
+          }
+        },
+        "compatibility": {
+          "type": "object",
+          "properties": {
+            "python_min": {
+              "const": "3.12"
+            },
+            "vllm_version": {
+              "const": "0.29.0"
+            },
+            "torch_cuda_major": {
+              "const": 13
+            },
+            "compute_capability": {
+              "const": "12.1"
+            },
+            "native_context": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1048576
+            }
+          },
+          "required": [
+            "python_min",
+            "vllm_version",
+            "torch_cuda_major",
+            "compute_capability",
+            "native_context"
+          ],
+          "additionalProperties": false
+        },
+        "memory": {
+          "type": "object",
+          "properties": {
+            "minimum_available_gib": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 128
+            },
+            "host_reserve_gib": {
+              "type": "number",
+              "minimum": 4,
+              "maximum": 32
+            },
+            "weights_gib": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 256
+            },
+            "kv_estimate_gib": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 128
+            },
+            "overhead_gib": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 32
+            },
+            "minimum_disk_gib": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 1024
+            }
+          },
+          "required": [
+            "minimum_available_gib",
+            "host_reserve_gib",
+            "weights_gib",
+            "kv_estimate_gib",
+            "overhead_gib",
+            "minimum_disk_gib"
+          ],
+          "additionalProperties": false
+        },
+        "server": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "const": "127.0.0.1"
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1024,
+              "maximum": 65535
+            },
+            "max_model_len": {
+              "const": 262144
+            },
+            "max_num_seqs": {
+              "const": 1
+            },
+            "kv_cache_dtype": {
+              "const": "fp8"
+            },
+            "gpu_memory_utilization": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 0.9
+            },
+            "max_num_batched_tokens": {
+              "type": "integer",
+              "minimum": 256,
+              "maximum": 32768
+            },
+            "reasoning_parser": {
+              "enum": [
+                "kolibri1",
+                "mistral"
+              ]
+            },
+            "tool_call_parser": {
+              "enum": [
+                "kolibri1",
+                "mistral"
+              ]
+            },
+            "enable_auto_tool_choice": {
+              "const": true
+            },
+            "enforce_eager": {
+              "type": "boolean"
+            },
+            "enable_prefix_caching": {
+              "const": true
+            }
+          },
+          "required": [
+            "host",
+            "port",
+            "max_model_len",
+            "max_num_seqs",
+            "kv_cache_dtype",
+            "gpu_memory_utilization",
+            "max_num_batched_tokens",
+            "reasoning_parser",
+            "tool_call_parser",
+            "enable_auto_tool_choice",
+            "enforce_eager",
+            "enable_prefix_caching"
+          ],
+          "additionalProperties": false
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "smoke_tokens": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 256
+            },
+            "long_context_prompt_tokens": {
+              "const": 262112
+            },
+            "long_context_output_tokens": {
+              "const": 32
+            }
+          },
+          "required": [
+            "smoke_tokens",
+            "long_context_prompt_tokens",
+            "long_context_output_tokens"
+          ],
+          "additionalProperties": false
+        },
+        "kv_calibration": {
+          "type": "object",
+          "properties": {
+            "manifest": {
+              "type": "string",
+              "pattern": "^/[a-zA-Z0-9_./-]+/build/dgx-spark-vllm/calibration/[a-z0-9-]+/manifest.json$"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "source_release": {
+              "type": "string",
+              "pattern": "^/[a-zA-Z0-9_./-]+/build/dgx-spark-vllm/releases/kolibri-1-[a-zA-Z0-9-]+$"
+            },
+            "requirements_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "manifest",
+            "sha256",
+            "source_release",
+            "requirements_sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "version",
+        "id",
+        "enabled",
+        "blocked_reason",
+        "repository",
+        "revision",
+        "architecture_name",
+        "quantization",
+        "packages",
+        "compatibility",
+        "memory",
+        "server",
+        "verification"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

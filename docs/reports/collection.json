@@ -1,0 +1,457 @@
+{
+  "format_version": 2,
+  "scope": "Three current reader pages updated for the 6 November cohort; redacted machine-readable cohort summary; historical editions and compatibility links retained.",
+  "reader_documents": [
+    {
+      "path": "README.md",
+      "sha256": "235f986e071d3ea3840e54b3ae03055b62beb0c76f68e332749330f6e9e9bef5"
+    },
+    {
+      "path": "kolibri.md",
+      "sha256": "924681bd0f2fcea34801798df478fa0f8f464177ac5969ad6920efd9d8078a42"
+    },
+    {
+      "path": "methodology.md",
+      "sha256": "ffa51d6be851feeb6edaf798c047ecc117060e6347291af84d12f16751dfb825"
+    }
+  ],
+  "reports": [
+    {
+      "id": "R01",
+      "title": "Inventory audit: publication scope",
+      "path": "evidence/inventory-scope.md",
+      "sha256": "12e62b56b896c39404a9e32f95ada6b85f81b385ed57d7a37017705a92c99b23",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R02",
+      "title": "Capacity planning: estimates versus measurements",
+      "path": "evidence/capacity-planning.md",
+      "sha256": "9093ca20226490f3d99d9ea415b4d5a790340e2ac02c14a37ed90e6e4a9637b2",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R03",
+      "title": "Model selection and qualification limits",
+      "path": "evidence/model-selection.md",
+      "sha256": "948e6a5096373e0d841a83f3231b9c291956c450b0df718f1ff333cf04364694",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R04",
+      "title": "Repository verification and synchronization",
+      "path": "evidence/repository-checks.md",
+      "sha256": "f127601c69b0d58740d6172111465c10aa66af6ca040558cbb756372e4b82ced",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R05",
+      "title": "Kolibri serving and context-capacity qualification",
+      "path": "evidence/kolibri-serving.md",
+      "sha256": "6092cadb52c190a28c3b5182bb2e0ed3df230030a786d0eb1e98228b40033aaf",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R06",
+      "title": "A real browser task through Kolibri and Kilo",
+      "path": "evidence/browser-agent-proof.md",
+      "sha256": "fd9a7f32e55a6e598e77cd00f30c88e774e682192689243dc7b49d5c6c9a2864",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R07",
+      "title": "Four-phase benchmark: initial pilot scope",
+      "path": "evidence/four-phase-pilot.md",
+      "sha256": "fa0829232a306d747711ff5084984663a82694ec0d494da1dfc4bec488ab6238",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R08",
+      "title": "Kolibri before cache calibration",
+      "path": "evidence/general-baseline.md",
+      "sha256": "3a3be399670c6ca7a77677eefdb1cee2b5ca01bed8922ac0bc0ebd667c6f7fee",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R09",
+      "title": "Cache calibration: method and rejected export",
+      "path": "evidence/cache-calibration-method.md",
+      "sha256": "847ed854cca4350def3b41982f1ac8aea1c58263134e0ec3c00d36f6c69f5d55",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R10",
+      "title": "Kolibri after accepted cache calibration",
+      "path": "evidence/general-calibrated.md",
+      "sha256": "505fd3020b825af07e4cfae21513b0066e9bbfae8f18384adb7aefab35083abf",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R11",
+      "title": "With and without cache calibration",
+      "path": "evidence/calibration-comparison.md",
+      "sha256": "19c04627796002ea6ee3050389024e5c80ca9152ae9828748aa4bff7bb94615f",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R12",
+      "title": "Early coding readiness: missing evidence",
+      "path": "evidence/early-readiness.md",
+      "sha256": "f53dc68c1661b80984af0faed8ed96afc9680af942e3bd1c4b738238396affa7",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R13",
+      "title": "Working browser versus frozen contract",
+      "path": "evidence/browser-contract-deviation.md",
+      "sha256": "e2b4da23da37d8dbb0981379e7a1dda4b65a4a24c64e3fcf2930a2aca00707d3",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R14",
+      "title": "Browser qualification: observed boundary gaps",
+      "path": "evidence/browser-boundary-gaps.md",
+      "sha256": "8cce01e2b47343df890d1a1c51901dd4703f65872f924d3c04247cb5be0ee085",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R15",
+      "title": "An independently checked isolated browser baseline",
+      "path": "evidence/isolated-browser-baseline.md",
+      "sha256": "c4ead1477641025d4ffdc658670aeccde4220252f569071e10df5e462e89ea58",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R16",
+      "title": "Isolated model-to-browser proof and follow-up failure",
+      "path": "evidence/isolated-model-tool-proof.md",
+      "sha256": "c6ba254e130a542ec63275c0faa79bccddfff232f1843efb24f7a44bfa068f05",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R17",
+      "title": "First bootstrap validation: partial success",
+      "path": "evidence/bootstrap-first-validation.md",
+      "sha256": "cfffdd203c24baa3f25db6ecc536db83ba960191365fd98e85ef9d3c40e22c2e",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R18",
+      "title": "Adopting an existing installation without reinstalling",
+      "path": "evidence/existing-installation-adoption.md",
+      "sha256": "db7af70ecbd675fd1262aecfb40e8d7130d664c1b79a8abf3465b403af5fbb54",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R19",
+      "title": "Preparing inputs without claiming experiment readiness",
+      "path": "evidence/experiment-preparation.md",
+      "sha256": "bf4576bbfd08df110156d7b38760df34a2af133054eb668e511973638dc19eaf",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R20",
+      "title": "Resuming experiments without replaying uncertain work",
+      "path": "evidence/resumable-controller.md",
+      "sha256": "3fe8e315e08992181d268d594ff51cd1dc640a4afdb1ad7dd0f1e46e122b608e",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R21",
+      "title": "Release readiness versus completed benchmark",
+      "path": "evidence/release-gates.md",
+      "sha256": "dc773f4e9b32d2064b27d3d7923c91899b004812fc8dad2754da12bd2d8293eb",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R22",
+      "title": "Three early independent coding attempts",
+      "path": "evidence/coding-three-attempts.md",
+      "sha256": "7416b371a4552dc3dde2cce256ecdf9070eb9873c02cad566678c4ec19f75371",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R23",
+      "title": "The coding attempt that exhausted its tool budget",
+      "path": "evidence/coding-loop-failure.md",
+      "sha256": "66f7715e3a4d829733123553057bf13b310bb184eac579583e01e27b4ec11b66",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R24",
+      "title": "A separate Codex-assisted repair",
+      "path": "evidence/assisted-repair.md",
+      "sha256": "c13133bfeb95001ca34737e23e1e065e3ed81c16ebffc04ede3fc5ad86981317",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R25",
+      "title": "Why did Kolibri read the same files repeatedly?",
+      "path": "evidence/repeated-read-diagnosis.md",
+      "sha256": "31c8fc483d96f2d85f6d028c838c004f740c1ce2d4f6fbbaf5f52a23a707e5f6",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R26",
+      "title": "A bounded feedback and sampling diagnostic",
+      "path": "evidence/feedback-sampling.md",
+      "sha256": "e9620bda4b6583fa090d72793f0b490324fed1c2f8119c4494579316d6c1302b",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R27",
+      "title": "A fresh coding attempt with declared recipe changes",
+      "path": "evidence/coding-recommended-sampling.md",
+      "sha256": "74da9bb84fae27236d35b85a1fccefe2417680c6fae0d377fb2c874b7de85618",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R28",
+      "title": "Measuring duration without a whole-trial deadline",
+      "path": "evidence/elapsed-only-policy.md",
+      "sha256": "b2879611573da74afe114ffcbd0221558e9f48b3daab1f477d04e2ca14b27bf2",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R29",
+      "title": "The independent attempt without a wall deadline",
+      "path": "evidence/coding-no-wall-deadline.md",
+      "sha256": "fb42693a0d6e36677519afb75e0b459e78064b7d1c6a05a67f22dddd073f3d90",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R30",
+      "title": "What the independent coding attempts established",
+      "path": "evidence/coding-retrospective.md",
+      "sha256": "82d906bcf01dda5857ea0bc822a03cc6048cedd5cafcda3f9f805198bfe749de",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R31",
+      "title": "Guided development: progress, invalid tests and truncation",
+      "path": "evidence/guided-development.md",
+      "sha256": "0d1a94a03731e42d1d8febff8a51a0c54b7eb37d1f84a9734b0c83503e074e8b",
+      "edition": "editorial summary; original retained privately",
+      "role": "historical_evidence"
+    },
+    {
+      "id": "R32",
+      "title": "Kolibri-1 \u2014 Coding Quality in Practice",
+      "path": "evidence/kolibri-overview.md",
+      "sha256": "a534d0669a72a014e6d734e91a4271c85696c00855467acfe5683c72a676538e",
+      "edition": "concise capability assessment with cited external benchmark interpretation",
+      "role": "historical_evidence"
+    }
+  ],
+  "supporting_documents": [
+    {
+      "path": "evidence/README.md",
+      "sha256": "e0e3422024af2cd8430a2a9df957f7b1512a414f92e09526f2deb0fc8d0ffc9b"
+    },
+    {
+      "path": "evidence/METHODS.md",
+      "sha256": "0f067af80c9a1c17e31207101e1210c63d513b995d1f149c8a4d031873dedce6"
+    },
+    {
+      "path": "evidence/kolibri-20261106.json",
+      "sha256": "7af16a507762819d990e6ee43753af67bb2bd5b63414bf5052d8b87dd9a7e19e"
+    }
+  ],
+  "compatibility_links": [
+    {
+      "path": "inventory-scope.md",
+      "target": "evidence/inventory-scope.md",
+      "sha256": "907840d0395364dc16208afda3dad9f81fdd2d284c63312706b4bf27f41af9c7"
+    },
+    {
+      "path": "capacity-planning.md",
+      "target": "evidence/capacity-planning.md",
+      "sha256": "3356f169af13a0b763aa47eb816d89ab8158c9308c08ff119d638a93aae75f20"
+    },
+    {
+      "path": "model-selection.md",
+      "target": "evidence/model-selection.md",
+      "sha256": "5b20aefd0eb5652ca3103f93dfa8c4464694303f204f1ea8f8f307805ac49cc0"
+    },
+    {
+      "path": "repository-checks.md",
+      "target": "evidence/repository-checks.md",
+      "sha256": "f721c9c509906698d1bd2940f763f91a5d8b4ec22430ee3a6ad0156a770edf21"
+    },
+    {
+      "path": "kolibri-serving.md",
+      "target": "evidence/kolibri-serving.md",
+      "sha256": "a16220d41dcd304d91fce9eec1d421d1689ca97f55e9c5445f82c7de846bacec"
+    },
+    {
+      "path": "browser-agent-proof.md",
+      "target": "evidence/browser-agent-proof.md",
+      "sha256": "6fcc14c94f47ddfb83c02bb759566f7a6890589599f0eeef4a805b18537d054c"
+    },
+    {
+      "path": "four-phase-pilot.md",
+      "target": "evidence/four-phase-pilot.md",
+      "sha256": "26377bffbc79ea5091b396edd064e12a74e6d388bde50cd393dd0d23cf4ba15d"
+    },
+    {
+      "path": "general-baseline.md",
+      "target": "evidence/general-baseline.md",
+      "sha256": "25aa580975f1ca9e855bc71b02a8eb4ba3ff8fbcd1c76bd418f1ffa28aa0c340"
+    },
+    {
+      "path": "cache-calibration-method.md",
+      "target": "evidence/cache-calibration-method.md",
+      "sha256": "911f964a42aaf2c9351058a42f2449bdd5dbb595c93ef579b4d38bcea0cac1a0"
+    },
+    {
+      "path": "general-calibrated.md",
+      "target": "evidence/general-calibrated.md",
+      "sha256": "63d832d640cc47a8e0fef47895775b502c497c08c640f56c24da0626893375b6"
+    },
+    {
+      "path": "calibration-comparison.md",
+      "target": "evidence/calibration-comparison.md",
+      "sha256": "f27f8f60fe3f11612a46c6f8823ca416f0db6229a1a0a4e8c63fba3f18029c75"
+    },
+    {
+      "path": "early-readiness.md",
+      "target": "evidence/early-readiness.md",
+      "sha256": "fee8008de8e00e498159917fd57ea79a4e6cb3de07b4205917a64d649c043f2c"
+    },
+    {
+      "path": "browser-contract-deviation.md",
+      "target": "evidence/browser-contract-deviation.md",
+      "sha256": "15834fc16f2bec3ccafbfe58dbc50a31b2d58de48d3c313692a96b1a142c82d2"
+    },
+    {
+      "path": "browser-boundary-gaps.md",
+      "target": "evidence/browser-boundary-gaps.md",
+      "sha256": "d49528d3d0bebd74269c23c9d290579648605ef66e857b4abca3bca4e1cc0414"
+    },
+    {
+      "path": "isolated-browser-baseline.md",
+      "target": "evidence/isolated-browser-baseline.md",
+      "sha256": "bad643ab71ce0f48da394a54fb10c4ac2fb8214864d7fb28e4f33c47c86c60bc"
+    },
+    {
+      "path": "isolated-model-tool-proof.md",
+      "target": "evidence/isolated-model-tool-proof.md",
+      "sha256": "dacf8c66876c525573b73c73f989ed912fe480cf0185898be6156a180c1f35d7"
+    },
+    {
+      "path": "bootstrap-first-validation.md",
+      "target": "evidence/bootstrap-first-validation.md",
+      "sha256": "bfce91451caf7700e8a440d09f804057f306812d3df6ef3d2e0026568c9afdea"
+    },
+    {
+      "path": "existing-installation-adoption.md",
+      "target": "evidence/existing-installation-adoption.md",
+      "sha256": "d148371548cc2eeb9b78960acf59ecbc5ed92924dac637def8dcaf71d887a604"
+    },
+    {
+      "path": "experiment-preparation.md",
+      "target": "evidence/experiment-preparation.md",
+      "sha256": "c39ab03c0b6a8283fb196f20e7ded23fcf4d0dfde52268d9381dfb2f4a27a288"
+    },
+    {
+      "path": "resumable-controller.md",
+      "target": "evidence/resumable-controller.md",
+      "sha256": "3fa3bcadd07e723e69c9b3b2e0ce393cc510176cb24f0e1cda374bddab91ff6b"
+    },
+    {
+      "path": "release-gates.md",
+      "target": "evidence/release-gates.md",
+      "sha256": "d4c5abfbfb5c4847aa087f3474d64d24da0f2636722e89ec7fa6bcd52df116f3"
+    },
+    {
+      "path": "coding-three-attempts.md",
+      "target": "evidence/coding-three-attempts.md",
+      "sha256": "3165f95d1fd8919e86f9f839abaf0ba5774ee8fb6c33554d56279a0b8ff96d5f"
+    },
+    {
+      "path": "coding-loop-failure.md",
+      "target": "evidence/coding-loop-failure.md",
+      "sha256": "9c50387f55dc60eda3e159ff751151a1794a6224b88addccbc8f739c48355537"
+    },
+    {
+      "path": "assisted-repair.md",
+      "target": "evidence/assisted-repair.md",
+      "sha256": "1f6bbabdb0982b5fe753da8b3e05c3c25fd51cb737f052e96e32834777a77d6f"
+    },
+    {
+      "path": "repeated-read-diagnosis.md",
+      "target": "evidence/repeated-read-diagnosis.md",
+      "sha256": "7631c052e7a0a13ee663e1e67d2265b3d4d4dedb058bcf2c9983ed4974d50139"
+    },
+    {
+      "path": "feedback-sampling.md",
+      "target": "evidence/feedback-sampling.md",
+      "sha256": "4701a33a1cd04b0b575f18940795af9e73bd8fdf87d11960d92a8ffdcf670e6c"
+    },
+    {
+      "path": "coding-recommended-sampling.md",
+      "target": "evidence/coding-recommended-sampling.md",
+      "sha256": "8b20764ed23885dbb996240b8c0fd5179bc5f3bb0622e52e4eb192173bbcf900"
+    },
+    {
+      "path": "elapsed-only-policy.md",
+      "target": "evidence/elapsed-only-policy.md",
+      "sha256": "f0ae87f3700e3bcd22f3cdc62810f4d23408de150974660ef45ccdba48607107"
+    },
+    {
+      "path": "coding-no-wall-deadline.md",
+      "target": "evidence/coding-no-wall-deadline.md",
+      "sha256": "90f0199119099e9d9e612d3853b5b92ddd21e3939ca824257becc562db26d2ec"
+    },
+    {
+      "path": "coding-retrospective.md",
+      "target": "evidence/coding-retrospective.md",
+      "sha256": "b4a84e9fc355d27c669e776a0f2e5fe3cdec4b93c98982d4cce8c18f94a63833"
+    },
+    {
+      "path": "guided-development.md",
+      "target": "evidence/guided-development.md",
+      "sha256": "67bbb487aaedfdc62e766aafd0cc48e89a4f1b9ea6b44d2ffb449894f99f4c60"
+    },
+    {
+      "path": "kolibri-overview.md",
+      "target": "evidence/kolibri-overview.md",
+      "sha256": "8f1449515ce50fa0864ac111c6e3799a66c7aa6acff14ae04589e8d6507d9f67"
+    },
+    {
+      "path": "METHODS.md",
+      "target": "methodology.md",
+      "sha256": "e0e7e21b31d0182b3459bd50a388cf475e4c2c70f644fafe01fa3bfb36ffeebd"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# Managed by ModelBench bootstrap maintenance v1
+[Unit]
+Description=ModelBench %i package maintenance
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+Environment=MODEL_BENCH_HOSTNAME=@HOSTNAME@
+ExecStart=/usr/local/libexec/ai-model/apt-maintenance %i
+TimeoutStartSec=3h

@@ -1,0 +1,86 @@
+name: Release security gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  full-history-secret-scan:
+    name: Gitleaks / all Git history
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout full history, without persistent credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Include retained PR history without persisting credentials
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import base64, os, subprocess
+          env = dict(os.environ)
+          token = env.pop('GITHUB_TOKEN')
+          header = base64.b64encode(('x-access-token:' + token).encode()).decode()
+          env.update(GIT_CONFIG_COUNT='1',
+                     GIT_CONFIG_KEY_0='http.https://github.com/.extraheader',
+                     GIT_CONFIG_VALUE_0='AUTHORIZATION: basic ' + header)
+          subprocess.run(['git', 'fetch', '--no-tags', 'origin',
+                          '+refs/pull/*/head:refs/remotes/history-review/*'],
+                         env=env, check=True)
+
+      - name: Source privacy gate
+        run: python3 -B scripts/verify-publication.py --check
+
+      - name: Verify the clone includes Git history
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d .git
+          count="$(git rev-list --all --count)"
+          echo "Reachable commits: $count"
+          test "$count" -gt 0
+
+      - name: Gitleaks full Git history
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v "$PWD:/repo:ro" -w /repo \
+            ghcr.io/gitleaks/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
+            git --log-opts='--full-history --all' --redact --no-banner --exit-code 1 .
+
+      - name: Gitleaks current worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v "$PWD:/repo:ro" -w /repo \
+            ghcr.io/gitleaks/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
+            dir --redact --no-banner --exit-code 1 .
+
+      - name: TruffleHog full Git history (offline verification)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Do not print potential secret values into GitHub Actions logs.
+          # External credential verification is disabled deliberately.
+          if ! docker run --rm \
+            -v "$PWD:/repo:ro" -w /repo \
+            ghcr.io/trufflesecurity/trufflehog@sha256:5c4d4838b96178c3577c4d2f3f131320991648cffd06ff66f01591f5fd5790cf \
+            git file:///repo --no-verification --results=unverified,unknown --no-update \
+            --fail --fail-on-scan-errors --no-color \
+            > "$RUNNER_TEMP/trufflehog-scan.log" 2>&1; then
+            echo "::error::TruffleHog found potential secrets or encountered an error; review the private runner log locally."
+            exit 1
+          fi
+          echo "TruffleHog full-history scan completed without findings."

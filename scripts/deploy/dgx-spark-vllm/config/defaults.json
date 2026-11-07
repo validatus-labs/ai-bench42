@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "user": "validatus",
+  "hostname": "spark-a922",
+  "architecture": "aarch64",
+  "runtime_root": "/home/validatus/workspace/AI-Model/runtime/spark-a922",
+  "python": "/usr/bin/python3",
+  "pip_version": "26.2.1",
+  "index_url": "https://pypi.org/simple",
+  "health": {
+    "startup_seconds": 3600,
+    "request_seconds": 1800,
+    "interval_seconds": 5
+  },
+  "environment": {
+    "VLLM_PLUGINS": "aleph_alpha_inference",
+    "CUDA_HOME": "/usr/local/cuda",
+    "TORCH_CUDA_ARCH_LIST": "12.1",
+    "VLLM_TARGET_DEVICE": "cuda"
+  },
+  "wheel_metadata_exceptions": [
+    {
+      "distribution": "nvidia-cusparselt-cu13",
+      "version": "0.8.1",
+      "filename": "nvidia_cusparselt_cu13-0.8.1-py3-none-manylinux2014_aarch64.whl",
+      "sha256": "4dca476c50bf4780d46cd0bfbd82e2bc10a08e4fef7950917ce8d7578d22a23f",
+      "metadata_tag": "py3-none-manylinux2014_sbsa",
+      "diagnostic": "nvidia-cusparselt-cu13 0.8.1 is not supported on this platform",
+      "library": "nvidia/cusparselt/lib/libcusparseLt.so.0"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "protocol": "kolibri-diagnostics-v1",
+  "model": "kolibri-1",
+  "base_url": "http://127.0.0.1:8000/v1",
+  "context_tokens": 262144,
+  "seeds": [1, 2, 3],
+  "temperature": 0.2,
+  "top_p": 1.0,
+  "max_tokens": 4096,
+  "request_timeout_seconds": 240,
+  "performance": {
+    "concurrency": [1, 2, 4],
+    "repetitions": 3,
+    "requests_per_client": 1,
+    "max_tokens": 128
+  },
+  "coding_config": null
+}

@@ -1,0 +1,24 @@
+name: Kolibri benchmark harness
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Verify complete coordinator package
+        run: python3 -B scripts/verify-package.py --output "$RUNNER_TEMP/acceptance"
+      - name: Verify unchanged second invocation
+        run: python3 -B scripts/verify-package.py --output "$RUNNER_TEMP/acceptance"

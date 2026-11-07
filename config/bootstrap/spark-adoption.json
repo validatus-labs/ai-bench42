@@ -1,0 +1,57 @@
+{
+  "browser_sha256": "3434c18dba045756b03a4f3473725fcb180eecdf2f76d2c86fc37804220e42fa",
+  "calibration_sha256": "c4ebdd377f95e0d5cd0aa1b20a5449c1efbbcc8752a6cf176f69ec255d6fe82a",
+  "destination_runtime": "/home/validatus/workspace/AI-Model/runtime/spark-a922/tools/ai-bench42-host",
+  "existing_runtime": "/home/validatus/workspace/AI-Model/runtime/spark-a922",
+  "files": {
+    "/etc/apt/apt.conf.d/99ai-model-updates": {
+      "mode": 420,
+      "sha256": "8d91f7dd0e54cdc911cc90b5db66a32be87f4ecdfaf86e5dd593c463b7e0c1f0"
+    },
+    "/etc/default/dgx-spark-health": {
+      "mode": 420,
+      "sha256": "132cdac3d0642f9547a713dbb492661c2ec5a6cd05ec4d8d02d0b6fcda31ce1f"
+    },
+    "/etc/systemd/system/ai-model-apt-update@.service": {
+      "mode": 420,
+      "sha256": "90232e16dd1330ddb14632b6236f21e4bfda1ad01788e12df15ba7f8fd69fd0e"
+    },
+    "/etc/systemd/system/ai-model-security-updates.timer": {
+      "mode": 420,
+      "sha256": "c4df60050db93998976c974029d667f1184eee9b929354c949dfe329e629d79a"
+    },
+    "/etc/systemd/system/ai-model-weekly-updates.timer": {
+      "mode": 420,
+      "sha256": "d7e13594966e23b54781c05206c190c96273a4bb8e1dd49b4167bea8838c958f"
+    },
+    "/etc/systemd/system/dgx-spark-health-exporter.service": {
+      "mode": 420,
+      "sha256": "a5c7144df2f032783837d70056c33cc9cb5126f9432c53d8546bc2f733032f4f"
+    },
+    "/etc/systemd/system/dgx-spark-health.service": {
+      "mode": 420,
+      "sha256": "2408137e214be8a4f967749edd1b64502d33bb3f6f5db36dd1718e8f645b221c"
+    },
+    "/etc/systemd/system/dgx-spark-health.timer": {
+      "mode": 420,
+      "sha256": "a81de1e2a3f6d78e37af547a4baa02c44503b6c0556e9fb736cdd079e8aea21a"
+    },
+    "/usr/local/lib/dgx-spark-health/bootstrap.sh": {
+      "mode": 493,
+      "sha256": "246026d55d08ddb5cb7df6428d988b1fa8f5ec7535c83789db767e781d7d2715"
+    },
+    "/usr/local/libexec/ai-model/apt-maintenance": {
+      "mode": 493,
+      "sha256": "061f6fa11ae862b5440b2807881e59ef49685b11be705e1f0fbf1b39327ac90b"
+    }
+  },
+  "hostname": "spark-a922",
+  "model_boot_state": "disabled",
+  "model_fingerprint": "2d6ae26c6f09de8c6e57932078ef1034015890e1d456390ac492388a845956ee",
+  "model_revision": "258cae8ffffc8c12db670bdbc6ac01bcf8826c87",
+  "module_seal_sha256": "874d211e605bcc860d9f855b7c66566eeaadd8e7c0bd5988e868ebf55df97e47",
+  "node_sha256": "719a43d185f3b6a59d8fcbba1ff06b93c75f76fb0bb9916f81d33921615d4cb5",
+  "schema_version": 1,
+  "source_root": "/home/validatus/workspace/AI-Model",
+  "user": "validatus"
+}

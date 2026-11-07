@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "cohort_date": "2026-11-06",
+  "publication_date": "2026-11-07",
+  "model": {
+    "repository": "Aleph-Alpha/Kolibri-1",
+    "revision": "258cae8ffffc8c12db670bdbc6ac01bcf8826c87",
+    "quantization": "fp8",
+    "kv_calibration": "V5",
+    "vllm": "0.29.0",
+    "configured_context_tokens": 262144
+  },
+  "source": {
+    "assignment_commit": "b0e4ede9e99899f7ef9572d95cd7aed142c71745",
+    "assignment_files": 27,
+    "assignment_archive_sha256": "3ac42e7940dd94e2b652697e987811abf8c98df596f3591f4ff8c9ae2d709405",
+    "measured_coordinator_archive_sha256": "54238b84000e666ff99d98cd27d6cb1a69dc16266abf0309907fdfd55e43be2e",
+    "measured_coordinator_files": 259,
+    "original_package_tests": 374
+  },
+  "scope": "Independent development trials, selected existing-installation workflow and retained integration smoke; no held-out or full-suite ranking.",
+  "complete_task_passes": 0,
+  "trials": [
+    {
+      "seed": 1,
+      "complete_task": false,
+      "decision": "CHANGES_REQUIRED",
+      "visible_tests": {
+        "passed": 21,
+        "total": 21
+      },
+      "supplemental_probes": {
+        "passed": 4,
+        "total": 11
+      },
+      "coding_requests": 39,
+      "coding_generated_tokens": 28317,
+      "coding_tool_calls": 100,
+      "observed_seconds": 899.6942291259766,
+      "elapsed_basis": "lifecycle",
+      "model_issued_mcp_admission_calls": 3,
+      "worker_train_executions_independently_verified": 0,
+      "candidate_tree_sha256": "11abed5126c69830415e3f1648ad497f96d52de6431a44d7edf4732416ac1dd5",
+      "candidate_archive_sha256": "06ce88d8c24a9c6ab06564a1a322bdd48a16b3fa2f95cfe077674b420da81bbf",
+      "worker_report_sha256": "ec9b41e01ece3b8fc78ca72beae358ec0a5d0bbd2cb4232dd29e96ae42290396",
+      "independent_review_sha256": "e95e879c7376ce2bdc551546c7d89935d8bc60b622ed5ac1adb4a4b52c6bf2aa",
+      "note": "Supplied tests passed; independent full-task acceptance failed."
+    },
+    {
+      "seed": 2,
+      "complete_task": false,
+      "decision": "CHANGES_REQUIRED",
+      "visible_tests": null,
+      "supplemental_probes": null,
+      "coding_requests": 2,
+      "coding_generated_tokens": 32280,
+      "coding_tool_calls": 6,
+      "observed_seconds": 1023.5520713329315,
+      "elapsed_basis": "coding",
+      "model_issued_mcp_admission_calls": 3,
+      "worker_train_executions_independently_verified": 0,
+      "candidate_tree_sha256": "8773a43844cff76910622ed275b4fd39ed03edefa9a419e4b3baac2a49a7495a",
+      "candidate_archive_sha256": "af84889042159410e20862731d19bb150b4065681997c2bd64675af529c2529b",
+      "worker_report_sha256": null,
+      "independent_review_sha256": "6a2024f93ff1cacdd45577fedce780ad6158afd6c9fea98720f6d8f37a89a596",
+      "note": "Starter unimplemented; infrastructure and negative CLI checks are not parser success."
+    },
+    {
+      "seed": 3,
+      "complete_task": false,
+      "decision": "CHANGES_REQUIRED",
+      "visible_tests": {
+        "passed": 21,
+        "total": 21
+      },
+      "supplemental_probes": {
+        "passed": 7,
+        "total": 11
+      },
+      "coding_requests": 31,
+      "coding_generated_tokens": 21466,
+      "coding_tool_calls": 113,
+      "observed_seconds": 706.8262557983398,
+      "elapsed_basis": "coding",
+      "model_issued_mcp_admission_calls": 3,
+      "worker_train_executions_independently_verified": 12,
+      "candidate_tree_sha256": "cbb561f85bbd99e1a5d6d8615a6011a3a375c67be24b28234b06c31e80a614f8",
+      "candidate_archive_sha256": "cf3a28960086729751b94aa0fd5b20bdb957042952f5b0a904329cc727a1b32f",
+      "worker_report_sha256": "269d3710e0ea044541ede9125732f0487124bffd22648d59524dc79cdb544913",
+      "independent_review_sha256": "d5e55668b53f4540b043f89b79deadb116a4e52be4cc8c1a039c122b63615ff5",
+      "note": "Supplied tests passed; independent full-task acceptance failed."
+    }
+  ],
+  "retained_phase123": {
+    "aiperf": {
+      "version": "0.13.0",
+      "requests": 36,
+      "trials": 9,
+      "concurrency": [
+        1,
+        2,
+        4
+      ]
+    },
+    "lm_eval": {
+      "version": "0.4.13",
+      "leaf_tasks": 42,
+      "samples_per_task": 1,
+      "output_tokens_including_reasoning": 128
+    },
+    "bfcl": {
+      "version": "2026.3.23",
+      "mode": "simple_python AST",
+      "cases": 3,
+      "passed": 3
+    },
+    "classification": "integration_smoke"
+  },
+  "repeat": {
+    "experiment_files_unchanged": 77,
+    "original_evidence_files_unchanged": 69,
+    "new_model_requests": 0,
+    "observation": "coordinator-recorded; independent artifact audit, not independent remote replay"
+  },
+  "independent_workflow_review": {
+    "decision": "SELECTED_WORKFLOW_ACCEPTED",
+    "sha256": "b6f1f273cbf4958ff82c882cf4f805fa5dd17ba56530bfcf0ed3090e05390ad3"
+  },
+  "not_evaluated": [
+    "heldout_precision_recall_f1",
+    "swe_bench",
+    "matched_other_models",
+    "human_productivity",
+    "fresh_machine_installation"
+  ],
+  "public_evidence_boundary": "This summary is derived from retained private records. Hashes bind those records, but do not expose or independently prove withheld sessions, archives, TRAIN or Gold."
+}

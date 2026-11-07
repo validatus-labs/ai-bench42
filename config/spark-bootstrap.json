@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hostname": "spark-a922",
+  "user": "validatus",
+  "project": "/home/validatus/workspace/AI-Model",
+  "model": "kolibri-1",
+  "calibration": "qualified-v5-reuse",
+  "context_tokens": 262144,
+  "runtime_seconds": 21600,
+  "stage_seconds": 14400,
+  "include_health_scrape": true,
+  "install_benchmark_clients": false
+}

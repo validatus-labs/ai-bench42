@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "kolibri-1",
+  "enabled": true,
+  "blocked_reason": "",
+  "repository": "Aleph-Alpha/Kolibri-1",
+  "revision": "258cae8ffffc8c12db670bdbc6ac01bcf8826c87",
+  "architecture_name": "Kolibri1ForCausalLM",
+  "quantization": "fp8",
+  "packages": [
+    "vllm==0.29.0",
+    "aleph-alpha-inference==1.0.0"
+  ],
+  "compatibility": {
+    "python_min": "3.12",
+    "vllm_version": "0.29.0",
+    "torch_cuda_major": 13,
+    "compute_capability": "12.1",
+    "native_context": 262144
+  },
+  "memory": {
+    "minimum_available_gib": 112,
+    "host_reserve_gib": 10,
+    "weights_gib": 73.55,
+    "kv_estimate_gib": 8,
+    "overhead_gib": 8,
+    "minimum_disk_gib": 160
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8000,
+    "max_model_len": 262144,
+    "max_num_seqs": 1,
+    "kv_cache_dtype": "fp8",
+    "gpu_memory_utilization": 0.8,
+    "max_num_batched_tokens": 8192,
+    "reasoning_parser": "kolibri1",
+    "tool_call_parser": "kolibri1",
+    "enable_auto_tool_choice": true,
+    "enforce_eager": true,
+    "enable_prefix_caching": true
+  },
+  "verification": {
+    "smoke_tokens": 64,
+    "long_context_prompt_tokens": 262112,
+    "long_context_output_tokens": 32
+  },
+  "kv_calibration": {
+    "manifest": "/home/validatus/workspace/AI-Model/runtime/spark-a922/build/dgx-spark-vllm/calibration/kolibri-kv-minmax-v5-20261017/manifest.json",
+    "sha256": "c4ebdd377f95e0d5cd0aa1b20a5449c1efbbcc8752a6cf176f69ec255d6fe82a",
+    "source_release": "/home/validatus/workspace/AI-Model/runtime/spark-a922/build/dgx-spark-vllm/releases/kolibri-1-bb4e65233ec1-20261014T183014-378dd04e",
+    "requirements_sha256": "1944a9e30f9ff143d572d29374c109bac0d5d5e98ba5a94d667600ebbb1732bb"
+  }
+}

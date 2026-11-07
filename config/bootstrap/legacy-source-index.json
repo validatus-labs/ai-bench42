@@ -1,0 +1,56 @@
+{
+  "copied_at": "2026-10-18",
+  "files": {
+    "config/99ai-model-updates": {
+      "bytes": 981,
+      "sha256": "8d91f7dd0e54cdc911cc90b5db66a32be87f4ecdfaf86e5dd593c463b7e0c1f0"
+    },
+    "config/benchmark.json": {
+      "bytes": 3330,
+      "sha256": "ef203df9be1ae9653c5e39922c4f102161494d41bffde79e00873463d3b6cd17"
+    },
+    "config/kolibri-calibration.json": {
+      "bytes": 1145,
+      "sha256": "8bde891aa3617bfa12e09f5a526262eeb7e358d040dfd313d2e2e001fb9b2b14"
+    },
+    "config/kolibri-deployment.json": {
+      "bytes": 165,
+      "sha256": "cbec446320e40937645347ffaa7b64d17bc305389fd84677741de4f944dd942a"
+    },
+    "config/playwright-mcp.json": {
+      "bytes": 599,
+      "sha256": "bac8e9725ffa33699af648c06f0d68f84800b0a45cf09ad72bc1f29ff6a91067"
+    },
+    "config/playwright-package-lock.json": {
+      "bytes": 1831,
+      "sha256": "a80775921958f6a8be8fb02acf4395cb63863ee21f29558df03fb2797e525f4d"
+    },
+    "config/playwright-package.json": {
+      "bytes": 140,
+      "sha256": "bd1d6d9484991e16d3f7ca2e83e9c40bada1abb5e850651e05f2bfe864512b51"
+    },
+    "config/spark-bootstrap.json": {
+      "bytes": 337,
+      "sha256": "463e42a518b845c8c490cc1c26b59a7d9bf6b998406c330ead4e91e3c78e57d2"
+    },
+    "scripts/audit/check-kolibri-protocol.py": {
+      "bytes": 5607,
+      "sha256": "c345b0c98a65eac4c20d714988c8741f08c543e41421c22115fd20acecd609d5"
+    },
+    "scripts/benchmark/accept-calibration.py": {
+      "bytes": 8940,
+      "sha256": "4def8d4cf49dc82d00f9f2a7e6296520a8dcdf6c5a9e8ae1529ca8b667b94ce8"
+    },
+    "scripts/benchmark/benchmark.py": {
+      "bytes": 14252,
+      "sha256": "1f34650939b232fee13207d09eb8b1e85326681b14d5189281adf71f42611931"
+    },
+    "scripts/benchmark/setup-metrics.py": {
+      "bytes": 11198,
+      "sha256": "da6198e951e52ee69fe474edbe255b894356cf878e0f21538d9b7c38b09aa0d3"
+    }
+  },
+  "purpose": "Unmodified legacy AI-Model coordinator resources needed by imported bootstrap regressions. Not a new assignment or fresh-host qualification.",
+  "schema_version": 1,
+  "source_project": "AI-Model"
+}

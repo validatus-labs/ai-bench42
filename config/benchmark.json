@@ -1,0 +1,51 @@
+{
+  "version": "benchmark-v1",
+  "base_sha": "75fcaad909346909115d92b9929b5b91b3ddfbd6",
+  "runtime": "/home/validatus/workspace/AI-Model/runtime/spark-a922/tools/benchmark",
+  "prometheus_url": "http://127.0.0.1:9090",
+  "models": {
+    "kolibri-1": {
+      "enabled": true,
+      "repository": "Aleph-Alpha/Kolibri-1",
+      "revision": "258cae8ffffc8c12db670bdbc6ac01bcf8826c87",
+      "quantization": "fp8",
+      "context_tokens": 262144,
+      "max_num_seqs": 1,
+      "url": "http://127.0.0.1:8000",
+      "unit": "ai-model-vllm-kolibri-1.service"
+    },
+    "mistral-small-4": {"enabled": false, "reason": "No qualified pinned Spark server profile yet; do not load or stop existing models."},
+    "qwen": {"enabled": false, "reason": "Exact model/checkpoint/quantization not yet selected; no capacity assumption."}
+  },
+  "performance": {
+    "aiperf_version": "0.13.0",
+    "concurrency": [1, 2, 4],
+    "seeds": [41, 42, 43],
+    "requests": 6,
+    "input_tokens": 256,
+    "output_tokens": 64,
+    "timeout_seconds": 300,
+    "minimum_available_bytes": 2147483648,
+    "warmup_requests": 0,
+    "cache_policy": "Existing warm server and prefix cache; no reset, no cold-start claim.",
+    "classification": "Bounded synthetic pilot, not sustained throughput or 256K performance qualification."
+  },
+  "general": {
+    "version": "general-v1-small",
+    "lighteval_version": "0.13.0",
+    "backend": "LightEval task definitions with Inspect AI generation/scorers",
+    "selection_seed": 42,
+    "samples_per_task": 32,
+    "max_output_tokens": 4096,
+    "temperature": 0.0,
+    "concurrent_requests": 1,
+    "repetitions": 3,
+    "tasks": [
+      {"id": "ifeval", "dataset": "google/IFEval", "revision": "966cd89545d6b6acfd7638bc708b98261ca58e84", "subset": "default", "split": "train", "module": "lighteval.tasks.tasks.ifeval.main", "config_name": "ifeval", "scoring": "LightEval Inspect IFEval prompt-level strict and loose; instruction-level scores are not provided by this scorer", "solver": "generate"},
+      {"id": "mmlu_pro", "dataset": "TIGER-Lab/MMLU-Pro", "revision": "b189ec765aa7ed75c8acfea42df31fdae71f97be", "subset": "default", "split": "test", "module": "lighteval.tasks.tasks.mmlu_pro", "config_name": "mmlu_pro", "scoring": "Inspect choice accuracy, generated multiple-choice answer, zero-shot", "solver": "multiple_choice"},
+      {"id": "bbh_date_understanding", "dataset": "lighteval/bbh", "revision": "1b61f099fcbf9e55691ef8cc6b4b8fb431dae097", "subset": "date_understanding", "split": "train", "module": "lighteval.tasks.tasks.bigbench_hard", "config_name": "date_understanding", "scoring": "Inspect choice accuracy, generated multiple-choice answer, zero-shot", "solver": "multiple_choice"},
+      {"id": "bbh_logical_deduction_three_objects", "dataset": "lighteval/bbh", "revision": "1b61f099fcbf9e55691ef8cc6b4b8fb431dae097", "subset": "logical_deduction_three_objects", "split": "train", "module": "lighteval.tasks.tasks.bigbench_hard", "config_name": "logical_deduction_three_objects", "scoring": "Inspect choice accuracy, generated multiple-choice answer, zero-shot", "solver": "multiple_choice"}
+    ],
+    "comparability": "This small fixed generation-based selection is not full IFEval/MMLU-Pro/BBH leaderboard evaluation. No log-likelihood substitution or combined overall score."
+  }
+}

@@ -1,0 +1,22 @@
+// Scheduling is owned by ai-model-security-updates/weekly-updates.timer.
+// Direct apt-get and unattended-upgrade calls remain available.
+APT::Periodic::Enable "0";
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Unattended-Upgrade "0";
+
+// Security updates, plus the frozen release pocket for required dependencies.
+// General -updates, third-party and backports upgrades belong to the weekly job.
+#clear Unattended-Upgrade::Allowed-Origins;
+#clear Unattended-Upgrade::Origins-Pattern;
+Unattended-Upgrade::Allowed-Origins {
+  "Ubuntu:noble";
+  "Ubuntu:noble-security";
+  "UbuntuESMApps:noble-apps-security";
+  "UbuntuESM:noble-infra-security";
+};
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::Automatic-Reboot-WithUsers "false";
+Unattended-Upgrade::Remove-Unused-Dependencies "false";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "false";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "false";
+Unattended-Upgrade::InstallOnShutdown "false";

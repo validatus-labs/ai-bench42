@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "model": "kolibri-1",
+  "calibration": "qualified-v5-reuse",
+  "runtime_seconds": 10800,
+  "stage_seconds": 7200,
+  "acceptance_seconds": 1800
+}

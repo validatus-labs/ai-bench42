@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "experiment": "kolibri-kv-minmax-v5-20261017",
+  "model": "kolibri-1",
+  "revision": "258cae8ffffc8c12db670bdbc6ac01bcf8826c87",
+  "baseline_unit_sha256": "2345c6f8f9f77546a23fb990c4f5f929d90cc72501ea0edba3a28fa0c0780d6b",
+  "method": "static-per-tensor-absmax",
+  "margin": 1.1,
+  "fp8_max": 448.0,
+  "samples": 32,
+  "input_tokens": 2048,
+  "output_tokens": 64,
+  "context_tokens": 262144,
+  "languages": [
+    "en",
+    "de",
+    "fr",
+    "code"
+  ],
+  "calibration_kv_dtype": "auto",
+  "evaluation_policy": "Frozen general-v1-small and coding-v1 selections and original budgets. No benchmark rows, answers, mail, reference code or Gold used for calibration. Historical comparison; restart/cache state is a declared confound.",
+  "scale_storage_dtype": "bfloat16",
+  "scale_rounding": "toward_positive_infinity",
+  "scale_scope": "kv-only-bf16-query",
+  "backend_compatibility": {
+    "path": "/home/validatus/workspace/AI-Model/runtime/spark-a922/tools/benchmark/cohorts/kolibri-kv-minmax-v4-20261017/backend-scale-diagnostic.json",
+    "sha256": "1ccff9d339fb7db7ede2c4b097583fa161c93becbed56ea909b0264920cccf11"
+  }
+}

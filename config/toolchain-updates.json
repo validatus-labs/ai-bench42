@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "platform": {
+    "distribution": "ubuntu",
+    "version": "24.04",
+    "architecture": "arm64"
+  },
+  "apt_roots": [
+    "brave-browser",
+    "nodejs",
+    "ca-certificates",
+    "fonts-dejavu-core",
+    "python3-minimal"
+  ],
+  "npm_dist_tags": {
+    "@playwright/mcp": "latest"
+  },
+  "registry": "https://registry.npmjs.org/",
+  "minimum_node_major": 22,
+  "minimum_free_gib": 8,
+  "check_interval_seconds": 86400,
+  "qualification_max_age_seconds": 86400,
+  "model_canary": {
+    "base_url": "http://127.0.0.1:8000/v1",
+    "model": "kolibri-1",
+    "auth_file": null,
+    "timeout_seconds": 1200
+  },
+  "automatic_promotion": true,
+  "scope": "HOST_BROWSER_TOOLCHAIN_NOT_C00_OR_MODEL_ENGINE_UPGRADE",
+  "runtime_backend": "native-brave-sandbox/v1",
+  "browser_temporary_root": null
+}
